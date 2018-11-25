@@ -1,27 +1,26 @@
+import xlrd
+import xlsxwriter
+
 #ITSEMIL
 #this function sends the message to the manager
 
-def alerts(m):
-    if (m!='\0'):
-        print("Dear manager,you have new alert:")
-        print(m)
-    else:
-       print(" ")
+# def alerts():
+#     if m!='\0':
+#         print("Dear manager,you have new alert:")
+#         print(m)
+#     else:
+#        print(" ")
 
 # this func recieves the meassage from the shift manager
-def MessageForManager():
+def MessageForManager(access):
     print("Enter here you message:")
-    mes=input()
-    alerts(mes)
+    message=input()
+    workbook = xlsxwriter.Workbook('messages.xlsx')
+    worksheet = workbook.add_worksheet()
+    worksheet.write(0, 0, message)
+    workbook.close()
+    Open_Menu(access)
 
-
-
-MessageForManager()
-
-
-import xlrd
-import string
-import xlsxwriter
 
 
 '''
@@ -29,7 +28,7 @@ find a custumer in the members club
 '''
 def find_custumer(access):
     name, last = input('enter the first name: '), input('enter the last name: ')
-    file_loc = r'C:\Users\micha\Desktop\קוד מיכל\Group2_Yesodot\Hackathon\membership.xlsx'
+    file_loc = r'C:\Users\emiliazorin\Desktop\YESODOT!\Group2_Yesodot\Hackathon\membership.xlsx'
     workbook = xlrd.open_workbook(file_loc)
     worksheet = workbook.sheet_by_index(0)
     worksheet.cell_value(0, 0)
@@ -112,6 +111,7 @@ def Open_Menu(access):
     access_Responsible = 'shift r'
     access_worker ='worker'
 
+
     if access == access_manage:
         manager_menu(access)
     if access == access_Responsible:
@@ -120,6 +120,11 @@ def Open_Menu(access):
         worker_menu(access)
 
 def manager_menu(access):
+    file_loc = r'C:\Users\emiliazorin\Desktop\YESODOT!\Group2_Yesodot\Hackathon\messages.xlsx'
+    workbook = xlrd.open_workbook(file_loc)
+    worksheet = workbook.sheet_by_index(0)
+    print("Dear manager,you have new alert:")
+    print(worksheet.cell_value(0, 0))
     print('manager menu:')
     print('Select the desired action ')
     print('1- sell item')
@@ -148,6 +153,9 @@ def Responsible_menu(access):
         choice = input()
         if choice == '1':
             add_worker_Constraints(access)
+    if choice == '3':
+        MessageForManager(access)
+
 
 def worker_menu(access):
     print('worker menu:')
@@ -174,7 +182,7 @@ def Error_page():
     exit(0)
 
 def Log_In():
-    file_loc = r'C:\Users\micha\Desktop\קוד מיכל\Group2_Yesodot\Hackathon\passwarde.xlsx'
+    file_loc = r'C:\Users\emiliazorin\Desktop\YESODOT!\Group2_Yesodot\Hackathon\passwarde.xlsx'
 
     pas_file = xlrd.open_workbook(file_loc)
     sheet = pas_file.sheet_by_index(0)
@@ -200,7 +208,7 @@ def Log_In():
                         Password = int(input('wrong password, try again'))
 
                 if j == 2:
-                    print("soory, too many tries")
+                    print("sorry, too many tries")
                     Error_page()
                 break
             else:
@@ -220,16 +228,14 @@ Log_In()
 
 
 
-<<<<<<< HEAD
-=======
-# =======
+
 '''
 find a custumer in the members club
 '''
 def find_custumer(name, last):
-    file_loc = r'C:\Users\micha\Desktop\קוד מיכל\Group2_Yesodot\Hackathon\membership.xlsx'
+    file_loc = r'C:\Users\emiliazorin\Desktop\YESODOT!\Group2_Yesodot\Hackathon\membership.xlsx'
     workbook = xlrd.open_workbook(file_loc)
     worksheet = workbook.sheet_by_index(0)
->>>>>>> 22bed2490d307797a34f8c59e552496e30c1c60e
+
 
 
