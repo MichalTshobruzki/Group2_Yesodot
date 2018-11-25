@@ -1,3 +1,24 @@
+#ITSEMIL
+#this function sends the message to the manager
+
+def alerts(m):
+    if (m!='\0'):
+        print("Dear manager,you have new alert:")
+        print(m)
+    else:
+       print(" ")
+
+# this func recieves the meassage from the shift manager
+def MessageForManager():
+    print("Enter here you message:")
+    mes=input()
+    alerts(mes)
+
+
+
+MessageForManager()
+
+
 import xlrd
 <<<<<<< HEAD
 import string
@@ -114,7 +135,7 @@ Log_In()
 
 
 
-=======
+# =======
 '''
 find a custumer in the members club
 '''
