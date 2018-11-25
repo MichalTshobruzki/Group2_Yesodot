@@ -1,3 +1,24 @@
+#ITSEMIL
+#this function sends the message to the manager
+
+def alerts(m):
+    if (m!='\0'):
+        print("Dear manager,you have new alert:")
+        print(m)
+    else:
+       print(" ")
+
+# this func recieves the meassage from the shift manager
+def MessageForManager():
+    print("Enter here you message:")
+    mes=input()
+    alerts(mes)
+
+
+
+MessageForManager()
+
+
 import xlrd
 import string
 import xlsxwriter
@@ -199,5 +220,16 @@ Log_In()
 
 
 
+<<<<<<< HEAD
+=======
+# =======
+'''
+find a custumer in the members club
+'''
+def find_custumer(name, last):
+    file_loc = r'C:\Users\micha\Desktop\קוד מיכל\Group2_Yesodot\Hackathon\membership.xlsx'
+    workbook = xlrd.open_workbook(file_loc)
+    worksheet = workbook.sheet_by_index(0)
+>>>>>>> 22bed2490d307797a34f8c59e552496e30c1c60e
 
 
