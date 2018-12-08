@@ -3,10 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="ef9c1d98-e107-4520-8dc2-8d675912b73b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/Group2_Yesodot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Group2_Yesodot.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Hackathon/Hackathon1.py" beforeDir="false" afterPath="$PROJECT_DIR$/Hackathon/Hackathon1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/try.py" beforeDir="false" afterPath="$PROJECT_DIR$/try.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,18 +12,26 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Hackathon/Hackathon1.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/workOnExcel/Hackathon1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="4" selection-start-column="4" selection-end-column="4" />
+            <state relative-caret-position="-2052">
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://C:/untitled/try.py">
-          <provider selected="true" editor-type-id="text-editor" />
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../../Group2_Yesodot/workOnExcel/Hackathon1.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-918">
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
         </entry>
       </file>
     </leaf>
@@ -44,7 +48,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="487" />
+    <option name="x" value="486" />
     <option name="width" value="1440" />
     <option name="height" value="775" />
   </component>
@@ -98,6 +102,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Hackathon/Hackathon1.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -124,16 +129,17 @@
       <option name="presentableId" value="Default" />
       <updated>1543132344949</updated>
       <workItem from="1543132347590" duration="161000" />
+      <workItem from="1544281186232" duration="39000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="161000" />
+    <option name="totallyTimeSpent" value="200000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24917382" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14832215" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -168,13 +174,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/untitled/try.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://C:/untitled/try.py" />
     <entry file="file://$PROJECT_DIR$/Hackathon/Hackathon1.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret column="4" selection-start-column="4" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/workOnExcel/Hackathon1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2052">
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Group2_Yesodot/workOnExcel/Hackathon1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-918">
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
