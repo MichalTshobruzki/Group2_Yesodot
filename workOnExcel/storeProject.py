@@ -49,8 +49,29 @@ def find_custumer(access):
 
 '''add worker Constraints'''
 def add_worker_Constraints(access):
+    constraints_list = []
+    row_list = []
+    constraints_loc = r'C:\Users\micha\Desktop\קוד מיכל\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
+    constraints_file = xlrd.open_workbook(constraints_loc)
+    amount_sheets = constraints_file.nsheets
+    for i in range(amount_sheets):
+        sheet = constraints_file.sheet_by_index(i)
+        sheet_list = [sheet.name]
+        for j in range(sheet.nrows):
+            row_list = sheet.row_values(j)
+            sheet_list.append(row_list)
+        constraints_list.append(sheet_list)
+
+    workbook = xlsxwriter.Workbook('Constraints1.xlsx')
+
+    for i in range(len(constraints_list)):  #runs on 2 sheets - michal and shir
+        worksheet = workbook.add_worksheet(constraints_list[i][0])   #constraints_list[i][0]- sheet name
+        for j in range(1, len(constraints_list[i])):  # number of rows in sheet
+            for k in range(len(constraints_list[i][j])):
+                worksheet.write(j-1, k, constraints_list[i][j][k])
+
     name = input('Enter your name: ')
-    workbook = xlsxwriter.Workbook('Constraints.xlsx')
+
     worksheet = workbook.add_worksheet(name)
 
     worksheet.write(1, 0, 'Morning')
@@ -67,7 +88,6 @@ def add_worker_Constraints(access):
                                          input('enter your first constraint-> shift: ')
     constraint2_day, constraint2_shift = input('enter your second constraint-> day: '), \
                                          input('enter your second constraint-> shift: ')
-
     if constraint1_day == 'Sunday':
         constraint1_day = 1
     if constraint1_day == 'Monday':
