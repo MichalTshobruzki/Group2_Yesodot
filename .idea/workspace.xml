@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ef9c1d98-e107-4520-8dc2-8d675912b73b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Group2_Yesodot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Group2_Yesodot.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/workOnExcel/‏‏‫מסמך טקסט ‫חדש.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/workOnExcel/membership.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/workOnExcel/membership.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/workOnExcel/storeProject.py" beforeDir="false" afterPath="$PROJECT_DIR$/workOnExcel/storeProject.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -12,21 +15,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/workOnExcel/Hackathon1.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2052">
-              <folding>
-                <element signature="e#0#11#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/../../Group2_Yesodot/workOnExcel/Hackathon1.py">
+        <entry file="file://$PROJECT_DIR$/workOnExcel/storeProject.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-918">
+            <state relative-caret-position="462">
+              <caret line="344" column="19" lean-forward="true" selection-start-line="344" selection-start-column="19" selection-end-line="344" selection-end-column="19" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -36,6 +29,13 @@
       </file>
     </leaf>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -44,20 +44,22 @@
       <list>
         <option value="$PROJECT_DIR$/try.py" />
         <option value="$PROJECT_DIR$/Hackathon/Hackathon1.py" />
+        <option value="$PROJECT_DIR$/workOnExcel/add costumer.py" />
+        <option value="$PROJECT_DIR$/workOnExcel/storeProject.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="486" />
-    <option name="width" value="1440" />
-    <option name="height" value="775" />
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="-8" />
+    <option name="width" value="977" />
+    <option name="height" value="1038" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -69,10 +71,12 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="XML" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
@@ -89,7 +93,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.storeProject">
     <configuration name="Hackathon1" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Group2_Yesodot" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -112,8 +116,52 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="add costumer" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Group2_Yesodot" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/workOnExcel" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/workOnExcel/add costumer.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="storeProject" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Group2_Yesodot" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/workOnExcel" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/workOnExcel/storeProject.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.storeProject" />
+        <item itemvalue="Python.add costumer" />
         <item itemvalue="Python.Hackathon1" />
       </list>
     </recent_temporary>
@@ -138,13 +186,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14832215" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14805023" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3286119" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.10481586" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -182,18 +231,25 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/workOnExcel/Hackathon1.py">
+    <entry file="file://$PROJECT_DIR$/workOnExcel/Hackathon1.py" />
+    <entry file="file://$PROJECT_DIR$/../../Group2_Yesodot/workOnExcel/Hackathon1.py" />
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/workOnExcel/add costumer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2052">
+        <state relative-caret-position="105">
+          <caret line="5" selection-start-line="5" selection-end-line="41" selection-end-column="65" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../Group2_Yesodot/workOnExcel/Hackathon1.py">
+    <entry file="file://$PROJECT_DIR$/workOnExcel/storeProject.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-918">
+        <state relative-caret-position="462">
+          <caret line="344" column="19" lean-forward="true" selection-start-line="344" selection-start-column="19" selection-end-line="344" selection-end-column="19" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>

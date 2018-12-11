@@ -1,15 +1,15 @@
 import xlrd
 import xlsxwriter
-import pandas as pd
+#import pandas as pd
 #from openpyxl import load_workbook
-import numpy as np
+#import numpy as np
 #ITSEMIL
 
 '''this func recieves the meassage from the shift manager'''
 def MessageForManager(access):
     messages_list = []
     row_list = []
-    message_loc = r'C:\Users\emiliazorin\Desktop\YESODOT!\Group2_Yesodot\workOnExcel\messages.xlsx'
+    message_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\messages.xlsx'
     message_file = xlrd.open_workbook(message_loc)
     sheet = message_file.sheet_by_index(0)
     for i in range(0, sheet.nrows):
@@ -36,7 +36,7 @@ def MessageForManager(access):
 '''find a custumer in the members club'''
 def find_custumer(access):
     name, last = input('enter the first name: '), input('enter the last name: ')
-    file_loc = r'C:\Users\emiliazorin\Desktop\YESODOT!\Group2_Yesodot\workOnExcel\membership.xlsx'
+    file_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\membership.xlsx'
     workbook = xlrd.open_workbook(file_loc)
     worksheet = workbook.sheet_by_index(0)
     worksheet.cell_value(0, 0)
@@ -51,7 +51,7 @@ def find_custumer(access):
 def add_worker_Constraints(access):
     constraints_list = []
     row_list = []
-    constraints_loc = r'C:\Users\emiliazorin\Desktop\YESODOT!\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
+    constraints_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
     constraints_file = xlrd.open_workbook(constraints_loc)
     amount_sheets = constraints_file.nsheets
     for i in range(amount_sheets):
@@ -138,7 +138,7 @@ def add_new_inventory(access):
     inventory_list = []
     row_list = []
     users_list = []
-    inventory_loc = r'C:\Users\emiliazorin\Desktop\YESODOT!\Group2_Yesodot\workOnExcel\inventory.xlsx'
+    inventory_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\inventory.xlsx'
     inventory_file = xlrd.open_workbook(inventory_loc)
     sheet = inventory_file.sheet_by_index(0)
 
@@ -172,8 +172,47 @@ def add_new_inventory(access):
             worksheet.write(i, j, inventory_list[i][j])
 
     inventory_workbook.close()
-
     Open_Menu(access)
+
+
+def Add_custumer (access):
+    # saving location file
+    location = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\membership.xlsx'
+    # variable that present the file we will work with
+    members_file = xlrd.open_workbook(location)
+    # the specific sheet we need from the file:
+    sheet = members_file.sheet_by_index(0)
+
+    row_list = []
+    members_list = []
+
+    # copy the file to list:
+    for i in range(0, sheet.nrows):
+        row_list = sheet.row_values(i)
+        members_list.append(row_list)
+
+    # add new costumer to members list:
+    first_name = input('First name:')
+    last_name = input('Last name:')
+    id = input('ID: ')
+    address = input('Address:')
+    birthday = input('Date of birth: ')
+    phone = input('Phone number: ')
+    members_list.append([first_name, last_name, id, address, birthday, phone])
+
+    # update excel file by new members list:
+    workbook = xlsxwriter.Workbook('membership.xlsx')
+    worksheet = workbook.add_worksheet('membership')
+
+    i = 0
+    for i in range(len(members_list)):
+        for j in range(6):
+            worksheet.write(i, j, members_list[i][j])
+
+    workbook.close()
+    print('The customer was successfully added to the customer club')
+    Open_Menu(access)
+
 
 def Open_Menu(access):
     access_manage = 'manager'
@@ -189,7 +228,7 @@ def Open_Menu(access):
         worker_menu(access)
 
 def manager_menu(access):
-    file_loc = r'C:\Users\emiliazorin\Desktop\YESODOT!\Group2_Yesodot\workOnExcel\messages.xlsx'
+    file_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\messages.xlsx'
     workbook = xlrd.open_workbook(file_loc)
     worksheet = workbook.sheet_by_index(0)
     print('-----------------------------------------------')
@@ -210,6 +249,8 @@ def manager_menu(access):
     choice = input('your choice: ')
     if choice == '4':
         add_new_inventory(access)
+    if choice == '7':
+        Add_custumer(access)
 
 
 def Responsible_menu(access):
@@ -234,6 +275,8 @@ def Responsible_menu(access):
             add_worker_Constraints(access)
     if choice == '3':
         MessageForManager(access)
+    if choice == '5':
+        Add_custumer(access)
 
 
 def worker_menu(access):
@@ -258,13 +301,17 @@ def worker_menu(access):
     if choice == '6':
         print(find_custumer(access))
         Open_Menu(access)
+    if choice == '5':
+        Add_custumer(access)
+
+
 
 
 def Error_page():
     exit(0)
 
 def Log_In():
-    file_loc = r'C:\Users\emiliazorin\Desktop\YESODOT!\Group2_Yesodot\workOnExcel\passwarde.xlsx'
+    file_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\passwarde.xlsx'
 
     pas_file = xlrd.open_workbook(file_loc)
     sheet = pas_file.sheet_by_index(0)
@@ -306,17 +353,6 @@ def Log_In():
 Log_In()
 
 
-
-
-
-
-'''
-find a custumer in the members club
-'''
-def find_custumer(name, last):
-    file_loc = r'C:\Users\emiliazorin\Desktop\YESODOT!\Group2_Yesodot\workOnExcel\membership.xlsx'
-    workbook = xlrd.open_workbook(file_loc)
-    worksheet = workbook.sheet_by_index(0)
 
 
 
