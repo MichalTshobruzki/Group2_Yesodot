@@ -4,6 +4,55 @@ import time
 from time import gmtime, strftime
 #ITSEMIL
 
+def return_inventory(access):
+    flag=0
+    while flag == 0:
+        inventory_list = []
+        updated_stock_list = []
+        inventory_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\inventory.xlsx'
+        inventory_file = xlrd.open_workbook(inventory_loc)
+        sheet = inventory_file.sheet_by_index(0)
+        k, l = 0, 0
+
+        for i in range(sheet.nrows):
+            row_list = sheet.row_values(i)
+            inventory_list.append(row_list)
+        for i in range(1, len(inventory_list)):
+            num = inventory_list[i][0]
+            inventory_list[i][0] = int(num)
+            num = inventory_list[i][3]
+            inventory_list[i][3] = int(num)
+
+        picks = []
+        pick = int(input("enter product code of item you want to send back?:"))
+        picks.append(pick)
+        for i in range(len(inventory_list)):
+            for j in range(len(inventory_list[i])):
+                for k in range(len(picks)):
+                    if picks[k] == inventory_list[i][j]:
+                        l = i + 1
+        for i in range(0, l-1, 1):
+            updated_stock_list.append(inventory_list[i])
+        for j in range(l, len(inventory_list), 1):
+            updated_stock_list.append(inventory_list[j])
+        print("the new inventory is:")
+        print(updated_stock_list)
+
+        pick2 = input("would you like to remove another item from the inventory?:[yes/no]")
+        if pick2 == 'yes':
+            flag = 0
+        elif pick2 == 'no':
+            flag = 1
+
+        inventory_workbook = xlsxwriter.Workbook('inventory.xlsx')
+        worksheet = inventory_workbook.add_worksheet('inventory1')
+        for i in range(len(updated_stock_list)):
+            print(updated_stock_list[i])
+            for j in range(len(updated_stock_list[i])):
+                worksheet.write(i, j, updated_stock_list[i][j])
+
+        inventory_workbook.close()
+    Open_Menu(access)
 
 def arrival_to_work(access):
     print(access)
@@ -418,8 +467,10 @@ def Open_Menu(access):
     if access == access_worker:
         worker_menu(access)
 
+
 def manager_menu(access, worker_name=None):
     file_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\messages.xlsx'
+
     workbook = xlrd.open_workbook(file_loc)
     worksheet = workbook.sheet_by_index(0)
     print('-----------------------------------------------')
@@ -431,7 +482,7 @@ def manager_menu(access, worker_name=None):
     print('2- Issue reports')
     print('3- Cancelling a transaction\ Refund')
     print('4- Order new stock')
-    print('5- Remove item inventory')
+    print('5- Remove items from inventory')
     print('6- Changes in work arrangements')
     print('7- add customer to customer club')
     print('8- remove customer from customer club')
@@ -444,6 +495,8 @@ def manager_menu(access, worker_name=None):
         Add_custumer(access)
     if choice == '8':
         Delete_customer(access)
+    if choice == '5':
+        return_inventory(access)
 
 
 def Responsible_menu(access, worker_name=None):
@@ -515,7 +568,7 @@ def Error_page():
     exit(0)
 
 def Log_In():
-    file_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\passwarde.xlsx'
+    file_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\passwarde.xlsx'
 
     pas_file = xlrd.open_workbook(file_loc)
     sheet = pas_file.sheet_by_index(0)
