@@ -4,6 +4,24 @@ import time
 from time import gmtime, strftime
 #ITSEMIL
 
+
+def get_inventory_report(access):
+    inventory_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Inventory.xlsx'
+    inventory_file = xlrd.open_workbook(inventory_loc)
+    sheet = inventory_file.sheet_by_index(0)
+    row_list = []
+    inventory_list = []
+    for i in range(0, sheet.nrows):
+        row_list = sheet.row_values(i)
+        inventory_list.append(row_list)
+
+    '''print table report:'''
+    print('**product code**     **name**      **size**      **amount**       **color**      **price**')
+    for i in range(1, len(inventory_list)):
+        print('      {0}            {1}          {2}           {3}               {4}          {5}'.format(inventory_list[i][0], inventory_list[i][1],  inventory_list[i][2], int(inventory_list[i][3]), inventory_list[i][4], inventory_list[i][5]))
+    Open_Menu(access)
+
+
 def get_manager_presence_report(access):
     now = time.localtime()
     month = now[1]
@@ -503,6 +521,7 @@ def Responsible_menu(access):
     print('7- Entry to work')
     print('8- Departing from work')
     print('9- Get presence report')
+    print('10- Get inventory report')
     print('-----------------------------------------------')
 
     choice = input('your choice: ')
@@ -525,6 +544,9 @@ def Responsible_menu(access):
         departure(access)
     if choice == '9':
         get_monthly_presence_report(access)
+    if choice == '10':
+        get_inventory_report(access)
+
 
 def worker_menu(access):
     print('-----------------------------------------------')
