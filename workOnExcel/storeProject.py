@@ -1,15 +1,83 @@
 import xlrd
 import xlsxwriter
-#import pandas as pd
-#from openpyxl import load_workbook
-#import numpy as np
+import time
+from time import gmtime, strftime
 #ITSEMIL
+
+
+def arrival_to_work(access):
+    name = input('enter your first name: ')
+    last = input('enter your last name: ')
+    presence_list = []
+    row_list = []
+    presence_loc = r'C:\Users\micha\Desktop\קוד מיכל\Group2_Yesodot\workOnExcel\presence1.xlsx'
+    presence_file = xlrd.open_workbook(presence_loc)
+    sheet = presence_file.sheet_by_index(0)
+
+    for i in range(0, sheet.nrows):
+        row_list = sheet.row_values(i)
+        if i > 0:
+            row_list[0] = int(row_list[0])
+        presence_list.append(row_list)
+
+    presence_list.append([sheet.nrows, name, last, strftime("%a, %d %b %Y %H:%M:%S", time.localtime())])
+    presence_workbook = xlsxwriter.Workbook('presence1.xlsx')
+    worksheet = presence_workbook.add_worksheet('presence')
+
+    for i in range(len(presence_list)):
+        for j in range(len(presence_list[i])):
+            worksheet.write(i, j, presence_list[i][j])
+    presence_workbook.close()
+    Open_Menu(access)
+
+
+
+def departure(access):
+    name = input('enter your first name: ')
+    last = input('enter your last name: ')
+    presence_list = []
+    row_list = []
+    presence_loc = r'C:\Users\micha\Desktop\קוד מיכל\Group2_Yesodot\workOnExcel\presence1.xlsx'
+    presence_file = xlrd.open_workbook(presence_loc)
+    sheet = presence_file.sheet_by_index(0)
+
+    for i in range(0, sheet.nrows):
+        row_list = sheet.row_values(i)
+        if i > 0:
+            row_list[0] = int(row_list[0])
+        presence_list.append(row_list)
+    for i in range(1, len(presence_list)):
+        if presence_list[i][1] == name and presence_list[i][2] == last:
+            presence_list[i][4] = strftime("%a, %d %b %Y %H:%M:%S", time.localtime())
+            worker = i
+    worker_arrival = presence_list[worker][3]
+    worker_departure = presence_list[worker][4]
+
+######calculates the second of each time
+    arrival_time = (int(worker_arrival[17])*10 + int(worker_arrival[18]))*3600 +\
+                   (int(worker_arrival[20])*10 + int(worker_arrival[21]))*60 +\
+                   (int(worker_arrival[23])*10 + int(worker_arrival[24]))
+    departure_time = (int(worker_departure[17]) * 10 + int(worker_departure[18])) * 3600 +\
+                     (int(worker_departure[20]) * 10 + int(worker_departure[21])) * 60 +\
+                     (int(worker_departure[23]) * 10 + int(worker_departure[24]))
+    delta = departure_time - arrival_time
+    presence_list[worker][5] = delta
+
+    presence_workbook = xlsxwriter.Workbook('presence1.xlsx')
+    worksheet = presence_workbook.add_worksheet('presence')
+
+    for i in range(len(presence_list)):
+        for j in range(len(presence_list[i])):
+            worksheet.write(i, j, presence_list[i][j])
+    presence_workbook.close()
+    Open_Menu(access)
+
 
 '''this func recieves the meassage from the shift manager'''
 def MessageForManager(access):
     messages_list = []
     row_list = []
-    message_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\messages.xlsx'
+    message_loc = r'C:\Users\micha\Desktop\קוד מיכל\Group2_Yesodot\workOnExcel\workOnExcel\messages.xlsx'
     message_file = xlrd.open_workbook(message_loc)
     sheet = message_file.sheet_by_index(0)
     for i in range(0, sheet.nrows):
@@ -36,7 +104,7 @@ def MessageForManager(access):
 '''find a custumer in the members club'''
 def find_custumer(access):
     name, last = input('enter the first name: '), input('enter the last name: ')
-    file_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\membership.xlsx'
+    file_loc = r'C:\Users\micha\Desktop\קוד מיכל\Group2_Yesodot\workOnExcel\membership.xlsx'
     workbook = xlrd.open_workbook(file_loc)
     worksheet = workbook.sheet_by_index(0)
     worksheet.cell_value(0, 0)
@@ -51,7 +119,7 @@ def find_custumer(access):
 def add_worker_Constraints(access):
     constraints_list = []
     row_list = []
-    constraints_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
+    constraints_loc = r'C:\Users\micha\Desktop\קוד מיכל\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
     constraints_file = xlrd.open_workbook(constraints_loc)
     amount_sheets = constraints_file.nsheets
     for i in range(amount_sheets):
@@ -138,7 +206,7 @@ def add_new_inventory(access):
     inventory_list = []
     row_list = []
     users_list = []
-    inventory_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\inventory.xlsx'
+    inventory_loc = r'C:\Users\micha\Desktop\קוד מיכל\Group2_Yesodot\workOnExcel\inventory.xlsx'
     inventory_file = xlrd.open_workbook(inventory_loc)
     sheet = inventory_file.sheet_by_index(0)
 
@@ -177,7 +245,7 @@ def add_new_inventory(access):
 
 def Add_custumer (access):
     # saving location file
-    location = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\membership.xlsx'
+    location = r'C:\Users\micha\Desktop\קוד מיכל\Group2_Yesodot\workOnExcel\membership.xlsx'
     # variable that present the file we will work with
     members_file = xlrd.open_workbook(location)
     # the specific sheet we need from the file:
@@ -268,7 +336,7 @@ def Open_Menu(access):
         worker_menu(access)
 
 def manager_menu(access):
-    file_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\messages.xlsx'
+    file_loc = r'C:\Users\micha\Desktop\קוד מיכל\Group2_Yesodot\workOnExcel\messages.xlsx'
     workbook = xlrd.open_workbook(file_loc)
     worksheet = workbook.sheet_by_index(0)
     print('-----------------------------------------------')
@@ -333,6 +401,8 @@ def worker_menu(access):
     print('4- Submission of constraints')
     print('5- add customer to customer club')
     print('6- find customer in customer club')
+    print('7- Entry to work')
+    print('8- Departing from work')
     print('-----------------------------------------------')
     choice = input()
     if choice == '4':
@@ -342,20 +412,22 @@ def worker_menu(access):
         choice = input()
         if choice == '1':
             add_worker_Constraints(access)
+    if choice == '5':
+        Add_custumer(access)
     if choice == '6':
         print(find_custumer(access))
         Open_Menu(access)
-    if choice == '5':
-        Add_custumer(access)
-
-
+    if choice == '7':
+        arrival_to_work(access)
+    if choice == '8':
+        departure(access)
 
 
 def Error_page():
     exit(0)
 
 def Log_In():
-    file_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\passwarde.xlsx'
+    file_loc = r'C:\Users\micha\Desktop\קוד מיכל\Group2_Yesodot\workOnExcel\passwarde.xlsx'
 
     pas_file = xlrd.open_workbook(file_loc)
     sheet = pas_file.sheet_by_index(0)
