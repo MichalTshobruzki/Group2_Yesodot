@@ -55,12 +55,16 @@ def return_inventory(access):
     Open_Menu(access)
 
 def arrival_to_work(access):
+    print(access)
+    print(type(access))
     name = input('enter your first name: ')
     last = input('enter your last name: ')
     date_now = time.localtime()
     presence_list = []
     row_list = []
+
     presence_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\presence2.xlsx'
+
     presence_file = xlrd.open_workbook(presence_loc)
     sheet = presence_file.sheet_by_index(0)
 
@@ -197,6 +201,7 @@ def MessageForManager(access):
     messages_list = []
     row_list = []
     message_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\messages.xlsx'
+
     message_file = xlrd.open_workbook(message_loc)
     sheet = message_file.sheet_by_index(0)
     for i in range(0, sheet.nrows):
@@ -224,6 +229,7 @@ def MessageForManager(access):
 def find_custumer(access):
     name, last = input('enter the first name: '), input('enter the last name: ')
     file_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\membership.xlsx'
+
     workbook = xlrd.open_workbook(file_loc)
     worksheet = workbook.sheet_by_index(0)
     worksheet.cell_value(0, 0)
@@ -238,6 +244,7 @@ def find_custumer(access):
 def add_worker_Constraints(access):
     constraints_list = []
     row_list = []
+
     constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
     constraints_file = xlrd.open_workbook(constraints_loc)
     amount_sheets = constraints_file.nsheets
@@ -325,6 +332,7 @@ def add_new_inventory(access):
     inventory_list = []
     row_list = []
     users_list = []
+
     inventory_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\inventory.xlsx'
     inventory_file = xlrd.open_workbook(inventory_loc)
     sheet = inventory_file.sheet_by_index(0)
@@ -364,6 +372,7 @@ def add_new_inventory(access):
 
 def Add_custumer (access):
     # saving location file
+
     location = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\membership.xlsx'
     # variable that present the file we will work with
     members_file = xlrd.open_workbook(location)
@@ -427,6 +436,10 @@ def Delete_customer (access):
         for j in range(6):
             if members_list[i][j] == ID:
                 index = i
+
+    if index == None:
+        print("id doesn't exists in membership club")
+
 
     # update excel file by new members list without the removed costumer:
     workbook = xlsxwriter.Workbook('membership.xlsx')
@@ -494,6 +507,8 @@ def Responsible_menu(access):
     print('4- Submission of constraints')
     print('5- add customer to customer club')
     print('6- remove customer from customer club')
+    print('7- Entry to work')
+    print('8- Departing from work')
     print('-----------------------------------------------')
 
     choice = input('your choice: ')
@@ -510,7 +525,10 @@ def Responsible_menu(access):
         Add_custumer(access)
     if choice == '6':
         Delete_customer(access)
-
+    if choice == '7':
+        arrival_to_work(access)
+    if choice == '8':
+        departure(access)
 
 def worker_menu(access):
     print('-----------------------------------------------')
