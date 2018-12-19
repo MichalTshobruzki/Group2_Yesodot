@@ -13,7 +13,11 @@ def arrival_to_work(access):
     date_now = time.localtime()
     presence_list = []
     row_list = []
+<<<<<<< HEAD
+    presence_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\presence1.xlsx'
+=======
     presence_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\presence2.xlsx'
+>>>>>>> e5a2d4d3ed20ce45b83c45c1fcf7eaf4545074a1
     presence_file = xlrd.open_workbook(presence_loc)
     sheet = presence_file.sheet_by_index(0)
 
@@ -69,7 +73,11 @@ def departure(access):
 
     presence_list = []
     row_list = []
+<<<<<<< HEAD
+    presence_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\presence1.xlsx'
+=======
     presence_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\presence2.xlsx'
+>>>>>>> e5a2d4d3ed20ce45b83c45c1fcf7eaf4545074a1
     presence_file = xlrd.open_workbook(presence_loc)
     sheet = presence_file.sheet_by_index(0)
 
@@ -149,7 +157,11 @@ def departure(access):
 def MessageForManager(access):
     messages_list = []
     row_list = []
+<<<<<<< HEAD
+    message_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\messages.xlsx'
+=======
     message_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\messages.xlsx'
+>>>>>>> e5a2d4d3ed20ce45b83c45c1fcf7eaf4545074a1
     message_file = xlrd.open_workbook(message_loc)
     sheet = message_file.sheet_by_index(0)
     for i in range(0, sheet.nrows):
@@ -176,7 +188,11 @@ def MessageForManager(access):
 '''find a custumer in the members club'''
 def find_custumer(access):
     name, last = input('enter the first name: '), input('enter the last name: ')
+<<<<<<< HEAD
+    file_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\membership.xlsx'
+=======
     file_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\membership.xlsx'
+>>>>>>> e5a2d4d3ed20ce45b83c45c1fcf7eaf4545074a1
     workbook = xlrd.open_workbook(file_loc)
     worksheet = workbook.sheet_by_index(0)
     worksheet.cell_value(0, 0)
@@ -191,7 +207,11 @@ def find_custumer(access):
 def add_worker_Constraints(access):
     constraints_list = []
     row_list = []
+<<<<<<< HEAD
+    constraints_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
+=======
     constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
+>>>>>>> e5a2d4d3ed20ce45b83c45c1fcf7eaf4545074a1
     constraints_file = xlrd.open_workbook(constraints_loc)
     amount_sheets = constraints_file.nsheets
     for i in range(amount_sheets):
@@ -278,7 +298,11 @@ def add_new_inventory(access):
     inventory_list = []
     row_list = []
     users_list = []
+<<<<<<< HEAD
+    inventory_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\inventory.xlsx'
+=======
     inventory_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\inventory.xlsx'
+>>>>>>> e5a2d4d3ed20ce45b83c45c1fcf7eaf4545074a1
     inventory_file = xlrd.open_workbook(inventory_loc)
     sheet = inventory_file.sheet_by_index(0)
 
@@ -317,7 +341,11 @@ def add_new_inventory(access):
 
 def Add_custumer (access):
     # saving location file
+<<<<<<< HEAD
+    location = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\membership.xlsx'
+=======
     location = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\membership.xlsx'
+>>>>>>> e5a2d4d3ed20ce45b83c45c1fcf7eaf4545074a1
     # variable that present the file we will work with
     members_file = xlrd.open_workbook(location)
     # the specific sheet we need from the file:
@@ -381,6 +409,10 @@ def Delete_customer (access):
             if members_list[i][j] == ID:
                 index = i
 
+    if index == None:
+        print("id doesn't exists in membership club")
+
+
     # update excel file by new members list without the removed costumer:
     workbook = xlsxwriter.Workbook('membership.xlsx')
     worksheet = workbook.add_worksheet('membership')
@@ -408,7 +440,11 @@ def Open_Menu(access):
         worker_menu(access)
 
 def manager_menu(access):
+<<<<<<< HEAD
+    file_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\messages.xlsx'
+=======
     file_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\messages.xlsx'
+>>>>>>> e5a2d4d3ed20ce45b83c45c1fcf7eaf4545074a1
     workbook = xlrd.open_workbook(file_loc)
     worksheet = workbook.sheet_by_index(0)
     print('-----------------------------------------------')
@@ -504,7 +540,11 @@ def Error_page():
     exit(0)
 
 def Log_In():
+<<<<<<< HEAD
+    file_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\passwarde.xlsx'
+=======
     file_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\passwarde.xlsx'
+>>>>>>> e5a2d4d3ed20ce45b83c45c1fcf7eaf4545074a1
 
     pas_file = xlrd.open_workbook(file_loc)
     sheet = pas_file.sheet_by_index(0)
