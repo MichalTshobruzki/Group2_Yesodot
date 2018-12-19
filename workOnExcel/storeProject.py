@@ -6,6 +6,8 @@ from time import gmtime, strftime
 
 
 def arrival_to_work(access):
+    print(access)
+    print(type(access))
     name = input('enter your first name: ')
     last = input('enter your last name: ')
     date_now = time.localtime()
@@ -443,6 +445,8 @@ def Responsible_menu(access):
     print('4- Submission of constraints')
     print('5- add customer to customer club')
     print('6- remove customer from customer club')
+    print('7- Entry to work')
+    print('8- Departing from work')
     print('-----------------------------------------------')
 
     choice = input('your choice: ')
@@ -459,7 +463,10 @@ def Responsible_menu(access):
         Add_custumer(access)
     if choice == '6':
         Delete_customer(access)
-
+    if choice == '7':
+        arrival_to_work(access)
+    if choice == '8':
+        departure(access)
 
 def worker_menu(access):
     print('-----------------------------------------------')
