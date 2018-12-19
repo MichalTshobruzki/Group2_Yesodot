@@ -4,9 +4,36 @@ import time
 from time import gmtime, strftime
 #ITSEMIL
 
+def get_manager_presence_report(access):
+    now = time.localtime()
+    month = now[1]
+    print('*****Presence Report For Manager:*****')
+    presence_list = []
+    #row_list = []
+    presence_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\presence2.xlsx'
+    presence_file = xlrd.open_workbook(presence_loc)
+    sheet = presence_file.sheet_by_index(0)
+    for i in range(0, sheet.nrows):
+        if sheet.cell_value(i, 4) == str(month):
+            total_sec = sheet.cell_value(i, 8)
+            sec = total_sec % 60
+            total_sec = total_sec // 60
+            mint = total_sec % 60
+            hour = total_sec // 60
+            row_list = [sheet.cell_value(i, 1), sheet.cell_value(i, 3), sheet.cell_value(i, 7), ('%02d:%02d:%02d' % (hour, mint, sec))]
+            presence_list.append(row_list)
+    '''print table report:'''
+    print('**worker**         **arrival**                     **departure**            **total**')
+    for i in range(0, len(presence_list)):
+        print('{0}       {1}       {2}       {3}'.format(presence_list[i][0], presence_list[i][1],  presence_list[i][2], presence_list[i][3]))
+    Open_Menu(access)
+
+
 
 def get_monthly_presence_report(access):
     name = input('enter your name: ')
+    now = time.localtime()
+    month = now[1]
     print('*****Presence Report:*****')
     table_list = ["arrival time", "departure time", "total time"]
     presence_list = []
@@ -15,7 +42,7 @@ def get_monthly_presence_report(access):
     presence_file = xlrd.open_workbook(presence_loc)
     sheet = presence_file.sheet_by_index(0)
     for i in range(0, sheet.nrows):
-        if sheet.cell_value(i, 1) == name:
+        if sheet.cell_value(i, 1) == name and sheet.cell_value(i, 4) == str(month):
             total_sec = sheet.cell_value(i, 8)
             sec = total_sec % 60
             total_sec = total_sec // 60
@@ -448,6 +475,7 @@ def manager_menu(access):
     print('6- Changes in work arrangements')
     print('7- add customer to customer club')
     print('8- remove customer from customer club')
+    print('9- Presence report')
     print('-----------------------------------------------')
 
     choice = input('your choice: ')
@@ -459,7 +487,8 @@ def manager_menu(access):
         Delete_customer(access)
     if choice == '5':
         return_inventory(access)
-
+    if choice == '9':
+        get_manager_presence_report(access)
 
 def Responsible_menu(access):
     print('-----------------------------------------------')
