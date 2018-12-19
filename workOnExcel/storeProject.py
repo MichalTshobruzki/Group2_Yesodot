@@ -418,7 +418,7 @@ def Open_Menu(access):
     if access == access_worker:
         worker_menu(access)
 
-def manager_menu(access):
+def manager_menu(access, worker_name=None):
     file_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\messages.xlsx'
     workbook = xlrd.open_workbook(file_loc)
     worksheet = workbook.sheet_by_index(0)
@@ -446,7 +446,7 @@ def manager_menu(access):
         Delete_customer(access)
 
 
-def Responsible_menu(access):
+def Responsible_menu(access, worker_name=None):
     print('-----------------------------------------------')
     print('responsible menu:')
     print('Select the desired action ')
@@ -479,7 +479,7 @@ def Responsible_menu(access):
     if choice == '8':
         departure(access)
 
-def worker_menu(access):
+def worker_menu(access, worker_name=None):
     print('-----------------------------------------------')
     print('worker menu:')
     print('Select the desired action ')
@@ -534,7 +534,7 @@ def Log_In():
                 for j in range(2):
                     if Password == (sheet.cell_value(index, 1)):
                         worker_access = sheet.cell_value(index, 2)
-                        Open_Menu(worker_access)
+                        Open_Menu(worker_access, name)
                         break
                     else:
                         Password = int(input('wrong password, try again'))
