@@ -4,12 +4,38 @@ import time
 from time import gmtime, strftime
 #ITSEMIL
 
+
+def get_monthly_presence_report(access):
+    name = input('enter your name: ')
+    print('*****Presence Report:*****')
+    table_list = ["arrival time", "departure time", "total time"]
+    presence_list = []
+    #row_list = []
+    presence_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\presence2.xlsx'
+    presence_file = xlrd.open_workbook(presence_loc)
+    sheet = presence_file.sheet_by_index(0)
+    for i in range(0, sheet.nrows):
+        if sheet.cell_value(i, 1) == name:
+            total_sec = sheet.cell_value(i, 8)
+            sec = total_sec % 60
+            total_sec = total_sec // 60
+            mint = total_sec % 60
+            hour = total_sec // 60
+            row_list = [sheet.cell_value(i, 3), sheet.cell_value(i, 7), ('%02d:%02d:%02d' % (hour, mint, sec))]
+            presence_list.append(row_list)
+    '''print table report:'''
+    print('       **arrival**                     **departure**            **total**')
+    for i in range(0, len(presence_list)):
+        print('{0}       {1}       {2}'.format(presence_list[i][0], presence_list[i][1], presence_list[i][2]))
+    Open_Menu(access)
+
+
 def return_inventory(access):
     flag=0
     while flag == 0:
         inventory_list = []
         updated_stock_list = []
-        inventory_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\inventory.xlsx'
+        inventory_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\inventory.xlsx'
         inventory_file = xlrd.open_workbook(inventory_loc)
         sheet = inventory_file.sheet_by_index(0)
         k, l = 0, 0
@@ -88,31 +114,6 @@ def arrival_to_work(access):
     presence_workbook.close()
     Open_Menu(access)
 
-    # name = input('enter your first name: ')
-    # last = input('enter your last name: ')
-    # presence_list = []
-    # row_list = []
-    # presence_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\presence2.xlsx'
-    # presence_file = xlrd.open_workbook(presence_loc)
-    # sheet = presence_file.sheet_by_index(0)
-    #
-    # for i in range(0, sheet.nrows):
-    #     row_list = sheet.row_values(i)
-    #     if i > 0:
-    #         row_list[0] = int(row_list[0])
-    #     presence_list.append(row_list)
-    #
-    # presence_list.append([sheet.nrows, name, last, strftime("%a, %d %b %Y %H:%M:%S", time.localtime())])
-    # presence_workbook = xlsxwriter.Workbook('presence1.xlsx')
-    # worksheet = presence_workbook.add_worksheet('presence')
-    #
-    # for i in range(len(presence_list)):
-    #     for j in range(len(presence_list[i])):
-    #         worksheet.write(i, j, presence_list[i][j])
-    # presence_workbook.close()
-    # Open_Menu(access)
-
-
 
 def departure(access):
     name = input('enter your first name: ')
@@ -155,45 +156,6 @@ def departure(access):
             worksheet.write(i, j, presence_list[i][j])
     presence_workbook.close()
     Open_Menu(access)
-
-#     name = input('enter your first name: ')
-#     last = input('enter your last name: ')
-#     presence_list = []
-#     row_list = []
-#     presence_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\presence2.xlsx'
-#     presence_file = xlrd.open_workbook(presence_loc)
-#     sheet = presence_file.sheet_by_index(0)
-#
-#     for i in range(0, sheet.nrows):
-#         row_list = sheet.row_values(i)
-#         if i > 0:
-#             row_list[0] = int(row_list[0])
-#         presence_list.append(row_list)
-#     for i in range(1, len(presence_list)):
-#         if presence_list[i][1] == name and presence_list[i][2] == last:
-#             presence_list[i][4] = strftime("%a, %d %b %Y %H:%M:%S", time.localtime())
-#             worker = i
-#     worker_arrival = presence_list[worker][3]
-#     worker_departure = presence_list[worker][4]
-#
-# ######calculates the second of each time
-#     arrival_time = (int(worker_arrival[17])*10 + int(worker_arrival[18]))*3600 +\
-#                    (int(worker_arrival[20])*10 + int(worker_arrival[21]))*60 +\
-#                    (int(worker_arrival[23])*10 + int(worker_arrival[24]))
-#     departure_time = (int(worker_departure[17]) * 10 + int(worker_departure[18])) * 3600 +\
-#                      (int(worker_departure[20]) * 10 + int(worker_departure[21])) * 60 +\
-#                      (int(worker_departure[23]) * 10 + int(worker_departure[24]))
-#     delta = departure_time - arrival_time
-#     presence_list[worker][5] = delta
-#
-#     presence_workbook = xlsxwriter.Workbook('presence1.xlsx')
-#     worksheet = presence_workbook.add_worksheet('presence')
-#
-#     for i in range(len(presence_list)):
-#         for j in range(len(presence_list[i])):
-#             worksheet.write(i, j, presence_list[i][j])
-#     presence_workbook.close()
- #   Open_Menu(access)
 
 
 '''this func recieves the meassage from the shift manager'''
@@ -468,7 +430,7 @@ def Open_Menu(access):
         worker_menu(access)
 
 
-def manager_menu(access, worker_name=None):
+def manager_menu(access):
     file_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\messages.xlsx'
 
     workbook = xlrd.open_workbook(file_loc)
@@ -499,7 +461,7 @@ def manager_menu(access, worker_name=None):
         return_inventory(access)
 
 
-def Responsible_menu(access, worker_name=None):
+def Responsible_menu(access):
     print('-----------------------------------------------')
     print('responsible menu:')
     print('Select the desired action ')
@@ -511,6 +473,7 @@ def Responsible_menu(access, worker_name=None):
     print('6- remove customer from customer club')
     print('7- Entry to work')
     print('8- Departing from work')
+    print('9- Get presence report')
     print('-----------------------------------------------')
 
     choice = input('your choice: ')
@@ -531,8 +494,10 @@ def Responsible_menu(access, worker_name=None):
         arrival_to_work(access)
     if choice == '8':
         departure(access)
+    if choice == '9':
+        get_monthly_presence_report(access)
 
-def worker_menu(access, worker_name=None):
+def worker_menu(access):
     print('-----------------------------------------------')
     print('worker menu:')
     print('Select the desired action ')
@@ -544,6 +509,7 @@ def worker_menu(access, worker_name=None):
     print('6- find customer in customer club')
     print('7- Entry to work')
     print('8- Departing from work')
+    print('9- Get presence report')
     print('-----------------------------------------------')
     choice = input()
     if choice == '4':
@@ -562,13 +528,15 @@ def worker_menu(access, worker_name=None):
         arrival_to_work(access)
     if choice == '8':
         departure(access)
+    if choice == '9':
+        get_monthly_presence_report(access)
 
 
 def Error_page():
     exit(0)
 
 def Log_In():
-    file_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\passwarde.xlsx'
+    file_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\passwarde.xlsx'
 
     pas_file = xlrd.open_workbook(file_loc)
     sheet = pas_file.sheet_by_index(0)
@@ -587,7 +555,7 @@ def Log_In():
                 for j in range(2):
                     if Password == (sheet.cell_value(index, 1)):
                         worker_access = sheet.cell_value(index, 2)
-                        Open_Menu(worker_access, name)
+                        Open_Menu(worker_access)
                         break
                     else:
                         Password = int(input('wrong password, try again'))
