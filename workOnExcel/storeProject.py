@@ -214,11 +214,51 @@ def Add_custumer (access):
     Open_Menu(access)
 
 
+def Delete_customer (access):
+    # saving location file
+    location = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\membership.xlsx'
+    # variable that present the file we will work with
+    members_file = xlrd.open_workbook(location)
+    # the specific sheet we need from the file:
+    sheet = members_file.sheet_by_index(0)
+
+    row_list = []
+    members_list = []
+
+    # copy the file to list:
+    for i in range(0, sheet.nrows):
+        row_list = sheet.row_values(i)
+        members_list.append(row_list)
+
+    # get costumer id:
+    ID = input('please enter costumer id: ')
+
+
+    # find the index of the id in membership list:
+    index = None
+    for i in range(len(members_list)):
+        for j in range(6):
+            if members_list[i][j] == ID:
+                index = i
+
+    # update excel file by new members list without the removed costumer:
+    workbook = xlsxwriter.Workbook('membership.xlsx')
+    worksheet = workbook.add_worksheet('membership')
+
+    for i in range(len(members_list)):
+        if i != index:
+            for j in range(6):
+                worksheet.write(i, j, members_list[i][j])
+
+    workbook.close()
+    print('The customer was successfully removed from customer club')
+    Open_Menu(access)
+
+
 def Open_Menu(access):
     access_manage = 'manager'
     access_Responsible = 'shift r'
-    access_worker ='worker'
-
+    access_worker = 'worker'
 
     if access == access_manage:
         manager_menu(access)
@@ -251,6 +291,8 @@ def manager_menu(access):
         add_new_inventory(access)
     if choice == '7':
         Add_custumer(access)
+    if choice == '8':
+        Delete_customer(access)
 
 
 def Responsible_menu(access):
@@ -277,6 +319,8 @@ def Responsible_menu(access):
         MessageForManager(access)
     if choice == '5':
         Add_custumer(access)
+    if choice == '6':
+        Delete_customer(access)
 
 
 def worker_menu(access):
