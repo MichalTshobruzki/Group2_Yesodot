@@ -28,7 +28,7 @@ find a custumer in the members club
 '''
 def find_custumer(access):
     name, last = input('enter the first name: '), input('enter the last name: ')
-    file_loc = r'C:\Users\emiliazorin\Desktop\YESODOT!\Group2_Yesodot\Hackathon\membership.xlsx'
+    file_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\Hackathon\membership.xlsx'
     workbook = xlrd.open_workbook(file_loc)
     worksheet = workbook.sheet_by_index(0)
     worksheet.cell_value(0, 0)
@@ -119,8 +119,8 @@ def Open_Menu(access):
     if access == access_worker:
         worker_menu(access)
 
-def manager_menu(access):
-    file_loc = r'C:\Users\emiliazorin\Desktop\YESODOT!\Group2_Yesodot\Hackathon\messages.xlsx'
+def manager_menu(access, worker_name=None):
+    file_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\Hackathon\messages.xlsx'
     workbook = xlrd.open_workbook(file_loc)
     worksheet = workbook.sheet_by_index(0)
     print("Dear manager,you have new alert:")
@@ -137,7 +137,7 @@ def manager_menu(access):
     print('8- remove customer from customer club')
 
 
-def Responsible_menu(access):
+def Responsible_menu(access, worker_name=None):
     print('responsible menu:')
     print('Select the desired action ')
     print('1- sell item')
@@ -157,7 +157,7 @@ def Responsible_menu(access):
         MessageForManager(access)
 
 
-def worker_menu(access):
+def worker_menu(access, worker_name=None):
     print('worker menu:')
     print('Select the desired action ')
     print('1- sell item')
@@ -182,7 +182,7 @@ def Error_page():
     exit(0)
 
 def Log_In():
-    file_loc = r'C:\Users\emiliazorin\Desktop\YESODOT!\Group2_Yesodot\Hackathon\passwarde.xlsx'
+    file_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\Hackathon\passwarde.xlsx'
 
     pas_file = xlrd.open_workbook(file_loc)
     sheet = pas_file.sheet_by_index(0)
@@ -202,7 +202,7 @@ def Log_In():
                 for j in range(2):
                     if Password == (sheet.cell_value(index, 1)):
                         worker_access = sheet.cell_value(index, 2)
-                        Open_Menu(worker_access)
+                        Open_Menu(worker_access, name)
                         break
                     else:
                         Password = int(input('wrong password, try again'))
@@ -233,7 +233,7 @@ Log_In()
 find a custumer in the members club
 '''
 def find_custumer(name, last):
-    file_loc = r'C:\Users\emiliazorin\Desktop\YESODOT!\Group2_Yesodot\Hackathon\membership.xlsx'
+    file_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\Hackathon\membership.xlsx'
     workbook = xlrd.open_workbook(file_loc)
     worksheet = workbook.sheet_by_index(0)
 
