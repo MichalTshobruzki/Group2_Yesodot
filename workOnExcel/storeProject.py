@@ -494,6 +494,7 @@ def manager_menu(access):
     print('7- add customer to customer club')
     print('8- remove customer from customer club')
     print('9- Presence report')
+    print('10- Get inventory report')
     print('-----------------------------------------------')
 
     choice = input('your choice: ')
@@ -507,6 +508,8 @@ def manager_menu(access):
         return_inventory(access)
     if choice == '9':
         get_manager_presence_report(access)
+    if choice == '10':
+        get_inventory_report(access)
 
 def Responsible_menu(access):
     print('-----------------------------------------------')
