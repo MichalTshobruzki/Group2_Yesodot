@@ -6,6 +6,22 @@ import random
 #ITSEMIL
 
 
+def get_shift_report(access):
+    constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
+    constraints_file = xlrd.open_workbook(constraints_loc)
+    sheet = constraints_file.sheet_by_index(0)
+    row_list = []
+    constraints_list = []
+    for i in range(0, sheet.nrows):
+        row_list = sheet.row_values(i)
+        constraints_list.append(row_list)
+
+    '''print table report:'''
+    print('                 **Sunday**    **Monday**    **Tuesday**    **Wednesday**    **Thursday**    **Friday**    **Saturday**')
+    for i in range(1, len(constraints_list)):
+        print('{0}\t\t\t\t{1}\t\t{2}\t\t\t{3}\t\t\t{4}\t\t\t{5}\t\t\t{6}\t\t\t\t{7}'.format(constraints_list[i][0], constraints_list[i][1],  constraints_list[i][2], constraints_list[i][3], constraints_list[i][4], constraints_list[i][5], constraints_list[i][6], constraints_list[i][7]))
+    Open_Menu(access)
+
 
 def make_shift_by_random(day):
     shift = []
@@ -187,9 +203,9 @@ def get_inventory_report(access):
         inventory_list.append(row_list)
 
     '''print table report:'''
-    print('**product code**     **name**      **size**      **amount**       **color**      **price**')
+    print('**product code**    **name**  **size**      **amount**       **color**      **price**')
     for i in range(1, len(inventory_list)):
-        print('      {0}            {1}          {2}           {3}               {4}          {5}'.format(inventory_list[i][0], inventory_list[i][1],  inventory_list[i][2], int(inventory_list[i][3]), inventory_list[i][4], inventory_list[i][5]))
+        print('\t{0}\t\t\t\t{1}\t\t{2}\t\t\t{3}\t\t\t\t{4}\t\t\t{5}'.format(int(inventory_list[i][0]), inventory_list[i][1],  inventory_list[i][2], int(inventory_list[i][3]), inventory_list[i][4], inventory_list[i][5]))
     Open_Menu(access)
 
 
@@ -739,6 +755,7 @@ def worker_menu(access):
     print('7- Entry to work')
     print('8- Departing from work')
     print('9- Get presence report')
+    print('10- Get shift report')
     print('-----------------------------------------------')
     choice = input()
     if choice == '4':
@@ -759,7 +776,8 @@ def worker_menu(access):
         departure(access)
     if choice == '9':
         get_monthly_presence_report(access)
-
+    if choice == '10':
+        get_shift_report(access)
 
 def Error_page():
     exit(0)
