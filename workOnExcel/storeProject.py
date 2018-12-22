@@ -14,11 +14,11 @@ def make_shift_by_random(day):
         shift.append('no one can')
         return shift
     elif len(day) == 1:
-        shift[0] = day[0]
-        shift[1] = 'no one can'
+        shift.append(day[0])
+        shift.append('no one can')
         return shift
     while len(shift) < 2:
-        rand = random.randint(0, len(day)-1)
+        rand = random.randint(0, len(day) - 1)
         if len(shift) == 0:
             shift.append(day[rand])
         else:
@@ -34,7 +34,7 @@ def build_one_shift(amount_sheets, row, col):
     shift = []
     constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
     constraints_file = xlrd.open_workbook(constraints_loc)
-    for i in range(amount_sheets):
+    for i in range(1, amount_sheets):
         sheet = constraints_file.sheet_by_index(i)
         if sheet.cell_value(row, col) != 'NO':
             shift.append(sheet.name)
@@ -50,7 +50,7 @@ def build_shifts(access):
     constraints_file = xlrd.open_workbook(constraints_loc)
     amount_sheets = constraints_file.nsheets
     #########add the sheets of constraints to list##########
-    for i in range(amount_sheets):
+    for i in range(1, amount_sheets):
         sheet = constraints_file.sheet_by_index(i)
         sheet_list = [sheet.name]
         for j in range(sheet.nrows):
