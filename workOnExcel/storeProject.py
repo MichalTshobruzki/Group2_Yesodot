@@ -2,7 +2,178 @@ import xlrd
 import xlsxwriter
 import time
 from time import gmtime, strftime
+import random
 #ITSEMIL
+
+
+
+def make_shift_by_random(day):
+    shift = []
+    if len(day) == 0:
+        shift.append('no one can')
+        shift.append('no one can')
+        return shift
+    elif len(day) == 1:
+        shift[0] = day[0]
+        shift[1] = 'no one can'
+        return shift
+    while len(shift) < 2:
+        rand = random.randint(0, len(day)-1)
+        if len(shift) == 0:
+            shift.append(day[rand])
+        else:
+            for i in range(len(shift)):
+                if day[rand] != shift[i]:
+                    shift.append(day[rand])
+                    break
+    return shift
+
+
+####################################################
+def build_one_shift(amount_sheets, row, col):
+    shift = []
+    constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
+    constraints_file = xlrd.open_workbook(constraints_loc)
+    for i in range(amount_sheets):
+        sheet = constraints_file.sheet_by_index(i)
+        if sheet.cell_value(row, col) != 'NO':
+            shift.append(sheet.name)
+    return shift
+
+
+####################################################
+def build_shifts(access):
+    constraints_list = []
+    row_list = []
+
+    constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
+    constraints_file = xlrd.open_workbook(constraints_loc)
+    amount_sheets = constraints_file.nsheets
+    #########add the sheets of constraints to list##########
+    for i in range(amount_sheets):
+        sheet = constraints_file.sheet_by_index(i)
+        sheet_list = [sheet.name]
+        for j in range(sheet.nrows):
+            row_list = sheet.row_values(j)
+            sheet_list.append(row_list)
+        constraints_list.append(sheet_list)
+
+##every workers that can work in every shift
+    sunday_morning = build_one_shift(amount_sheets, 1, 1)
+    sunday_evening = build_one_shift(amount_sheets, 2, 1)
+    monday_morning = build_one_shift(amount_sheets, 1, 2)
+    monday_evening = build_one_shift(amount_sheets, 2, 2)
+    tuesday_morning = build_one_shift(amount_sheets, 1, 3)
+    tuesday_evening = build_one_shift(amount_sheets, 2, 3)
+    wednesday_morning = build_one_shift(amount_sheets, 1, 4)
+    wednesday_evening = build_one_shift(amount_sheets, 2, 4)
+    thursday_morning = build_one_shift(amount_sheets, 1, 5)
+    thursday_evening = build_one_shift(amount_sheets, 2, 5)
+    friday_morning = build_one_shift(amount_sheets, 1, 6)
+    saturday_evening = build_one_shift(amount_sheets, 2, 7)
+
+##list of workers in the shift
+    sunday_morning_shift = make_shift_by_random(sunday_morning)
+    sunday_evening_shift = make_shift_by_random(sunday_evening)
+    monday_morning_shift = make_shift_by_random(monday_morning)
+    monday_evening_shift = make_shift_by_random(monday_evening)
+    tuesday_morning_shift = make_shift_by_random(tuesday_morning)
+    tuesday_evening_shift = make_shift_by_random(tuesday_evening)
+    wednesday_morning_shift = make_shift_by_random(wednesday_morning)
+    wednesday_evening_shift = make_shift_by_random(wednesday_evening)
+    thursday_morning_shift = make_shift_by_random(thursday_morning)
+    thursday_evening_shift = make_shift_by_random(thursday_evening)
+    friday_morning_shift = make_shift_by_random(friday_morning)
+    saturday_evening_shift = make_shift_by_random(saturday_evening)
+
+    workbook = xlsxwriter.Workbook('Constraints1.xlsx')
+    worksheet = workbook.add_worksheet('shifts')
+
+##print the table of shifts
+    worksheet.write(1, 0, 'Morning')
+    worksheet.write(2, 0, 'Morning')
+    worksheet.write(3, 0, 'Evening')
+    worksheet.write(4, 0, 'Evening')
+    worksheet.write(0, 1, 'Sunday')
+    worksheet.write(0, 2, 'Monday')
+    worksheet.write(0, 3, 'Tuesday')
+    worksheet.write(0, 4, 'Wednesday')
+    worksheet.write(0, 5, 'Thursday')
+    worksheet.write(0, 6, 'Friday')
+    worksheet.write(0, 7, 'Saturday')
+
+##add the workers to each shift
+#############################################Sunday
+    first = sunday_morning_shift[0]
+    second = sunday_morning_shift[1]
+    worksheet.write(1, 1, first)
+    worksheet.write(2, 1, second)
+
+    first = sunday_evening_shift[0]
+    second = sunday_evening_shift[1]
+    worksheet.write(3, 1, first)
+    worksheet.write(4, 1, second)
+#############################################Monday
+    first = monday_morning_shift[0]
+    second = monday_morning_shift[1]
+    worksheet.write(1, 2, first)
+    worksheet.write(2, 2, second)
+
+    first = monday_evening_shift[0]
+    second = monday_evening_shift[1]
+    worksheet.write(3, 2, first)
+    worksheet.write(4, 2, second)
+#############################################Tuesday
+    first = tuesday_morning_shift[0]
+    second = tuesday_morning_shift[1]
+    worksheet.write(1, 3, first)
+    worksheet.write(2, 3, second)
+
+    first = tuesday_evening_shift[0]
+    second = tuesday_evening_shift[1]
+    worksheet.write(3, 3, first)
+    worksheet.write(4, 3, second)
+#############################################wednesday
+    first = wednesday_morning_shift[0]
+    second = wednesday_morning_shift[1]
+    worksheet.write(1, 4, first)
+    worksheet.write(2, 4, second)
+
+    first = wednesday_evening_shift[0]
+    second = wednesday_evening_shift[1]
+    worksheet.write(3, 4, first)
+    worksheet.write(4, 4, second)
+#############################################thursday
+    first = thursday_morning_shift[0]
+    second = thursday_morning_shift[1]
+    worksheet.write(1, 5, first)
+    worksheet.write(2, 5, second)
+
+    first = thursday_evening_shift[0]
+    second = thursday_evening_shift[1]
+    worksheet.write(3, 5, first)
+    worksheet.write(4, 5, second)
+#############################################friday
+    first = friday_morning_shift[0]
+    second = friday_morning_shift[1]
+    worksheet.write(1, 6, first)
+    worksheet.write(2, 6, second)
+#############################################saturday
+    first = saturday_evening_shift[0]
+    second = saturday_evening_shift[1]
+    worksheet.write(3, 7, first)
+    worksheet.write(4, 7, second)
+
+    ##########copy the sheets of constraints##########
+    for i in range(len(constraints_list)):
+        worksheet = workbook.add_worksheet(constraints_list[i][0])   #constraints_list[i][0]- sheet name
+        for j in range(1, len(constraints_list[i])):  # number of rows in sheet
+            for k in range(len(constraints_list[i][j])):
+                worksheet.write(j-1, k, constraints_list[i][j][k])
+
+    workbook.close()
+    Open_Menu(access)
+
 
 
 def get_inventory_report(access):
@@ -495,6 +666,7 @@ def manager_menu(access):
     print('8- remove customer from customer club')
     print('9- Presence report')
     print('10- Get inventory report')
+    print('11- Bulid shifts table')
     print('-----------------------------------------------')
 
     choice = input('your choice: ')
@@ -510,6 +682,9 @@ def manager_menu(access):
         get_manager_presence_report(access)
     if choice == '10':
         get_inventory_report(access)
+    if choice == '11':
+        build_shifts(access)
+
 
 def Responsible_menu(access):
     print('-----------------------------------------------')
