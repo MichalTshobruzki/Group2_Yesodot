@@ -2,18 +2,335 @@ import xlrd
 import xlsxwriter
 import time
 from time import gmtime, strftime
+<<<<<<< HEAD
+
+=======
+import random
+#ITSEMIL
+>>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
 
 
+def get_shift_report(access):
+    constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
+    constraints_file = xlrd.open_workbook(constraints_loc)
+    sheet = constraints_file.sheet_by_index(0)
+    row_list = []
+    constraints_list = []
+    for i in range(0, sheet.nrows):
+        row_list = sheet.row_values(i)
+        constraints_list.append(row_list)
+
+    '''print table report:'''
+    print('                 **Sunday**    **Monday**    **Tuesday**    **Wednesday**    **Thursday**    **Friday**    **Saturday**')
+    for i in range(1, len(constraints_list)):
+        print('{0}\t\t\t\t{1}\t\t{2}\t\t\t{3}\t\t\t{4}\t\t\t{5}\t\t\t{6}\t\t\t\t{7}'.format(constraints_list[i][0], constraints_list[i][1],  constraints_list[i][2], constraints_list[i][3], constraints_list[i][4], constraints_list[i][5], constraints_list[i][6], constraints_list[i][7]))
+    Open_Menu(access)
+
+
+def make_shift_by_random(day):
+    shift = []
+    if len(day) == 0:
+        shift.append('no one can')
+        shift.append('no one can')
+        return shift
+    elif len(day) == 1:
+        shift.append(day[0])
+        shift.append('no one can')
+        return shift
+    while len(shift) < 2:
+        rand = random.randint(0, len(day) - 1)
+        if len(shift) == 0:
+            shift.append(day[rand])
+        else:
+            for i in range(len(shift)):
+                if day[rand] != shift[i]:
+                    shift.append(day[rand])
+                    break
+    return shift
+
+
+####################################################
+def build_one_shift(amount_sheets, row, col):
+    shift = []
+    constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
+    constraints_file = xlrd.open_workbook(constraints_loc)
+    for i in range(1, amount_sheets):
+        sheet = constraints_file.sheet_by_index(i)
+        if sheet.cell_value(row, col) != 'NO':
+            shift.append(sheet.name)
+    return shift
+
+
+####################################################
+def build_shifts(access):
+    constraints_list = []
+    row_list = []
+
+    constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
+    constraints_file = xlrd.open_workbook(constraints_loc)
+    amount_sheets = constraints_file.nsheets
+    #########add the sheets of constraints to list##########
+    for i in range(1, amount_sheets):
+        sheet = constraints_file.sheet_by_index(i)
+        sheet_list = [sheet.name]
+        for j in range(sheet.nrows):
+            row_list = sheet.row_values(j)
+            sheet_list.append(row_list)
+        constraints_list.append(sheet_list)
+
+##every workers that can work in every shift
+    sunday_morning = build_one_shift(amount_sheets, 1, 1)
+    sunday_evening = build_one_shift(amount_sheets, 2, 1)
+    monday_morning = build_one_shift(amount_sheets, 1, 2)
+    monday_evening = build_one_shift(amount_sheets, 2, 2)
+    tuesday_morning = build_one_shift(amount_sheets, 1, 3)
+    tuesday_evening = build_one_shift(amount_sheets, 2, 3)
+    wednesday_morning = build_one_shift(amount_sheets, 1, 4)
+    wednesday_evening = build_one_shift(amount_sheets, 2, 4)
+    thursday_morning = build_one_shift(amount_sheets, 1, 5)
+    thursday_evening = build_one_shift(amount_sheets, 2, 5)
+    friday_morning = build_one_shift(amount_sheets, 1, 6)
+    saturday_evening = build_one_shift(amount_sheets, 2, 7)
+
+##list of workers in the shift
+    sunday_morning_shift = make_shift_by_random(sunday_morning)
+    sunday_evening_shift = make_shift_by_random(sunday_evening)
+    monday_morning_shift = make_shift_by_random(monday_morning)
+    monday_evening_shift = make_shift_by_random(monday_evening)
+    tuesday_morning_shift = make_shift_by_random(tuesday_morning)
+    tuesday_evening_shift = make_shift_by_random(tuesday_evening)
+    wednesday_morning_shift = make_shift_by_random(wednesday_morning)
+    wednesday_evening_shift = make_shift_by_random(wednesday_evening)
+    thursday_morning_shift = make_shift_by_random(thursday_morning)
+    thursday_evening_shift = make_shift_by_random(thursday_evening)
+    friday_morning_shift = make_shift_by_random(friday_morning)
+    saturday_evening_shift = make_shift_by_random(saturday_evening)
+
+    workbook = xlsxwriter.Workbook('Constraints1.xlsx')
+    worksheet = workbook.add_worksheet('shifts')
+
+##print the table of shifts
+    worksheet.write(1, 0, 'Morning')
+    worksheet.write(2, 0, 'Morning')
+    worksheet.write(3, 0, 'Evening')
+    worksheet.write(4, 0, 'Evening')
+    worksheet.write(0, 1, 'Sunday')
+    worksheet.write(0, 2, 'Monday')
+    worksheet.write(0, 3, 'Tuesday')
+    worksheet.write(0, 4, 'Wednesday')
+    worksheet.write(0, 5, 'Thursday')
+    worksheet.write(0, 6, 'Friday')
+    worksheet.write(0, 7, 'Saturday')
+
+##add the workers to each shift
+#############################################Sunday
+    first = sunday_morning_shift[0]
+    second = sunday_morning_shift[1]
+    worksheet.write(1, 1, first)
+    worksheet.write(2, 1, second)
+
+    first = sunday_evening_shift[0]
+    second = sunday_evening_shift[1]
+    worksheet.write(3, 1, first)
+    worksheet.write(4, 1, second)
+#############################################Monday
+    first = monday_morning_shift[0]
+    second = monday_morning_shift[1]
+    worksheet.write(1, 2, first)
+    worksheet.write(2, 2, second)
+
+    first = monday_evening_shift[0]
+    second = monday_evening_shift[1]
+    worksheet.write(3, 2, first)
+    worksheet.write(4, 2, second)
+#############################################Tuesday
+    first = tuesday_morning_shift[0]
+    second = tuesday_morning_shift[1]
+    worksheet.write(1, 3, first)
+    worksheet.write(2, 3, second)
+
+    first = tuesday_evening_shift[0]
+    second = tuesday_evening_shift[1]
+    worksheet.write(3, 3, first)
+    worksheet.write(4, 3, second)
+#############################################wednesday
+    first = wednesday_morning_shift[0]
+    second = wednesday_morning_shift[1]
+    worksheet.write(1, 4, first)
+    worksheet.write(2, 4, second)
+
+    first = wednesday_evening_shift[0]
+    second = wednesday_evening_shift[1]
+    worksheet.write(3, 4, first)
+    worksheet.write(4, 4, second)
+#############################################thursday
+    first = thursday_morning_shift[0]
+    second = thursday_morning_shift[1]
+    worksheet.write(1, 5, first)
+    worksheet.write(2, 5, second)
+
+    first = thursday_evening_shift[0]
+    second = thursday_evening_shift[1]
+    worksheet.write(3, 5, first)
+    worksheet.write(4, 5, second)
+#############################################friday
+    first = friday_morning_shift[0]
+    second = friday_morning_shift[1]
+    worksheet.write(1, 6, first)
+    worksheet.write(2, 6, second)
+#############################################saturday
+    first = saturday_evening_shift[0]
+    second = saturday_evening_shift[1]
+    worksheet.write(3, 7, first)
+    worksheet.write(4, 7, second)
+
+    ##########copy the sheets of constraints##########
+    for i in range(len(constraints_list)):
+        worksheet = workbook.add_worksheet(constraints_list[i][0])   #constraints_list[i][0]- sheet name
+        for j in range(1, len(constraints_list[i])):  # number of rows in sheet
+            for k in range(len(constraints_list[i][j])):
+                worksheet.write(j-1, k, constraints_list[i][j][k])
+
+    workbook.close()
+    Open_Menu(access)
+
+
+
+def get_inventory_report(access):
+    inventory_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Inventory.xlsx'
+    inventory_file = xlrd.open_workbook(inventory_loc)
+    sheet = inventory_file.sheet_by_index(0)
+    row_list = []
+    inventory_list = []
+    for i in range(0, sheet.nrows):
+        row_list = sheet.row_values(i)
+        inventory_list.append(row_list)
+
+    '''print table report:'''
+    print('**product code**    **name**  **size**      **amount**       **color**      **price**')
+    for i in range(1, len(inventory_list)):
+        print('\t{0}\t\t\t\t{1}\t\t{2}\t\t\t{3}\t\t\t\t{4}\t\t\t{5}'.format(int(inventory_list[i][0]), inventory_list[i][1],  inventory_list[i][2], int(inventory_list[i][3]), inventory_list[i][4], inventory_list[i][5]))
+    Open_Menu(access)
+
+
+def get_manager_presence_report(access):
+    now = time.localtime()
+    month = now[1]
+    print('*****Presence Report For Manager:*****')
+    presence_list = []
+    #row_list = []
+    presence_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\presence2.xlsx'
+    presence_file = xlrd.open_workbook(presence_loc)
+    sheet = presence_file.sheet_by_index(0)
+    for i in range(0, sheet.nrows):
+        if sheet.cell_value(i, 4) == str(month):
+            total_sec = sheet.cell_value(i, 8)
+            sec = total_sec % 60
+            total_sec = total_sec // 60
+            mint = total_sec % 60
+            hour = total_sec // 60
+            row_list = [sheet.cell_value(i, 1), sheet.cell_value(i, 3), sheet.cell_value(i, 7), ('%02d:%02d:%02d' % (hour, mint, sec))]
+            presence_list.append(row_list)
+    '''print table report:'''
+    print('**worker**         **arrival**                     **departure**            **total**')
+    for i in range(0, len(presence_list)):
+        print('{0}       {1}       {2}       {3}'.format(presence_list[i][0], presence_list[i][1],  presence_list[i][2], presence_list[i][3]))
+    Open_Menu(access)
+
+
+
+def get_monthly_presence_report(access):
+    name = input('enter your name: ')
+    now = time.localtime()
+    month = now[1]
+    print('*****Presence Report:*****')
+    table_list = ["arrival time", "departure time", "total time"]
+    presence_list = []
+    #row_list = []
+    presence_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\presence2.xlsx'
+    presence_file = xlrd.open_workbook(presence_loc)
+    sheet = presence_file.sheet_by_index(0)
+    for i in range(0, sheet.nrows):
+        if sheet.cell_value(i, 1) == name and sheet.cell_value(i, 4) == str(month):
+            total_sec = sheet.cell_value(i, 8)
+            sec = total_sec % 60
+            total_sec = total_sec // 60
+            mint = total_sec % 60
+            hour = total_sec // 60
+            row_list = [sheet.cell_value(i, 3), sheet.cell_value(i, 7), ('%02d:%02d:%02d' % (hour, mint, sec))]
+            presence_list.append(row_list)
+    '''print table report:'''
+    print('       **arrival**                     **departure**            **total**')
+    for i in range(0, len(presence_list)):
+        print('{0}       {1}       {2}'.format(presence_list[i][0], presence_list[i][1], presence_list[i][2]))
+    Open_Menu(access)
+
+
+def return_inventory(access):
+    flag=0
+    while flag == 0:
+        inventory_list = []
+        updated_stock_list = []
+        inventory_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\inventory.xlsx'
+        inventory_file = xlrd.open_workbook(inventory_loc)
+        sheet = inventory_file.sheet_by_index(0)
+        k, l = 0, 0
+
+        for i in range(sheet.nrows):
+            row_list = sheet.row_values(i)
+            inventory_list.append(row_list)
+        for i in range(1, len(inventory_list)):
+            num = inventory_list[i][0]
+            inventory_list[i][0] = int(num)
+            num = inventory_list[i][3]
+            inventory_list[i][3] = int(num)
+
+        picks = []
+        pick = int(input("enter product code of item you want to send back?:"))
+        picks.append(pick)
+        for i in range(len(inventory_list)):
+            for j in range(len(inventory_list[i])):
+                for k in range(len(picks)):
+                    if picks[k] == inventory_list[i][j]:
+                        l = i + 1
+        for i in range(0, l-1, 1):
+            updated_stock_list.append(inventory_list[i])
+        for j in range(l, len(inventory_list), 1):
+            updated_stock_list.append(inventory_list[j])
+        print("the new inventory is:")
+        print(updated_stock_list)
+
+        pick2 = input("would you like to remove another item from the inventory?:[yes/no]")
+        if pick2 == 'yes':
+            flag = 0
+        elif pick2 == 'no':
+            flag = 1
+
+        inventory_workbook = xlsxwriter.Workbook('inventory.xlsx')
+        worksheet = inventory_workbook.add_worksheet('inventory1')
+        for i in range(len(updated_stock_list)):
+            print(updated_stock_list[i])
+            for j in range(len(updated_stock_list[i])):
+                worksheet.write(i, j, updated_stock_list[i][j])
+
+        inventory_workbook.close()
+    Open_Menu(access)
 
 def arrival_to_work(access):
+    print(access)
+    print(type(access))
     name = input('enter your first name: ')
     last = input('enter your last name: ')
     date_now = time.localtime()
     presence_list = []
     row_list = []
 
+<<<<<<< HEAD
     presence_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\presence1.xlsx'
     presence_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\presence2.xlsx'
+=======
+    presence_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\presence2.xlsx'
+>>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
 
     presence_file = xlrd.open_workbook(presence_loc)
     sheet = presence_file.sheet_by_index(0)
@@ -38,31 +355,6 @@ def arrival_to_work(access):
     presence_workbook.close()
     Open_Menu(access)
 
-    # name = input('enter your first name: ')
-    # last = input('enter your last name: ')
-    # presence_list = []
-    # row_list = []
-    # presence_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\presence2.xlsx'
-    # presence_file = xlrd.open_workbook(presence_loc)
-    # sheet = presence_file.sheet_by_index(0)
-    #
-    # for i in range(0, sheet.nrows):
-    #     row_list = sheet.row_values(i)
-    #     if i > 0:
-    #         row_list[0] = int(row_list[0])
-    #     presence_list.append(row_list)
-    #
-    # presence_list.append([sheet.nrows, name, last, strftime("%a, %d %b %Y %H:%M:%S", time.localtime())])
-    # presence_workbook = xlsxwriter.Workbook('presence1.xlsx')
-    # worksheet = presence_workbook.add_worksheet('presence')
-    #
-    # for i in range(len(presence_list)):
-    #     for j in range(len(presence_list[i])):
-    #         worksheet.write(i, j, presence_list[i][j])
-    # presence_workbook.close()
-    # Open_Menu(access)
-
-
 
 def departure(access):
     name = input('enter your first name: ')
@@ -70,9 +362,13 @@ def departure(access):
 
     presence_list = []
     row_list = []
+<<<<<<< HEAD
     presence_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\presence1.xlsx'
     presence_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\presence2.xlsx'
 
+=======
+    presence_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\presence2.xlsx'
+>>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
     presence_file = xlrd.open_workbook(presence_loc)
     sheet = presence_file.sheet_by_index(0)
 
@@ -108,54 +404,19 @@ def departure(access):
     presence_workbook.close()
     Open_Menu(access)
 
-#     name = input('enter your first name: ')
-#     last = input('enter your last name: ')
-#     presence_list = []
-#     row_list = []
-#     presence_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\presence2.xlsx'
-#     presence_file = xlrd.open_workbook(presence_loc)
-#     sheet = presence_file.sheet_by_index(0)
-#
-#     for i in range(0, sheet.nrows):
-#         row_list = sheet.row_values(i)
-#         if i > 0:
-#             row_list[0] = int(row_list[0])
-#         presence_list.append(row_list)
-#     for i in range(1, len(presence_list)):
-#         if presence_list[i][1] == name and presence_list[i][2] == last:
-#             presence_list[i][4] = strftime("%a, %d %b %Y %H:%M:%S", time.localtime())
-#             worker = i
-#     worker_arrival = presence_list[worker][3]
-#     worker_departure = presence_list[worker][4]
-#
-# ######calculates the second of each time
-#     arrival_time = (int(worker_arrival[17])*10 + int(worker_arrival[18]))*3600 +\
-#                    (int(worker_arrival[20])*10 + int(worker_arrival[21]))*60 +\
-#                    (int(worker_arrival[23])*10 + int(worker_arrival[24]))
-#     departure_time = (int(worker_departure[17]) * 10 + int(worker_departure[18])) * 3600 +\
-#                      (int(worker_departure[20]) * 10 + int(worker_departure[21])) * 60 +\
-#                      (int(worker_departure[23]) * 10 + int(worker_departure[24]))
-#     delta = departure_time - arrival_time
-#     presence_list[worker][5] = delta
-#
-#     presence_workbook = xlsxwriter.Workbook('presence1.xlsx')
-#     worksheet = presence_workbook.add_worksheet('presence')
-#
-#     for i in range(len(presence_list)):
-#         for j in range(len(presence_list[i])):
-#             worksheet.write(i, j, presence_list[i][j])
-#     presence_workbook.close()
- #   Open_Menu(access)
-
 
 '''this func recieves the meassage from the shift manager'''
 def MessageForManager(access):
     messages_list = []
     row_list = []
+<<<<<<< HEAD
 
     message_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\messages.xlsx'
 
     message_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\messages.xlsx'
+=======
+    message_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\messages.xlsx'
+>>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
 
     message_file = xlrd.open_workbook(message_loc)
     sheet = message_file.sheet_by_index(0)
@@ -183,9 +444,13 @@ def MessageForManager(access):
 '''find a custumer in the members club'''
 def find_custumer(access):
     name, last = input('enter the first name: '), input('enter the last name: ')
+<<<<<<< HEAD
 
     file_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\membership.xlsx'
     file_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\membership.xlsx'
+=======
+    file_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\membership.xlsx'
+>>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
 
     workbook = xlrd.open_workbook(file_loc)
     worksheet = workbook.sheet_by_index(0)
@@ -202,9 +467,13 @@ def add_worker_Constraints(access):
     constraints_list = []
     row_list = []
 
+<<<<<<< HEAD
     constraints_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
     constraints_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
 
+=======
+    constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
+>>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
     constraints_file = xlrd.open_workbook(constraints_loc)
     amount_sheets = constraints_file.nsheets
     for i in range(amount_sheets):
@@ -292,10 +561,14 @@ def add_new_inventory(access):
     row_list = []
     users_list = []
 
+<<<<<<< HEAD
     inventory_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\inventory.xlsx'
 
     #inventory_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\inventory.xlsx'
 
+=======
+    inventory_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\inventory.xlsx'
+>>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
     inventory_file = xlrd.open_workbook(inventory_loc)
     sheet = inventory_file.sheet_by_index(0)
 
@@ -334,9 +607,14 @@ def add_new_inventory(access):
 
 def Add_custumer (access):
     # saving location file
+<<<<<<< HEAD
     location = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\membership.xlsx'
     location = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\membership.xlsx'
 
+=======
+
+    location = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\membership.xlsx'
+>>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
     # variable that present the file we will work with
     members_file = xlrd.open_workbook(location)
     # the specific sheet we need from the file:
@@ -667,6 +945,7 @@ def Open_Menu(access):
         worker_menu(access)
 
 
+<<<<<<< HEAD
 
 
 
@@ -676,6 +955,10 @@ def manager_menu(access):
     file_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\messages.xlsx'
 
     file_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\messages.xlsx'
+=======
+def manager_menu(access):
+    file_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\messages.xlsx'
+>>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
 
     workbook = xlrd.open_workbook(file_loc)
     worksheet = workbook.sheet_by_index(0)
@@ -688,10 +971,13 @@ def manager_menu(access):
     print('2- Issue reports')
     print('3- Cancelling a transaction\ Refund')
     print('4- Order new stock')
-    print('5- Remove item inventory')
+    print('5- Remove items from inventory')
     print('6- Changes in work arrangements')
     print('7- add customer to customer club')
     print('8- remove customer from customer club')
+    print('9- Presence report')
+    print('10- Get inventory report')
+    print('11- Bulid shifts table')
     print('-----------------------------------------------')
 
     choice = input('your choice: ')
@@ -703,6 +989,14 @@ def manager_menu(access):
         Add_custumer(access)
     if choice == '8':
         Delete_customer(access)
+    if choice == '5':
+        return_inventory(access)
+    if choice == '9':
+        get_manager_presence_report(access)
+    if choice == '10':
+        get_inventory_report(access)
+    if choice == '11':
+        build_shifts(access)
 
 
 def Responsible_menu(access):
@@ -715,6 +1009,10 @@ def Responsible_menu(access):
     print('4- Submission of constraints')
     print('5- add customer to customer club')
     print('6- remove customer from customer club')
+    print('7- Entry to work')
+    print('8- Departing from work')
+    print('9- Get presence report')
+    print('10- Get inventory report')
     print('-----------------------------------------------')
 
     choice = input('your choice: ')
@@ -733,6 +1031,14 @@ def Responsible_menu(access):
         Add_custumer(access)
     if choice == '6':
         Delete_customer(access)
+    if choice == '7':
+        arrival_to_work(access)
+    if choice == '8':
+        departure(access)
+    if choice == '9':
+        get_monthly_presence_report(access)
+    if choice == '10':
+        get_inventory_report(access)
 
 
 def worker_menu(access):
@@ -747,6 +1053,8 @@ def worker_menu(access):
     print('6- find customer in customer club')
     print('7- Entry to work')
     print('8- Departing from work')
+    print('9- Get presence report')
+    print('10- Get shift report')
     print('-----------------------------------------------')
     choice = input()
     if choice == '1':
@@ -774,16 +1082,23 @@ def worker_menu(access):
         arrival_to_work(access)
     if choice == '8':
         departure(access)
-
+    if choice == '9':
+        get_monthly_presence_report(access)
+    if choice == '10':
+        get_shift_report(access)
 
 def Error_page():
     exit(0)
 
 def Log_In():
+<<<<<<< HEAD
 
     file_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\passwarde.xlsx'
     file_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\passwarde.xlsx'
 
+=======
+    file_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\passwarde.xlsx'
+>>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
 
     pas_file = xlrd.open_workbook(file_loc)
     sheet = pas_file.sheet_by_index(0)
