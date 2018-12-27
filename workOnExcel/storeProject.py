@@ -2,16 +2,80 @@ import xlrd
 import xlsxwriter
 import time
 from time import gmtime, strftime
-<<<<<<< HEAD
+# <<<<<<< HEAD
 
-=======
+# =======
 import random
 #ITSEMIL
->>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
+# >>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
+
+
+def Daily_Money_amount(year,month,day):
+    sales_loc = r'C:\Users\emiliazorin\PycharmProjects\myfunc\sales.xlsx'
+    sales_file = xlrd.open_workbook(sales_loc)
+    sheet = sales_file.sheet_by_index(0)
+    temp_list = []
+    total_money_amount = 0
+
+    for i in range(1, sheet.nrows):
+        row_list = sheet.row_values(i)
+        temp_list.append(row_list)
+
+    for i in range(len(temp_list)):
+        temp_list[i][0] = int(temp_list[i][0])
+        temp_list[i][1] = int(temp_list[i][1])
+        temp_list[i][2] = int(temp_list[i][2])
+
+    for j in range(len(temp_list)):
+        if year == temp_list[j][0] and month == temp_list[j][1] and day == temp_list[j][2]:
+            total_money_amount = total_money_amount + temp_list[j][6]
+    return total_money_amount
+
+def EOD_report(access):
+    EOD_loc = r'C:\Users\emiliazorin\PycharmProjects\myfunc\EOD.xlsx'
+    EOD_file = xlrd.open_workbook(EOD_loc)
+    sheet = EOD_file.sheet_by_index(0)
+    date_now = time.localtime()
+    current_year, current_month, current_day = date_now[0], date_now[1], date_now[2]
+    date = strftime("%d %b %Y", time.localtime())
+    EOD_list = []
+    t_list = []
+    for j in range(sheet.nrows):
+        row_list = sheet.row_values(j)
+        EOD_list.append(row_list)
+
+    total = Daily_Money_amount(current_year, current_month, current_day)
+    t_list.append(date)
+    t_list.append(total)
+    EOD_list.append(t_list)
+    # print(EOD_list)
+
+    EOD_workbook = xlsxwriter.Workbook('EOD.xlsx')
+    worksheet = EOD_workbook.add_worksheet('EOD01')
+    for i in range(len(EOD_list)):
+        for j in range(len(EOD_list[i])):
+            worksheet.write(i, j, EOD_list[i][j])
+
+    EOD_workbook.close()
+
+    return total
+    Open_Menu(access)
+
+def Closing_The_Register(access):
+    money_from_register = input('Enter the amount you counted:')
+    if float(money_from_register) == EOD_report(access):
+        print('All Valid.')
+    else:
+        print('Please inform the shift manager that the money you entered does not match the EOD report.'
+              'Would you to close the register anyway?')
+        answer = input()
+        if answer == 'yes':
+            return -1
+    Open_Menu(access)
 
 
 def get_shift_report(access):
-    constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
+    constraints_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
     constraints_file = xlrd.open_workbook(constraints_loc)
     sheet = constraints_file.sheet_by_index(0)
     row_list = []
@@ -52,7 +116,7 @@ def make_shift_by_random(day):
 ####################################################
 def build_one_shift(amount_sheets, row, col):
     shift = []
-    constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
+    constraints_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
     constraints_file = xlrd.open_workbook(constraints_loc)
     for i in range(1, amount_sheets):
         sheet = constraints_file.sheet_by_index(i)
@@ -66,7 +130,7 @@ def build_shifts(access):
     constraints_list = []
     row_list = []
 
-    constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
+    constraints_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
     constraints_file = xlrd.open_workbook(constraints_loc)
     amount_sheets = constraints_file.nsheets
     #########add the sheets of constraints to list##########
@@ -197,7 +261,7 @@ def build_shifts(access):
 
 
 def get_inventory_report(access):
-    inventory_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Inventory.xlsx'
+    inventory_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\Inventory.xlsx'
     inventory_file = xlrd.open_workbook(inventory_loc)
     sheet = inventory_file.sheet_by_index(0)
     row_list = []
@@ -219,7 +283,7 @@ def get_manager_presence_report(access):
     print('*****Presence Report For Manager:*****')
     presence_list = []
     #row_list = []
-    presence_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\presence2.xlsx'
+    presence_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\presence2.xlsx'
     presence_file = xlrd.open_workbook(presence_loc)
     sheet = presence_file.sheet_by_index(0)
     for i in range(0, sheet.nrows):
@@ -247,7 +311,7 @@ def get_monthly_presence_report(access):
     table_list = ["arrival time", "departure time", "total time"]
     presence_list = []
     #row_list = []
-    presence_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\presence2.xlsx'
+    presence_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\presence2.xlsx'
     presence_file = xlrd.open_workbook(presence_loc)
     sheet = presence_file.sheet_by_index(0)
     for i in range(0, sheet.nrows):
@@ -271,7 +335,7 @@ def return_inventory(access):
     while flag == 0:
         inventory_list = []
         updated_stock_list = []
-        inventory_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\inventory.xlsx'
+        inventory_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\inventory.xlsx'
         inventory_file = xlrd.open_workbook(inventory_loc)
         sheet = inventory_file.sheet_by_index(0)
         k, l = 0, 0
@@ -325,12 +389,12 @@ def arrival_to_work(access):
     presence_list = []
     row_list = []
 
-<<<<<<< HEAD
-    presence_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\presence1.xlsx'
-    presence_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\presence2.xlsx'
-=======
-    presence_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\presence2.xlsx'
->>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
+# <<<<<<< HEAD
+    presence_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\presence1.xlsx'
+    presence_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\presence2.xlsx'
+# =======
+    presence_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\presence2.xlsx'
+# >>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
 
     presence_file = xlrd.open_workbook(presence_loc)
     sheet = presence_file.sheet_by_index(0)
@@ -362,13 +426,13 @@ def departure(access):
 
     presence_list = []
     row_list = []
-<<<<<<< HEAD
-    presence_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\presence1.xlsx'
-    presence_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\presence2.xlsx'
+# <<<<<<< HEAD
+    presence_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\presence1.xlsx'
+    presence_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\presence2.xlsx'
 
-=======
-    presence_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\presence2.xlsx'
->>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
+# =======
+    presence_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\presence2.xlsx'
+# >>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
     presence_file = xlrd.open_workbook(presence_loc)
     sheet = presence_file.sheet_by_index(0)
 
@@ -409,14 +473,14 @@ def departure(access):
 def MessageForManager(access):
     messages_list = []
     row_list = []
-<<<<<<< HEAD
+# <<<<<<< HEAD
 
-    message_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\messages.xlsx'
+    message_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\messages.xlsx'
 
-    message_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\messages.xlsx'
-=======
-    message_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\messages.xlsx'
->>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
+    message_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\messages.xlsx'
+# =======
+    message_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\messages.xlsx'
+# >>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
 
     message_file = xlrd.open_workbook(message_loc)
     sheet = message_file.sheet_by_index(0)
@@ -444,13 +508,13 @@ def MessageForManager(access):
 '''find a custumer in the members club'''
 def find_custumer(access):
     name, last = input('enter the first name: '), input('enter the last name: ')
-<<<<<<< HEAD
+# <<<<<<< HEAD
 
+    file_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\membership.xlsx'
     file_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\membership.xlsx'
-    file_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\membership.xlsx'
-=======
-    file_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\membership.xlsx'
->>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
+# =======
+    file_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\membership.xlsx'
+# >>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
 
     workbook = xlrd.open_workbook(file_loc)
     worksheet = workbook.sheet_by_index(0)
@@ -467,13 +531,13 @@ def add_worker_Constraints(access):
     constraints_list = []
     row_list = []
 
-<<<<<<< HEAD
-    constraints_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
-    constraints_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
+# <<<<<<< HEAD
+    constraints_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
+    constraints_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
 
-=======
-    constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
->>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
+# =======
+    constraints_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
+# >>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
     constraints_file = xlrd.open_workbook(constraints_loc)
     amount_sheets = constraints_file.nsheets
     for i in range(amount_sheets):
@@ -561,14 +625,14 @@ def add_new_inventory(access):
     row_list = []
     users_list = []
 
-<<<<<<< HEAD
-    inventory_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\inventory.xlsx'
+# <<<<<<< HEAD
+    inventory_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\inventory.xlsx'
 
-    #inventory_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\inventory.xlsx'
+    #inventory_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\inventory.xlsx'
 
-=======
-    inventory_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\inventory.xlsx'
->>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
+# =======
+    inventory_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\inventory.xlsx'
+# >>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
     inventory_file = xlrd.open_workbook(inventory_loc)
     sheet = inventory_file.sheet_by_index(0)
 
@@ -607,14 +671,14 @@ def add_new_inventory(access):
 
 def Add_custumer (access):
     # saving location file
-<<<<<<< HEAD
-    location = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\membership.xlsx'
-    location = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\membership.xlsx'
+# <<<<<<< HEAD
+    location = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\membership.xlsx'
+    location = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\membership.xlsx'
 
-=======
+# =======
 
-    location = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\membership.xlsx'
->>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
+    location = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\membership.xlsx'
+# >>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
     # variable that present the file we will work with
     members_file = xlrd.open_workbook(location)
     # the specific sheet we need from the file:
@@ -653,7 +717,7 @@ def Add_custumer (access):
 
 def Delete_customer (access):
     # saving location file
-    location = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\membership.xlsx'
+    location = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\membership.xlsx'
     # variable that present the file we will work with
     members_file = xlrd.open_workbook(location)
     # the specific sheet we need from the file:
@@ -698,7 +762,7 @@ def Delete_customer (access):
 
 def GetPrice(product_code):
     inventory_list = []
-    inventory_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\inventory.xlsx'
+    inventory_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\inventory.xlsx'
     inventory_file = xlrd.open_workbook(inventory_loc)
     sheet = inventory_file.sheet_by_index(0)
     price_index = 0
@@ -719,7 +783,7 @@ def GetPrice(product_code):
 
 def check_validation_of_product_code(code):
     inventory_list = []
-    inventory_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\inventory.xlsx'
+    inventory_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\inventory.xlsx'
     inventory_file = xlrd.open_workbook(inventory_loc)
     sheet = inventory_file.sheet_by_index(0)
 
@@ -737,7 +801,7 @@ def check_validation_of_product_code(code):
 
 def update_stock_with_sale(code_product, amount):
     inventory_list = []
-    inventory_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\inventory.xlsx'
+    inventory_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\inventory.xlsx'
     inventory_file = xlrd.open_workbook(inventory_loc)
     sheet = inventory_file.sheet_by_index(0)
     amount_index = 0
@@ -769,7 +833,7 @@ def update_stock_with_sale(code_product, amount):
 
 def make_recipect(date, price):
         # saving location file
-        location = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\recipects.xlsx'
+        location = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\recipects.xlsx'
         # variable that present the file we will work with
         recipects_file = xlrd.open_workbook(location)
         # the specific sheet we need from the file:
@@ -801,32 +865,40 @@ def make_recipect(date, price):
         print('Sale completed successfully')
         print('\n\n\n')
 
-# def get_sales_report():
-#         print('*****Sales Report For Manager:*****')
-#         sales_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel.xlsx'
-#         sales_file = xlrd.open_workbook(sales_loc)
-#         sheet = sales_file.sheet_by_index(0)
-#         sales_list = []
-#         temp_list = []
-#         for i in range(1, sheet.nrows):
-#             row_list = sheet.row_values(i)
-#             temp_list.append(row_list)
-#
-#         for i in range(0, len(temp_list)):
-#             temp_list[i][1] = int(temp_list[i][1])
-#             temp_list[i][3] = int(temp_list[i][3])
-#             # row_list[4] = int(row_list[4])
-#         sales_list = temp_list
-#
-#         print('**Date**   **Code Product**   **Name**    **Amount**   **Price**')
-#         for j in range(0, len(sales_list)):
-#             print('{0}       {1}           {2}            {3}         {4}'.format(sales_list[j][0], sales_list[j][1],
-#                                                                                   sales_list[j][2], sales_list[j][3],
-#                                                                                  sales_list[j][4]))
+def get_sales_report(access):
+    print('*****Sales Report For Manager:*****')
+    sales_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\sales.xlsx'
+    sales_file = xlrd.open_workbook(sales_loc)
+    sheet = sales_file.sheet_by_index(0)
+    date_now = time.localtime()
+    current_year, current_month, current_day = date_now[0], date_now[1], date_now[2]
+    temp_list = []
+    for i in range(1, sheet.nrows):
+        row_list = sheet.row_values(i)
+        temp_list.append(row_list)
+
+    for i in range(len(temp_list)):
+        temp_list[i][0] = int(temp_list[i][0])
+        temp_list[i][1] = int(temp_list[i][1])
+        temp_list[i][2] = int(temp_list[i][2])
+        temp_list[i][3] = int(temp_list[i][3])
+        temp_list[i][5] = int(temp_list[i][5])
+
+    sales_list = temp_list
+    # print(sales_list)
+    print('**year**  **month**  **day**   **Code Product**   **Name**    **Amount**   **Price**')
+    for j in range(len(sales_list)):
+        if current_year == sales_list[j][0] and current_month == sales_list[j][1] and current_day == sales_list[j][2]:
+            print('{0}\t    {1}\t       {2}\t\t\t       {3}\t   {4}\t\t    {5}\t     {6}'.format(sales_list[j][0], sales_list[j][1], sales_list[j][2], sales_list[j][3],
+                                                                    sales_list[j][4], sales_list[j][5], sales_list[j][6]))
+    Open_Menu(access)
+
+
+
 
 def GetName(product_code):
     inventory_list = []
-    inventory_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\inventory.xlsx'
+    inventory_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\inventory.xlsx'
     inventory_file = xlrd.open_workbook(inventory_loc)
     sheet = inventory_file.sheet_by_index(0)
     name_index = 0
@@ -845,6 +917,73 @@ def GetName(product_code):
                     name_index = inventory_list[i][j+1]
                     return name_index
 
+def update_stock_with_sale(code_product, amount):
+    inventory_list = []
+    inventory_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\\inventory.xlsx'
+    inventory_file = xlrd.open_workbook(inventory_loc)
+    sheet = inventory_file.sheet_by_index(0)
+    amount_index = 0
+    for i in range(sheet.nrows):
+            row_list = sheet.row_values(i)
+            inventory_list.append(row_list)
+    for i in range(1, len(inventory_list)):
+        num = inventory_list[i][0]
+        inventory_list[i][0] = int(num)
+        num = inventory_list[i][3]
+        inventory_list[i][3] = int(num)
+
+    for i in range(len(inventory_list)):
+        for j in range(len(inventory_list[i])):
+            if code_product == inventory_list[i][j]:
+                amount_index = inventory_list[i][j+3] - amount
+                inventory_list[i][j+3] = amount_index
+
+    inventory_workbook = xlsxwriter.Workbook('inventory.xlsx')
+    worksheet = inventory_workbook.add_worksheet('inventory1')
+    for i in range(len(inventory_list)):
+        print(inventory_list[i])
+        for j in range(len(inventory_list[i])):
+            worksheet.write(i, j, inventory_list[i][j])
+    # print(inventory_list[i])
+    inventory_workbook.close()
+
+
+def update_sales(list_1):
+    updated_sales_list = []
+    sales_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\sales.xlsx'
+    sales_file = xlrd.open_workbook(sales_loc)
+    temp_sales_list = []
+    amount_sheets = sales_file.nsheets
+    date_now = time.localtime()
+    current_year, current_month, current_day = date_now[0], date_now[1], date_now[2]
+
+    for i in range(amount_sheets):
+        sheet = sales_file.sheet_by_index(i)
+        for j in range(sheet.nrows):
+            row_list = sheet.row_values(j)
+            updated_sales_list.append(row_list)
+
+    temp_sales_list.append(current_year)
+    temp_sales_list.append(current_month)
+    temp_sales_list.append(current_day)
+    temp_sales_list.extend(list_1)
+    updated_sales_list.append(temp_sales_list)
+
+    for i in range(1, len(updated_sales_list)):
+        for k in range(len(updated_sales_list[i])):
+            updated_sales_list[i][0] = int(updated_sales_list[i][0])
+            updated_sales_list[i][1] = int(updated_sales_list[i][1])
+            updated_sales_list[i][2] = int(updated_sales_list[i][2])
+            updated_sales_list[i][3] = int(updated_sales_list[i][3])
+            updated_sales_list[i][5] = int(updated_sales_list[i][5])
+    print(updated_sales_list)
+    sales_workbook = xlsxwriter.Workbook('sales.xlsx')
+    worksheet = sales_workbook.add_worksheet('Sales01')
+    for i in range(len(updated_sales_list)):
+        for j in range(len(updated_sales_list[i])):
+            worksheet.write(i, j, updated_sales_list[i][j])
+
+    sales_workbook.close()
 
 
 def sell_items(access):
@@ -877,7 +1016,7 @@ def sell_items(access):
         item_list.append(item)
 
         # if there's more items:
-        flag = int(input('for add more items press 1, else enter 0'))
+        flag = int(input('for add more items press 1, else press 0:'))
 
     # ========================== Remove item from the list ===================================
     flag = 1
@@ -886,7 +1025,7 @@ def sell_items(access):
         print('************** products list is:**************\n')
         for i in range(len(item_list)):
             print('{0}) {1}'.format(i+1, item_list[i]))
-        flag = int(input('To delete items from list press 1, for continue press 0'))
+        flag = int(input('To delete items from list press 1, to continue press 0:'))
         if flag == 1:
             index = int(input('Enter index of item you want to remove'))
             cnt = 0
@@ -901,10 +1040,13 @@ def sell_items(access):
         total_price += (item_price * item_amount)
 
     #============================= update sell of items====================================
-    # for i in range(len(item_list)):
-    #     update_sales(item_list[i])
+    for i in range(len(item_list)):
+        print('its here bitch')
+        print(item_list[i])
+        update_sales(item_list[i])
 
-
+    # ============================= update stock with bought items====================================
+    update_stock_with_sale(product_code, Quantity)
     # ============================ print recipect =========================================
     print('\n\n****costumer recipect****')
     print('Date:{0}'.format(date))
@@ -945,20 +1087,20 @@ def Open_Menu(access):
         worker_menu(access)
 
 
-<<<<<<< HEAD
+# <<<<<<< HEAD
 
 
 
 
 def manager_menu(access):
 
-    file_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\messages.xlsx'
+    file_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\messages.xlsx'
 
-    file_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\messages.xlsx'
-=======
+    file_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\messages.xlsx'
+# =======
 def manager_menu(access):
-    file_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\messages.xlsx'
->>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
+    file_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\messages.xlsx'
+# >>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
 
     workbook = xlrd.open_workbook(file_loc)
     worksheet = workbook.sheet_by_index(0)
@@ -983,6 +1125,8 @@ def manager_menu(access):
     choice = input('your choice: ')
     if choice == '1':
         sell_items(access)
+    if choice == '2':
+        get_sales_report(access)
     if choice == '4':
         add_new_inventory(access)
     if choice == '7':
@@ -1046,8 +1190,8 @@ def worker_menu(access):
     print('worker menu:')
     print('Select the desired action ')
     print('1- sell item')
-    print('2- Issue reports')
-    print('3- Closing the POS')
+    print('2- Issue END OF DAY report')
+    print('3- Closing the register')
     print('4- Submission of constraints')
     print('5- add customer to customer club')
     print('6- find customer in customer club')
@@ -1059,6 +1203,11 @@ def worker_menu(access):
     choice = input()
     if choice == '1':
         sell_items(access)
+    if choice == '2':
+        total = EOD_report(access)
+        print('The final amount of money for today is: {0} NIS'.format(total))
+    if choice == '3':
+        Closing_The_Register(access)
     if choice == '4':
         print('1- submission of constrains')
         print('2- Viewing constraints')
@@ -1091,14 +1240,14 @@ def Error_page():
     exit(0)
 
 def Log_In():
-<<<<<<< HEAD
+# <<<<<<< HEAD
 
-    file_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\passwarde.xlsx'
-    file_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\passwarde.xlsx'
+    file_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\passwarde.xlsx'
+    file_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\passwarde.xlsx'
 
-=======
-    file_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\passwarde.xlsx'
->>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
+# =======
+    file_loc = r'C:\Users\emiliazorin\Desktop\Yesodot!!!\Group2_Yesodot\workOnExcel\passwarde.xlsx'
+# >>>>>>> 96aed4937e67650f2db01e712b34b97604d5a1c0
 
     pas_file = xlrd.open_workbook(file_loc)
     sheet = pas_file.sheet_by_index(0)
