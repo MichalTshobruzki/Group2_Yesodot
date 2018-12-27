@@ -826,7 +826,7 @@ def update_stock_with_sale(code_product, amount):
         print(inventory_list[i])
         for j in range(len(inventory_list[i])):
             worksheet.write(i, j, inventory_list[i][j])
-    print(inventory_list[i])
+    # print(inventory_list[i])
     inventory_workbook.close()
 
     # ============ function for create recipt and save her at recipects data=======================
@@ -941,7 +941,7 @@ def update_stock_with_sale(code_product, amount):
     inventory_workbook = xlsxwriter.Workbook('inventory.xlsx')
     worksheet = inventory_workbook.add_worksheet('inventory1')
     for i in range(len(inventory_list)):
-        print(inventory_list[i])
+        # print(inventory_list[i])
         for j in range(len(inventory_list[i])):
             worksheet.write(i, j, inventory_list[i][j])
     # print(inventory_list[i])
@@ -976,7 +976,7 @@ def update_sales(list_1):
             updated_sales_list[i][2] = int(updated_sales_list[i][2])
             updated_sales_list[i][3] = int(updated_sales_list[i][3])
             updated_sales_list[i][5] = int(updated_sales_list[i][5])
-    print(updated_sales_list)
+    # print(updated_sales_list)
     sales_workbook = xlsxwriter.Workbook('sales.xlsx')
     worksheet = sales_workbook.add_worksheet('Sales01')
     for i in range(len(updated_sales_list)):
@@ -1041,8 +1041,8 @@ def sell_items(access):
 
     #============================= update sell of items====================================
     for i in range(len(item_list)):
-        print('its here bitch')
-        print(item_list[i])
+        # print('its here bitch')
+        # print(item_list[i])
         update_sales(item_list[i])
 
     # ============================= update stock with bought items====================================
