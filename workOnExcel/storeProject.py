@@ -27,7 +27,6 @@ def add_2_workers_to_shifts(worker1, worker2):
             row_list = sheet.row_values(j)
             sheet_list.append(row_list)
         constraints_list.append(sheet_list)
-    print(constraints_list)
     count = 0
 
 ##change the no one can to worker
@@ -39,7 +38,6 @@ def add_2_workers_to_shifts(worker1, worker2):
                 print(constraints_list[0][i][j])
                 constraints_list[0][i][j] = worker1
                 count += 1
-    print(constraints_list)
 
     #copy the list to excel
     workbook_constraints = xlsxwriter.Workbook('Constraints2.xlsx')
@@ -93,14 +91,6 @@ def find_2_workers_when_no_one_can():
     screwed_file = xlrd.open_workbook(screwed_loc)
     number_of_shifts_sheet = screwed_file.sheet_by_index(1)
 
-    # no_One_Can_list = [] ##list of cells that no one can work
-    # for i in range(shifts_sheet.nrows):
-    #     for j in range(shifts_sheet.ncols):
-    #         if shifts_sheet.cell_value(i, j) == 'no one can':
-    #             cell = [i, j]
-    #             no_One_Can_list.append(cell)
-    # print(no_One_Can_list)
-
     list_of_number_of_shifts = []
     for i in range(1, number_of_shifts_sheet.nrows):
         list_of_number_of_shifts.append(number_of_shifts_sheet.cell_value(i, 1))
@@ -122,11 +112,6 @@ def find_2_workers_when_no_one_can():
             second = list_of_number_of_shifts[i]
             second_worker = number_of_shifts_sheet.cell_value(i+1, 0)
 
-    add_2_workers_to_shifts(first_worker, second_worker)
-
-
-
-
 
 def count_shift_for_worker():
     constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints2.xlsx'
@@ -145,7 +130,6 @@ def count_shift_for_worker():
             for k in range(shifts_sheet.ncols):
                 if worker == shifts_sheet.cell_value(j, k):
                     workers_dict[worker] = workers_dict[worker] + 1
-    print(workers_dict)
     return workers_dict
 
 
@@ -176,9 +160,6 @@ def write_number_of_shifts_to_sheet():
             for k in range(len(screwed_list[i][j])):
                 worksheet.write(j-1, k, screwed_list[i][j][k])
     workbook.close()
-
-
-# write_number_of_shifts_to_sheet()
 
 
 ##make list of constraints of shift manager
@@ -263,7 +244,7 @@ def build_one_shift(row, col):
 
 
 ####################################################
-def build_shifts():
+def build_shifts(access):
     constraints_list = []
     row_list = []
     constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints2.xlsx'
@@ -377,14 +358,7 @@ def build_shifts():
     find_2_workers_when_no_one_can()
 
     write_number_of_shifts_to_sheet()
-
-
-build_shifts()
-
-
-
-
-
+    Open_Menu(access)
 
 
 
@@ -894,7 +868,7 @@ def add_worker_Constraints(access):
     constraints_list = []
     row_list = []
 
-    constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
+    constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints2.xlsx'
 
     constraints_file = xlrd.open_workbook(constraints_loc)
     amount_sheets = constraints_file.nsheets
@@ -906,7 +880,7 @@ def add_worker_Constraints(access):
             sheet_list.append(row_list)
         constraints_list.append(sheet_list)
 
-    workbook = xlsxwriter.Workbook('Constraints1.xlsx')
+    workbook = xlsxwriter.Workbook('Constraints2.xlsx')
 
     for i in range(len(constraints_list)):  #runs on 2 sheets - michal and shir
         worksheet = workbook.add_worksheet(constraints_list[i][0])   #constraints_list[i][0]- sheet name
