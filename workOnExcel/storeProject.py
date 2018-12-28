@@ -4,8 +4,22 @@ import time
 from time import gmtime, strftime
 from datetime import date, timedelta
 import random
+from tabulate import tabulate
 
+def shifts_report(access):
+    constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints2.xlsx'
+    constraints_file = xlrd.open_workbook(constraints_loc)
+    sheet = constraints_file.sheet_by_index(0)
+    row_list = []
+    sheet_list = []
 
+    ##add the shifts to list
+    for i in range(sheet.nrows):
+        row_list = sheet.row_values(i)
+        sheet_list.append(row_list)
+
+    print(tabulate(sheet_list, tablefmt="fancy_grid"))
+    Open_Menu(access)
 
 
 def add_2_workers_to_shifts(worker1, worker2):
@@ -90,6 +104,10 @@ def find_2_workers_when_no_one_can():
     screwed_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Screwed.xlsx'
     screwed_file = xlrd.open_workbook(screwed_loc)
     number_of_shifts_sheet = screwed_file.sheet_by_index(1)
+    screwed_sheet = screwed_file.sheet_by_index(0)
+
+    screwed_worker1 = screwed_sheet.cell_value(screwed_sheet.nrows-1, 1)
+    screwed_worker2 = screwed_sheet.cell_value(screwed_sheet.nrows-2, 1)
 
     list_of_number_of_shifts = []
     for i in range(1, number_of_shifts_sheet.nrows):
@@ -102,15 +120,17 @@ def find_2_workers_when_no_one_can():
     first_worker = second_worker = number_of_shifts_sheet.cell_value(index_of_max+1, 0)
     for i in range(len(list_of_number_of_shifts)):
         # If current element is smaller than first then update both first and second
-        if list_of_number_of_shifts[i] < first:
+        if list_of_number_of_shifts[i] < first and list_of_number_of_shifts[i] != screwed_worker1 and list_of_number_of_shifts[i] != screwed_worker2:
             second = first
             second_worker = first_worker
             first = list_of_number_of_shifts[i]
             first_worker = number_of_shifts_sheet.cell_value(i+1, 0)
+
         # If list_of_number_of_shifts[i] is in between first and second then update second
-        elif list_of_number_of_shifts[i] < second and list_of_number_of_shifts[i] != first:
+        elif list_of_number_of_shifts[i] < second and list_of_number_of_shifts[i] != first and list_of_number_of_shifts[i] != screwed_worker1 and list_of_number_of_shifts[i] != screwed_worker2:
             second = list_of_number_of_shifts[i]
             second_worker = number_of_shifts_sheet.cell_value(i+1, 0)
+    add_2_workers_to_shifts(first_worker, second_worker)
 
 
 def count_shift_for_worker():
@@ -130,6 +150,7 @@ def count_shift_for_worker():
             for k in range(shifts_sheet.ncols):
                 if worker == shifts_sheet.cell_value(j, k):
                     workers_dict[worker] = workers_dict[worker] + 1
+    print(workers_dict)
     return workers_dict
 
 
@@ -354,19 +375,12 @@ def build_shifts(access):
             for k in range(len(constraints_list[i][j])):
                 worksheet.write(j-1, k, constraints_list[i][j][k])
     workbook.close()
-
     find_2_workers_when_no_one_can()
-
     write_number_of_shifts_to_sheet()
     Open_Menu(access)
 
 
 
-
-
-#
-# def get_shift_report(access):
-#     constraints_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\workOnExcel\Constraints1.xlsx'
 
 def Daily_Money_amount(year, month, day):
     sales_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\sales.xlsx'
@@ -1526,6 +1540,7 @@ def manager_menu(access):
     print('9- Issue presence report')
     print('10- Get inventory report')
     print('11- Bulid shifts table')
+    print('12- shift report and make changes')
     print('-----------------------------------------------')
 
     choice = input('your choice: ')
@@ -1547,6 +1562,13 @@ def manager_menu(access):
         get_inventory_report(access)
     if choice == '11':
         build_shifts(access)
+    if choice == '12':
+        print('1- Viewing shifts report')
+        print('2- make changes')
+        print('-----------------------------------------------')
+        choice = input()
+        if choice == '1':
+            shifts_report(access)
 
 
 def Responsible_menu(access):
@@ -1556,7 +1578,7 @@ def Responsible_menu(access):
     print('1- sell item')
     print('2- Issue reports')
     print('3- Submit messages to the administrator')
-    print('4- Submission of constraints')
+    print('4- Submission of constraints or shift report')
     print('5- add customer to customer club')
     print('6- remove customer from customer club')
     print('7- Entry to work')
@@ -1570,11 +1592,13 @@ def Responsible_menu(access):
         sell_items(access)
     if choice == '4':
         print('1- submission of constrains')
-        print('2- Viewing constraints')
+        print('2- Viewing shifts report')
         print('-----------------------------------------------')
         choice = input()
         if choice == '1':
             add_worker_Constraints(access)
+        if choice == '2':
+            shifts_report(access)
     if choice == '3':
         MessageForManager(access)
     if choice == '5':
@@ -1589,6 +1613,7 @@ def Responsible_menu(access):
         get_monthly_presence_report(access)
     if choice == '10':
         get_inventory_report(access)
+
 
 
 def worker_menu(access):
@@ -1621,6 +1646,8 @@ def worker_menu(access):
         choice = input()
         if choice == '1':
             add_worker_Constraints(access)
+        if choice == '2':
+            shifts_report(access)
     if choice == '5':
         Add_custumer(access)
     if choice == '6':
@@ -1639,8 +1666,7 @@ def worker_menu(access):
         departure(access)
     if choice == '9':
         get_monthly_presence_report(access)
-    if choice == '10':
-        get_shift_report(access)
+
 
 def Error_page():
     exit(0)
@@ -1687,7 +1713,9 @@ def Log_In():
             if check_name(0)!= 0:
                 break
 
+
 Log_In()
+
 
 
 
