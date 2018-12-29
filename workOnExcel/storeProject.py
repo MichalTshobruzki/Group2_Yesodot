@@ -6,6 +6,57 @@ from datetime import date, timedelta
 import random
 from tabulate import tabulate
 
+
+
+def make_cahnges_in_shifts(access):
+    constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints2.xlsx'
+    constraints_file = xlrd.open_workbook(constraints_loc)
+    sheet = constraints_file.sheet_by_index(0)
+    row_list = [' ', '0', '1', '2', '3', '4', '5', '6', '7']
+    sheet_list = []
+    sheet_list.append(row_list)
+    amount_sheets = constraints_file.nsheets
+    constraints_list = []
+
+    ##add the shifts to list
+    for i in range(sheet.nrows):
+        row_list = [i]
+        row_list.extend(sheet.row_values(i))
+        sheet_list.append(row_list)
+    print(tabulate(sheet_list, tablefmt="fancy_grid"))
+
+    ##add the sheets of constraints to list##########
+    for i in range(amount_sheets):
+        sheet = constraints_file.sheet_by_index(i)
+        sheet_list = [sheet.name]
+        for j in range(sheet.nrows):
+            row_list = sheet.row_values(j)
+            sheet_list.append(row_list)
+        constraints_list.append(sheet_list)
+
+    print(constraints_list)
+    print('enter row and col of the cell you want to change, for end entet- done')
+
+    while True:
+        row = input('row- ')
+        if row == 'done' or row == 'Done':
+            break
+        else:
+            row = int(row)
+        col = int(input('col- '))
+        worker = str(input('worker- '))
+        constraints_list[0][row+1][col] = worker
+
+    workbook = xlsxwriter.Workbook('Constraints2.xlsx')
+    for i in range(len(constraints_list)):
+        worksheet = workbook.add_worksheet(constraints_list[i][0])  # constraints_list[i][0]- sheet name
+        for j in range(1, len(constraints_list[i])):  # number of rows in sheet
+            for k in range(len(constraints_list[i][j])):
+                worksheet.write(j - 1, k, constraints_list[i][j][k])
+    workbook.close()
+    Open_Menu(access)
+
+
 def shifts_report(access):
     constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints2.xlsx'
     constraints_file = xlrd.open_workbook(constraints_loc)
@@ -1569,6 +1620,8 @@ def manager_menu(access):
         choice = input()
         if choice == '1':
             shifts_report(access)
+        if choice == '2':
+            make_cahnges_in_shifts(access)
 
 
 def Responsible_menu(access):
