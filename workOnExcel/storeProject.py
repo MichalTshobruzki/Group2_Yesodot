@@ -7,69 +7,9 @@ import random
 from tabulate import tabulate
 
 
-
-def make_cahnges_in_shifts(access):
-    constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints2.xlsx'
-    constraints_file = xlrd.open_workbook(constraints_loc)
-    sheet = constraints_file.sheet_by_index(0)
-    row_list = [' ', '0', '1', '2', '3', '4', '5', '6', '7']
-    sheet_list = []
-    sheet_list.append(row_list)
-    amount_sheets = constraints_file.nsheets
-    constraints_list = []
-
-    ##add the shifts to list
-    for i in range(sheet.nrows):
-        row_list = [i]
-        row_list.extend(sheet.row_values(i))
-        sheet_list.append(row_list)
-    print(tabulate(sheet_list, tablefmt="fancy_grid"))
-
-    ##add the sheets of constraints to list##########
-    for i in range(amount_sheets):
-        sheet = constraints_file.sheet_by_index(i)
-        sheet_list = [sheet.name]
-        for j in range(sheet.nrows):
-            row_list = sheet.row_values(j)
-            sheet_list.append(row_list)
-        constraints_list.append(sheet_list)
-
-    print(constraints_list)
-    print('enter row and col of the cell you want to change, for end entet- done')
-
-    while True:
-        row = input('row- ')
-        if row == 'done' or row == 'Done':
-            break
-        else:
-            row = int(row)
-        col = int(input('col- '))
-        worker = str(input('worker- '))
-        constraints_list[0][row+1][col] = worker
-
-    workbook = xlsxwriter.Workbook('Constraints2.xlsx')
-    for i in range(len(constraints_list)):
-        worksheet = workbook.add_worksheet(constraints_list[i][0])  # constraints_list[i][0]- sheet name
-        for j in range(1, len(constraints_list[i])):  # number of rows in sheet
-            for k in range(len(constraints_list[i][j])):
-                worksheet.write(j - 1, k, constraints_list[i][j][k])
-    workbook.close()
-    Open_Menu(access)
-
-
-def shifts_report(access):
-    constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints2.xlsx'
-    constraints_file = xlrd.open_workbook(constraints_loc)
-    sheet = constraints_file.sheet_by_index(0)
-    row_list = []
-    sheet_list = []
-
-    ##add the shifts to list
-    for i in range(sheet.nrows):
-        row_list = sheet.row_values(i)
-        sheet_list.append(row_list)
-
-    print(tabulate(sheet_list, tablefmt="fancy_grid"))
+def clear_constraints(access):
+    workbook_constraints = xlsxwriter.Workbook('Constraints2.xlsx')
+    workbook_constraints.close()
     Open_Menu(access)
 
 
@@ -84,7 +24,7 @@ def add_2_workers_to_shifts(worker1, worker2):
     row_list = []
     screwed_list = []
 
-    ##add the sheets of constraints to list##########
+    # add the sheets of constraints to list##########
     for i in range(amount_sheets_constraints):
         sheet = constraints_file.sheet_by_index(i)
         sheet_list = [sheet.name]
@@ -94,17 +34,16 @@ def add_2_workers_to_shifts(worker1, worker2):
         constraints_list.append(sheet_list)
     count = 0
 
-##change the no one can to worker
+    # change the no one can to worker
     for i in range(len(constraints_list[0])):
         for j in range(len(constraints_list[0][i])):
             if constraints_list[0][i][j] == 'no one can' and count == 1:
                 constraints_list[0][i][j] = worker2
             elif constraints_list[0][i][j] == 'no one can':
-                print(constraints_list[0][i][j])
                 constraints_list[0][i][j] = worker1
                 count += 1
 
-    #copy the list to excel
+    # copy the list to excel
     workbook_constraints = xlsxwriter.Workbook('Constraints2.xlsx')
     for i in range(len(constraints_list)):
         worksheet = workbook_constraints.add_worksheet(constraints_list[i][0])   #constraints_list[i][0]- sheet name
@@ -113,8 +52,7 @@ def add_2_workers_to_shifts(worker1, worker2):
                 worksheet.write(j-1, k, constraints_list[i][j][k])
     workbook_constraints.close()
 
-# ***********************************************************
-    ##add the sheets of screwed to list##########
+    # add the sheets of screwed to list##########
     for i in range(2):
         sheet = screwed_file.sheet_by_index(i)
         sheet_list = [sheet.name]
@@ -125,7 +63,7 @@ def add_2_workers_to_shifts(worker1, worker2):
             sheet_list.append(row_list)
         screwed_list.append(sheet_list)
 
-    ##add the one/two workers to screwed list
+    # add the one/two workers to screwed list
     if count == 1:
         screwed_list[0].append([screwed_file.sheet_by_index(0).nrows, worker1])
     elif count == 2:
@@ -133,7 +71,7 @@ def add_2_workers_to_shifts(worker1, worker2):
         screwed_list[0].append([screwed_file.sheet_by_index(0).nrows + 1, worker2])
 
 
-    ##copy the list to excel
+    # copy the list to excel
     workbook = xlsxwriter.Workbook('Screwed.xlsx')
     for i in range(len(screwed_list)):
         worksheet = workbook.add_worksheet(screwed_list[i][0])   #constraints_list[i][0]- sheet name
@@ -141,7 +79,8 @@ def add_2_workers_to_shifts(worker1, worker2):
             for k in range(len(screwed_list[i][j])):
                 worksheet.write(j-1, k, screwed_list[i][j][k])
     workbook.close()
-# ***********************************************************
+####################################################################################
+
 
 def max_val(var):
     maximum = 0
@@ -149,6 +88,7 @@ def max_val(var):
         if var[i] > maximum:
             maximum = var[i]
     return maximum
+####################################################################################
 
 
 def find_2_workers_when_no_one_can():
@@ -181,7 +121,11 @@ def find_2_workers_when_no_one_can():
         elif list_of_number_of_shifts[i] < second and list_of_number_of_shifts[i] != first and list_of_number_of_shifts[i] != screwed_worker1 and list_of_number_of_shifts[i] != screwed_worker2:
             second = list_of_number_of_shifts[i]
             second_worker = number_of_shifts_sheet.cell_value(i+1, 0)
+
     add_2_workers_to_shifts(first_worker, second_worker)
+####################################################################################
+
+
 
 
 def count_shift_for_worker():
@@ -203,6 +147,7 @@ def count_shift_for_worker():
                     workers_dict[worker] = workers_dict[worker] + 1
     print(workers_dict)
     return workers_dict
+####################################################################################
 
 
 def write_number_of_shifts_to_sheet():
@@ -214,7 +159,8 @@ def write_number_of_shifts_to_sheet():
     screwed_file = xlrd.open_workbook(screwed_loc)
     amount_sheets = screwed_file.nsheets
 
-    for i in range(amount_sheets): #copy the excel to list
+    # copy the excel to list
+    for i in range(amount_sheets):
         sheet = screwed_file.sheet_by_index(i)
         sheet_list = [sheet.name]
         for j in range(sheet.nrows):
@@ -222,7 +168,8 @@ def write_number_of_shifts_to_sheet():
             sheet_list.append(row_list)
         screwed_list.append(sheet_list)
 
-    for i in range(2, len(screwed_list[1])): #add the numbers of shifts to each worker
+    # add the numbers of shifts to each worker
+    for i in range(2, len(screwed_list[1])):
         screwed_list[1][i][1] = shifts_dict[screwed_list[1][i][0]]
 
     workbook = xlsxwriter.Workbook('Screwed.xlsx')
@@ -232,26 +179,27 @@ def write_number_of_shifts_to_sheet():
             for k in range(len(screwed_list[i][j])):
                 worksheet.write(j-1, k, screwed_list[i][j][k])
     workbook.close()
+####################################################################################
 
 
-##make list of constraints of shift manager
+# make list of constraints of shift manager
 def build_list_of_constraints_of_shift_manager(name):
     shiftManager_constraints = []
     constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints2.xlsx'
     constraints_file = xlrd.open_workbook(constraints_loc)
-##find the sheet of the shift manager- michal
+    # find the sheet of the shift manager- michal
     for i in range(constraints_file.nsheets):
         sheet = constraints_file.sheet_by_index(i)
         if sheet.name == name:
             shiftManager_constraints.append(name)
             break
-##add the constraints to a list
+    # add the constraints to a list
     for j in range(sheet.nrows):
         for k in range(sheet.ncols - 1):
             if sheet.cell_value(j, k) == 'NO':
                 shiftManager_constraints.append([j, k]) #j- the shift, k- the day
     return shiftManager_constraints
-
+####################################################################################
 
 def make_shifts_for_shift_manager(list_of_constraints):
     list = []
@@ -274,10 +222,10 @@ def make_shifts_for_shift_manager(list_of_constraints):
                 michal_number_of_shifts += 1
         list.append(row_list)
     return list
+####################################################################################
 
 
-##################################################
-##the function gets list of people who can work in the shift and return list by random of two workers
+# the function gets list of people who can work in the shift and return list by random of two workers
 def make_shift_by_random(day):
     shift = []
     if len(day) == 0:
@@ -298,11 +246,11 @@ def make_shift_by_random(day):
                     shift.append(day[rand])
                     break
     return shift
+####################################################################################
 
 
-####################################################
-##get from build_shifts the col and row of the cell that represent the shift
-##and append all the workers that can work in this shift
+# get from build_shifts the col and row of the cell that represent the shift
+# and append all the workers that can work in this shift
 def build_one_shift(row, col):
     shift = []
     constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints2.xlsx'
@@ -313,16 +261,16 @@ def build_one_shift(row, col):
         if sheet.cell_value(row, col) != 'NO':
             shift.append(sheet.name)
     return shift
+####################################################################################
 
 
-####################################################
 def build_shifts(access):
     constraints_list = []
     row_list = []
     constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints2.xlsx'
     constraints_file = xlrd.open_workbook(constraints_loc)
     amount_sheets = constraints_file.nsheets
-##add the sheets of constraints to list##########
+    # add the sheets of constraints to list##########
     for i in range(1, amount_sheets):
         sheet = constraints_file.sheet_by_index(i)
         sheet_list = [sheet.name]
@@ -331,9 +279,9 @@ def build_shifts(access):
             sheet_list.append(row_list)
         constraints_list.append(sheet_list)
 
-##every workers that can work in every shift:
-##send to function the cell of the shift that he will check with each worker
-##and add him to the list if he can work
+    # every workers that can work in every shift:
+    # send to function the cell of the shift that he will check with each worker
+    # and add him to the list if he can work
     sunday_morning = build_one_shift(1, 1)
     sunday_evening = build_one_shift(2, 1)
     monday_morning = build_one_shift(1, 2)
@@ -347,7 +295,7 @@ def build_shifts(access):
     friday_morning = build_one_shift(1, 6)
     saturday_evening = build_one_shift(2, 7)
 
-##list of workers in the shift
+    # list of workers in the shift
     sunday_morning_shift = make_shift_by_random(sunday_morning)
     sunday_evening_shift = make_shift_by_random(sunday_evening)
     monday_morning_shift = make_shift_by_random(monday_morning)
@@ -364,7 +312,7 @@ def build_shifts(access):
     workbook = xlsxwriter.Workbook('Constraints2.xlsx')
     worksheet = workbook.add_worksheet('shifts')
 
-##print the table of shifts
+    # print the table of shifts
     worksheet.write(1, 0, 'Morning')
     worksheet.write(2, 0, 'Morning')
     worksheet.write(3, 0, 'shift manager')
@@ -379,7 +327,7 @@ def build_shifts(access):
     worksheet.write(0, 6, 'Friday')
     worksheet.write(0, 7, 'Saturday')
 
-##add the workers to each shift in the sheet
+    # add the workers to each shift in the sheet
     for i in range(2):
         worksheet.write(i+1, 1, sunday_morning_shift[i])
     for i in range(2):
@@ -405,7 +353,7 @@ def build_shifts(access):
     for i in range(2):
         worksheet.write(i + 4, 7, saturday_evening_shift[i])
 
-##add the shifts of the shifts managers:
+    # add the shifts of the shifts managers:
     shift_managers_constraints =[]
     shift_managers_constraints.append(build_list_of_constraints_of_shift_manager('michal'))
     shift_managers_constraints.append(build_list_of_constraints_of_shift_manager('emilia'))
@@ -419,7 +367,7 @@ def build_shifts(access):
             continue
         worksheet.write(6, i, list_of_shifts_for_sManager[1][i-1])
 
-##copy the sheets of constraints
+    # copy the sheets of constraints
     for i in range(len(constraints_list)):
         worksheet = workbook.add_worksheet(constraints_list[i][0])   #constraints_list[i][0]- sheet name
         for j in range(1, len(constraints_list[i])):  # number of rows in sheet
@@ -429,8 +377,445 @@ def build_shifts(access):
     find_2_workers_when_no_one_can()
     write_number_of_shifts_to_sheet()
     Open_Menu(access)
+####################################################################################
 
 
+# manager can put cell and the name he want to change for working
+def make_changes_in_shifts(access):
+    constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints2.xlsx'
+    constraints_file = xlrd.open_workbook(constraints_loc)
+    sheet = constraints_file.sheet_by_index(0)
+    row_list = [' ', '0', '1', '2', '3', '4', '5', '6', '7']
+    sheet_list = []
+    sheet_list.append(row_list)
+    amount_sheets = constraints_file.nsheets
+    constraints_list = []
+
+    # add the shifts to list
+    for i in range(sheet.nrows):
+        row_list = [i]
+        row_list.extend(sheet.row_values(i))
+        sheet_list.append(row_list)
+    print(tabulate(sheet_list, tablefmt="fancy_grid"))
+
+    # add the sheets of constraints to list##########
+    for i in range(amount_sheets):
+        sheet = constraints_file.sheet_by_index(i)
+        sheet_list = [sheet.name]
+        for j in range(sheet.nrows):
+            row_list = sheet.row_values(j)
+            sheet_list.append(row_list)
+        constraints_list.append(sheet_list)
+
+    print(constraints_list)
+    print('enter row and col of the cell you want to change, for end entet- done')
+
+    while True:
+        row = input('row- ')
+        if row == 'done' or row == 'Done':
+            break
+        else:
+            row = int(row)
+        col = int(input('col- '))
+        worker = str(input('worker- '))
+        constraints_list[0][row+1][col] = worker
+
+    workbook = xlsxwriter.Workbook('Constraints2.xlsx')
+    for i in range(len(constraints_list)):
+        worksheet = workbook.add_worksheet(constraints_list[i][0])  # constraints_list[i][0]- sheet name
+        for j in range(1, len(constraints_list[i])):  # number of rows in sheet
+            for k in range(len(constraints_list[i][j])):
+                worksheet.write(j - 1, k, constraints_list[i][j][k])
+    workbook.close()
+    Open_Menu(access)
+####################################################################################
+
+
+# shows to the screen table of shifts
+def shifts_report(access):
+    constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints2.xlsx'
+    constraints_file = xlrd.open_workbook(constraints_loc)
+    sheet = constraints_file.sheet_by_index(0)
+    row_list = []
+    sheet_list = []
+
+    ##add the shifts to list
+    for i in range(sheet.nrows):
+        row_list = sheet.row_values(i)
+        sheet_list.append(row_list)
+
+    print(tabulate(sheet_list, tablefmt="fancy_grid"))
+    Open_Menu(access)
+####################################################################################
+
+
+
+
+#
+# def add_2_workers_to_shifts(worker1, worker2):
+#     constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints2.xlsx'
+#     constraints_file = xlrd.open_workbook(constraints_loc)
+#     screwed_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Screwed.xlsx'
+#     screwed_file = xlrd.open_workbook(screwed_loc)
+#     amount_sheets_constraints = constraints_file.nsheets
+#
+#     constraints_list = []
+#     row_list = []
+#     screwed_list = []
+#
+#     ##add the sheets of constraints to list##########
+#     for i in range(amount_sheets_constraints):
+#         sheet = constraints_file.sheet_by_index(i)
+#         sheet_list = [sheet.name]
+#         for j in range(sheet.nrows):
+#             row_list = sheet.row_values(j)
+#             sheet_list.append(row_list)
+#         constraints_list.append(sheet_list)
+#     count = 0
+#
+#     ##change the no one can to worker
+#     for i in range(len(constraints_list[0])):
+#         for j in range(len(constraints_list[0][i])):
+#             if constraints_list[0][i][j] == 'no one can' and count == 1:
+#                 constraints_list[0][i][j] = worker2
+#             elif constraints_list[0][i][j] == 'no one can':
+#                 print(constraints_list[0][i][j])
+#                 constraints_list[0][i][j] = worker1
+#                 count += 1
+#
+#     #copy the list to excel
+#     workbook_constraints = xlsxwriter.Workbook('Constraints2.xlsx')
+#     for i in range(len(constraints_list)):
+#         worksheet = workbook_constraints.add_worksheet(constraints_list[i][0])   #constraints_list[i][0]- sheet name
+#         for j in range(1, len(constraints_list[i])):  # number of rows in sheet
+#             for k in range(len(constraints_list[i][j])):
+#                 worksheet.write(j-1, k, constraints_list[i][j][k])
+#     workbook_constraints.close()
+#
+# # ***********************************************************
+#     ##add the sheets of screwed to list##########
+#     for i in range(2):
+#         sheet = screwed_file.sheet_by_index(i)
+#         sheet_list = [sheet.name]
+#         for j in range(sheet.nrows):
+#             row_list = sheet.row_values(j)
+#             # if j > 0:
+#             #     row_list[1] = int(row_list[1])
+#             sheet_list.append(row_list)
+#         screwed_list.append(sheet_list)
+#
+#     ##add the one/two workers to screwed list
+#     if count == 1:
+#         screwed_list[0].append([screwed_file.sheet_by_index(0).nrows, worker1])
+#     elif count == 2:
+#         screwed_list[0].append([screwed_file.sheet_by_index(0).nrows, worker1])
+#         screwed_list[0].append([screwed_file.sheet_by_index(0).nrows + 1, worker2])
+#
+#
+#     ##copy the list to excel
+#     workbook = xlsxwriter.Workbook('Screwed.xlsx')
+#     for i in range(len(screwed_list)):
+#         worksheet = workbook.add_worksheet(screwed_list[i][0])   #constraints_list[i][0]- sheet name
+#         for j in range(1, len(screwed_list[i])):  # number of rows in sheet
+#             for k in range(len(screwed_list[i][j])):
+#                 worksheet.write(j-1, k, screwed_list[i][j][k])
+#     workbook.close()
+# ####################################################################################
+#
+# # gets a var (in my case- list) and returns the maximum value
+# def max_val(var):
+#     maximum = 0
+#     for i in range(len(var)):
+#         if var[i] > maximum:
+#             maximum = var[i]
+#     return maximum
+# ####################################################################################
+#
+#
+# def find_2_workers_when_no_one_can():
+#     screwed_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Screwed.xlsx'
+#     screwed_file = xlrd.open_workbook(screwed_loc)
+#     number_of_shifts_sheet = screwed_file.sheet_by_index(1)
+#     screwed_sheet = screwed_file.sheet_by_index(0)
+#
+#     screwed_worker1 = screwed_sheet.cell_value(screwed_sheet.nrows-1, 1)
+#     screwed_worker2 = screwed_sheet.cell_value(screwed_sheet.nrows-2, 1)
+#
+#     list_of_number_of_shifts = []
+#     for i in range(1, number_of_shifts_sheet.nrows):
+#         list_of_number_of_shifts.append(number_of_shifts_sheet.cell_value(i, 1))
+#
+#     maximum_shifts = max_val(list_of_number_of_shifts)
+#     index_of_max = list_of_number_of_shifts.index(maximum_shifts)
+#
+#     first = second = maximum_shifts
+#     first_worker = second_worker = number_of_shifts_sheet.cell_value(index_of_max+1, 0)
+#     for i in range(len(list_of_number_of_shifts)):
+#         # If current element is smaller than first then update both first and second
+#         if list_of_number_of_shifts[i] < first and list_of_number_of_shifts[i] != screwed_worker1 and list_of_number_of_shifts[i] != screwed_worker2:
+#             second = first
+#             second_worker = first_worker
+#             first = list_of_number_of_shifts[i]
+#             first_worker = number_of_shifts_sheet.cell_value(i+1, 0)
+#
+#         # If list_of_number_of_shifts[i] is in between first and second then update second
+#         elif list_of_number_of_shifts[i] < second and list_of_number_of_shifts[i] != first and list_of_number_of_shifts[i] != screwed_worker1 and list_of_number_of_shifts[i] != screwed_worker2:
+#             second = list_of_number_of_shifts[i]
+#             second_worker = number_of_shifts_sheet.cell_value(i+1, 0)
+#     add_2_workers_to_shifts(first_worker, second_worker)
+# ####################################################################################
+#
+#
+# def count_shift_for_worker():
+#     constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints2.xlsx'
+#     constraints_file = xlrd.open_workbook(constraints_loc)
+#     screwed_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Screwed.xlsx'
+#     screwed_file = xlrd.open_workbook(screwed_loc)
+#
+#     shifts_sheet = constraints_file.sheet_by_index(0)
+#     shiftsForWorker_sheet = screwed_file.sheet_by_index(1)
+#     workers_dict = {}
+#
+#     for i in range(1, shiftsForWorker_sheet.nrows):
+#         worker = shiftsForWorker_sheet.cell_value(i, 0)
+#         workers_dict[worker] = 0
+#         for j in range(shifts_sheet.nrows):
+#             for k in range(shifts_sheet.ncols):
+#                 if worker == shifts_sheet.cell_value(j, k):
+#                     workers_dict[worker] = workers_dict[worker] + 1
+#     print(workers_dict)
+#     return workers_dict
+# ####################################################################################
+#
+#
+# def write_number_of_shifts_to_sheet():
+#     shifts_dict = count_shift_for_worker()
+#     row_list = []
+#     screwed_list = []
+#     sheet_list = []
+#     screwed_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Screwed.xlsx'
+#     screwed_file = xlrd.open_workbook(screwed_loc)
+#     amount_sheets = screwed_file.nsheets
+#
+#     for i in range(amount_sheets): #copy the excel to list
+#         sheet = screwed_file.sheet_by_index(i)
+#         sheet_list = [sheet.name]
+#         for j in range(sheet.nrows):
+#             row_list = sheet.row_values(j)
+#             sheet_list.append(row_list)
+#         screwed_list.append(sheet_list)
+#
+#     for i in range(2, len(screwed_list[1])): #add the numbers of shifts to each worker
+#         screwed_list[1][i][1] = shifts_dict[screwed_list[1][i][0]]
+#
+#     workbook = xlsxwriter.Workbook('Screwed.xlsx')
+#     for i in range(len(screwed_list)):
+#         worksheet = workbook.add_worksheet(screwed_list[i][0])
+#         for j in range(1, len(screwed_list[i])):  # number of rows in sheet
+#             for k in range(len(screwed_list[i][j])):
+#                 worksheet.write(j-1, k, screwed_list[i][j][k])
+#     workbook.close()
+# ####################################################################################
+#
+#
+# # make list of constraints of shift manager
+# def build_list_of_constraints_of_shift_manager(name):
+#     shiftManager_constraints = []
+#     constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints2.xlsx'
+#     constraints_file = xlrd.open_workbook(constraints_loc)
+#     ##find the sheet of the shift manager- michal
+#     for i in range(constraints_file.nsheets):
+#         sheet = constraints_file.sheet_by_index(i)
+#         if sheet.name == name:
+#             shiftManager_constraints.append(name)
+#             break
+#     ##add the constraints to a list
+#     for j in range(sheet.nrows):
+#         for k in range(sheet.ncols - 1):
+#             if sheet.cell_value(j, k) == 'NO':
+#                 shiftManager_constraints.append([j, k]) #j- the shift, k- the day
+#     return shiftManager_constraints
+# ####################################################################################
+#
+#
+# # gets a list of constraints of the shift managers and return list of two rows that represent the shifts
+# def make_shifts_for_shift_manager(list_of_constraints):
+#     list = []
+#     michal_number_of_shifts = 0
+#     emilia_number_of_shifts = 0
+#     for i in range(1, 3):
+#         row_list = []
+#         for j in range(1, 8):
+#             if (list_of_constraints[0][1][0] == i and list_of_constraints[0][1][1] == j) or (list_of_constraints[0][2][0] == i and list_of_constraints[0][2][1] == j): #if michal cant work, put emilia
+#                 row_list.append(list_of_constraints[1][0])
+#                 emilia_number_of_shifts += 1
+#             elif (list_of_constraints[1][1][0] == i and list_of_constraints[1][1][1] == j) or (list_of_constraints[1][2][0] == i and list_of_constraints[1][2][1] == j):
+#                 row_list.append(list_of_constraints[0][0])
+#                 michal_number_of_shifts += 1
+#             elif emilia_number_of_shifts < michal_number_of_shifts:
+#                 row_list.append(list_of_constraints[1][0])
+#                 emilia_number_of_shifts += 1
+#             else:
+#                 row_list.append(list_of_constraints[0][0])
+#                 michal_number_of_shifts += 1
+#         list.append(row_list)
+#     return list
+# ####################################################################################
+#
+#
+# # the function gets list of people who can work in the shift and return list by random of two workers
+# def make_shift_by_random(day):
+#     shift = []
+#     if len(day) == 0:
+#         shift.append('no one can')
+#         shift.append('no one can')
+#         return shift
+#     elif len(day) == 1:
+#         shift.append(day[0])
+#         shift.append('no one can')
+#         return shift
+#     while len(shift) < 2:
+#         rand = random.randint(0, len(day)-1)
+#         if len(shift) == 0:
+#             shift.append(day[rand])
+#         else:
+#             for i in range(len(shift)):
+#                 if day[rand] != shift[i]:
+#                     shift.append(day[rand])
+#                     break
+#     return shift
+# ####################################################################################
+#
+#
+# # get from build_shifts the col and row of the cell that represent the shift
+# # and append all the workers that can work in this shift
+# def build_one_shift(row, col):
+#     shift = []
+#     constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints2.xlsx'
+#     constraints_file = xlrd.open_workbook(constraints_loc)
+#     amount_sheets = constraints_file.nsheets - 2
+#     for i in range(1, amount_sheets):
+#         sheet = constraints_file.sheet_by_index(i)
+#         if sheet.cell_value(row, col) != 'NO':
+#             shift.append(sheet.name)
+#     return shift
+# ####################################################################################
+#
+#
+# def build_shifts(access):
+#     constraints_list = []
+#     row_list = []
+#     constraints_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\Constraints2.xlsx'
+#     constraints_file = xlrd.open_workbook(constraints_loc)
+#     amount_sheets = constraints_file.nsheets
+#     # add the sheets of constraints to list##########
+#     for i in range(1, amount_sheets):
+#         sheet = constraints_file.sheet_by_index(i)
+#         sheet_list = [sheet.name]
+#         for j in range(sheet.nrows):
+#             row_list = sheet.row_values(j)
+#             sheet_list.append(row_list)
+#         constraints_list.append(sheet_list)
+#
+#     # every workers that can work in every shift:
+#     # send to function the cell of the shift that he will check with each worker
+#     # and add him to the list if he can work
+#     sunday_morning = build_one_shift(1, 1)
+#     sunday_evening = build_one_shift(2, 1)
+#     monday_morning = build_one_shift(1, 2)
+#     monday_evening = build_one_shift(2, 2)
+#     tuesday_morning = build_one_shift(1, 3)
+#     tuesday_evening = build_one_shift(2, 3)
+#     wednesday_morning = build_one_shift(1, 4)
+#     wednesday_evening = build_one_shift(2, 4)
+#     thursday_morning = build_one_shift(1, 5)
+#     thursday_evening = build_one_shift(2, 5)
+#     friday_morning = build_one_shift(1, 6)
+#     saturday_evening = build_one_shift(2, 7)
+#
+#     # list of workers in the shift
+#     sunday_morning_shift = make_shift_by_random(sunday_morning)
+#     sunday_evening_shift = make_shift_by_random(sunday_evening)
+#     monday_morning_shift = make_shift_by_random(monday_morning)
+#     monday_evening_shift = make_shift_by_random(monday_evening)
+#     tuesday_morning_shift = make_shift_by_random(tuesday_morning)
+#     tuesday_evening_shift = make_shift_by_random(tuesday_evening)
+#     wednesday_morning_shift = make_shift_by_random(wednesday_morning)
+#     wednesday_evening_shift = make_shift_by_random(wednesday_evening)
+#     thursday_morning_shift = make_shift_by_random(thursday_morning)
+#     thursday_evening_shift = make_shift_by_random(thursday_evening)
+#     friday_morning_shift = make_shift_by_random(friday_morning)
+#     saturday_evening_shift = make_shift_by_random(saturday_evening)
+#
+#     workbook = xlsxwriter.Workbook('Constraints2.xlsx')
+#     worksheet = workbook.add_worksheet('shifts')
+#
+#     # print the table of shifts
+#     worksheet.write(1, 0, 'Morning')
+#     worksheet.write(2, 0, 'Morning')
+#     worksheet.write(3, 0, 'shift manager')
+#     worksheet.write(4, 0, 'Evening')
+#     worksheet.write(5, 0, 'Evening')
+#     worksheet.write(6, 0, 'shift manager')
+#     worksheet.write(0, 1, 'Sunday')
+#     worksheet.write(0, 2, 'Monday')
+#     worksheet.write(0, 3, 'Tuesday')
+#     worksheet.write(0, 4, 'Wednesday')
+#     worksheet.write(0, 5, 'Thursday')
+#     worksheet.write(0, 6, 'Friday')
+#     worksheet.write(0, 7, 'Saturday')
+#
+#     # add the workers to each shift in the sheet
+#     for i in range(2):
+#         worksheet.write(i+1, 1, sunday_morning_shift[i])
+#     for i in range(2):
+#         worksheet.write(i+4, 1, sunday_evening_shift[i])
+#     for i in range(2):
+#         worksheet.write(i+1, 2, monday_morning_shift[i])
+#     for i in range(2):
+#         worksheet.write(i+4, 2, monday_evening_shift[i])
+#     for i in range(2):
+#         worksheet.write(i+1, 3, tuesday_morning_shift[i])
+#     for i in range(2):
+#         worksheet.write(i+4, 3, tuesday_evening_shift[i])
+#     for i in range(2):
+#         worksheet.write(i + 1, 4, wednesday_morning_shift[i])
+#     for i in range(2):
+#         worksheet.write(i + 4, 4, wednesday_evening_shift[i])
+#     for i in range(2):
+#         worksheet.write(i + 1, 5, thursday_morning_shift[i])
+#     for i in range(2):
+#         worksheet.write(i + 4, 5, thursday_evening_shift[i])
+#     for i in range(2):
+#         worksheet.write(i + 1, 6, friday_morning_shift[i])
+#     for i in range(2):
+#         worksheet.write(i + 4, 7, saturday_evening_shift[i])
+#
+#     # add the shifts of the shifts managers:
+#     shift_managers_constraints =[]
+#     shift_managers_constraints.append(build_list_of_constraints_of_shift_manager('michal'))
+#     shift_managers_constraints.append(build_list_of_constraints_of_shift_manager('emilia'))
+#
+#     list_of_shifts_for_sManager = (make_shifts_for_shift_manager(shift_managers_constraints))
+#
+#     for i in range(1, 7):
+#         worksheet.write(3, i, list_of_shifts_for_sManager[0][i-1])
+#     for i in range(1, 8):
+#         if i == 6:
+#             continue
+#         worksheet.write(6, i, list_of_shifts_for_sManager[1][i-1])
+#
+#     # copy the sheets of constraints
+#     for i in range(len(constraints_list)):
+#         worksheet = workbook.add_worksheet(constraints_list[i][0])   #constraints_list[i][0]- sheet name
+#         for j in range(1, len(constraints_list[i])):  # number of rows in sheet
+#             for k in range(len(constraints_list[i][j])):
+#                 worksheet.write(j-1, k, constraints_list[i][j][k])
+#     workbook.close()
+#     find_2_workers_when_no_one_can()
+#     write_number_of_shifts_to_sheet()
+#     Open_Menu(access)
+# ####################################################################################
 
 
 def Daily_Money_amount(year, month, day):
@@ -453,6 +838,7 @@ def Daily_Money_amount(year, month, day):
         if year == temp_list[j][0] and month == temp_list[j][1] and day == temp_list[j][2]:
             total_money_amount = total_money_amount + temp_list[j][6]
     return total_money_amount
+
 
 def EOD_report(access):
     EOD_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\EOD.xlsx'
@@ -1590,8 +1976,9 @@ def manager_menu(access):
     print('8- remove customer from customer club')
     print('9- Issue presence report')
     print('10- Get inventory report')
-    print('11- Bulid shifts table')
+    print('11- Build shifts table')
     print('12- shift report and make changes')
+    print('13- Open the option to submit constraints')
     print('-----------------------------------------------')
 
     choice = input('your choice: ')
@@ -1621,8 +2008,9 @@ def manager_menu(access):
         if choice == '1':
             shifts_report(access)
         if choice == '2':
-            make_cahnges_in_shifts(access)
-
+            make_changes_in_shifts()
+    if choice == '13':
+        clear_constraints(access)
 
 def Responsible_menu(access):
     print('-----------------------------------------------')
@@ -1734,7 +2122,7 @@ def Log_In():
 
     flag = 0
 
-    def check_name (flag):
+    def check_name(flag):
         name = input('enter user name-english letters only: ')
         for i in range(1, sheet.ncols+1):
             check = sheet.cell_value(i, 0)
