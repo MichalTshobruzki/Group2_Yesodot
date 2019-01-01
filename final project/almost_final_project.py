@@ -784,15 +784,16 @@ def get_monthly_presence_report(access):
     name = input('enter your name: ')
     now = time.localtime()
     month = now[1]
-    print('*****Presence Report:*****')
-    table_list = ["arrival time", "departure time", "total time"]
+    print('          *****  Presence Report  *****')
     presence_list = []
-    #row_list = []
-    presence_loc = r'C:\Users\micha\Desktop\project\Group2_Yesodot\workOnExcel\presence2.xlsx'
+    presence_list.append(['arrival time', 'departure time', 'total work time'])
+
+    presence_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\presence1.xlsx'
     presence_file = xlrd.open_workbook(presence_loc)
     sheet = presence_file.sheet_by_index(0)
+
     for i in range(0, sheet.nrows):
-        if sheet.cell_value(i, 1) == name and sheet.cell_value(i, 4) == str(month):
+        if sheet.cell_value(i, 1) == name and str(sheet.cell_value(i, 4)) == str(float(month)):
             total_sec = sheet.cell_value(i, 8)
             sec = total_sec % 60
             total_sec = total_sec // 60
@@ -800,10 +801,8 @@ def get_monthly_presence_report(access):
             hour = total_sec // 60
             row_list = [sheet.cell_value(i, 3), sheet.cell_value(i, 7), ('%02d:%02d:%02d' % (hour, mint, sec))]
             presence_list.append(row_list)
-    '''print table report:'''
-    print('       **arrival**                     **departure**            **total**')
-    for i in range(0, len(presence_list)):
-        print('{0}       {1}       {2}'.format(presence_list[i][0], presence_list[i][1], presence_list[i][2]))
+    print(tabulate(presence_list, tablefmt="fancy_grid"))
+
     Open_Menu(access)
 ####################################################################################
 
@@ -1552,7 +1551,7 @@ def check_recipect_number_validation(rec_num):
     return False
 ####################################################################################
 
-print(check_recipect_number_validation(1))
+
 def get_recipect_date(number):
     # ======================== get lists of recipect =====================================
     # saving location file
