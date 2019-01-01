@@ -29,6 +29,10 @@ class TestProject(unittest.TestCase):
         self.assertIn('emilia', project.make_shifts_for_shift_manager(
             [['michal', [1, 1], [2, 6]], ['emilia', [1, 6], [2, 1]]])[0])
 
+    def test_Daily_Money_amount(self):
+        self.assertEqual(260, project.Daily_Money_amount(2018, 12, 20))
+
+
 if __name__ == '__test_project__':
     unittest.main()
 
