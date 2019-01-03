@@ -1807,57 +1807,175 @@ def manager_menu(access):
 
 def Responsible_menu(access):
     print('-----------------------------------------------')
-    print('responsible menu:')
-    print('Select the desired action ')
-    print('1- sell item')
-    print('2- Issue reports')
-    print('3- Submit messages to the administrator')
-    print('4- Submission of constraints or shift report')
-    print('5- add customer to customer club')
-    print('6- remove customer from customer club')
-    print('7- Entry to work')
-    print('8- Departing from work')
-    print('9- Get presence report')
-    print('10- Get inventory report')
-    print('11- change user')
+    print('** Responsible menu **')
+    print('1- Cash Desk')
+    print('2- Cancelling a transaction/ Refund')
+    print('3- Reports')
+    print('4- Submission of constraints')
+    print('5- Customers Club')
+    print('6- Messages to Manager')
+    print('7- Entry & Departing')
+    print('8- Change User')
     print('-----------------------------------------------')
 
-    choice = input('your choice: ')
-    if choice == '1':
+    choice = int(input('your choice: '))
+    while True:
+        if choice > 0 and choice < 15:
+            break
+        choice = int(input('wrong choice, try again: '))
+
+    # *********************************************************
+    if choice == 1:
         sell_items(access)
-    if choice == '3':
-        MessageForManager(access)
-    if choice == '4':
-        print('1- submission of constrains (first michal and then emilia')
-        print('2- Viewing shifts report')
-        print('-----------------------------------------------')
-        choice = input()
-        if choice == '1':
-            add_worker_Constraints(access)
-        if choice == '2':
+    # *********************************************************
+    if choice == 2:
+        cancel_sell(access)
+    # *********************************************************
+    if choice == 3:
+        print('1- Presence report')
+        print('2- Inventory report')
+        print('3- Shift report')
+
+        choice = int(input('your choice: '))
+        while True:
+            if choice > 0 and choice < 4:
+                break
+            choice = int(input('wrong choice, try again: '))
+
+        if choice == 1:
+            get_monthly_presence_report(access)
+        if choice == 2:
+            get_inventory_report(access)
+        if choice == 3:
             shifts_report(access)
-    if choice == '5':
-        Add_custumer(access)
-    if choice == '6':
-        Delete_customer(access)
-    if choice == '7':
-        arrival_to_work(access)
-    if choice == '8':
-        departure(access)
-    if choice == '9':
-        get_monthly_presence_report(access)
-    if choice == '10':
-        get_inventory_report(access)
-    if choice == '11':
+    # *********************************************************
+    if choice == 4:
+        add_worker_Constraints(access)
+    # *********************************************************
+    if choice == 5:
+        print('1- add customer')
+        print('2- remove customer')
+        choice = int(input('your choice: '))
+        while True:
+            if choice > 0 and choice < 3:
+                break
+            choice = int(input('wrong choice, try again: '))
+
+        if choice == 1:
+            Add_custumer(access)
+        if choice == 2:
+            Delete_customer(access)
+    # *********************************************************
+    if choice == 6:
+        MessageForManager(access)
+    # *********************************************************
+    if choice == 7:
+        print('1- arrival')
+        print('2- departure')
+        choice = int(input('your choice: '))
+        while True:
+            if choice > 0 and choice < 3:
+                break
+            choice = int(input('wrong choice, try again: '))
+        if choice == 1:
+            arrival_to_work(access)
+        if choice == 2:
+            departure(access)
+    # *********************************************************
+    if choice == 8:
         Log_In()
+    # *********************************************************
 
 
 def worker_menu(access):
     print('-----------------------------------------------')
-    print('worker menu:')
-    print('Select the desired action ')
-    print('1- sell item')
-    print('2- Issue END OF DAY report')
+    print('** worker menu **')
+    print('1- Cash Desk')
+    print('2- Reports')
+    print('3- Submission of constraints')
+    print('4- Customers Club')
+    print('5- Messages to Manager')
+    print('6- Entry & Departing')
+    print('7- Change User')
+    print('-----------------------------------------------')
+
+    choice = int(input('your choice: '))
+    while True:
+        if choice > 0 and choice < 15:
+            break
+        choice = int(input('wrong choice, try again: '))
+
+    # *********************************************************
+    if choice == 1:
+        sell_items(access)
+    # *********************************************************
+    if choice == 2:
+        print('1- Presence report')
+        print('2- End of the day report')
+        print('3- Shift report')
+
+        choice = int(input('your choice: '))
+        while True:
+            if choice > 0 and choice < 4:
+                break
+            choice = int(input('wrong choice, try again: '))
+
+        if choice == 1:
+            get_monthly_presence_report(access)
+        if choice == 2:
+            total = EOD_report(access)
+            print('The final amount of money for today is: {0} NIS'.format(total))
+        if choice == 3:
+            shifts_report(access)
+    # *********************************************************
+    if choice == 3:
+        add_worker_Constraints(access)
+    # *********************************************************
+    if choice == 4:
+        print('1- add customer')
+        print('2- find customer')
+        choice = int(input('your choice: '))
+        while True:
+            if choice > 0 and choice < 3:
+                break
+            choice = int(input('wrong choice, try again: '))
+
+        if choice == 1:
+            Add_custumer(access)
+        if choice == 2:
+            result = find_custumer(access)
+            if result:
+                print('Customer exists')
+            else:
+                print('Customer does not exist')
+    # *********************************************************
+    if choice == 5:
+        MessageForManager(access)
+    # *********************************************************
+    if choice == 6:
+        print('1- arrival')
+        print('2- departure')
+        choice = int(input('your choice: '))
+        while True:
+            if choice > 0 and choice < 3:
+                break
+            choice = int(input('wrong choice, try again: '))
+        if choice == 1:
+            arrival_to_work(access)
+        if choice == 2:
+            departure(access)
+    # *********************************************************
+    if choice == 7:
+        Log_In()
+    # *********************************************************
+
+
+
+
+
+    print('-----------------------------------------------')
+    print('** worker menu **')
+
     print('3- Closing the register')
     print('4- Submission of constraints')
     print('5- add customer to customer club')
