@@ -4,7 +4,7 @@ import time
 #import DateTime
 from time import gmtime, strftime
 from datetime import date
-#import random
+import random
 from tabulate import tabulate
 
 
@@ -1571,7 +1571,7 @@ def sell_items(access):
         if flag == 1:
             index = int(input('Enter index of item you want to remove'))
             # check validation of index input:
-            while index.isnumeric() == False:
+            while index.isnumer == False:
                 index = int(input('invalid index, try again. Enter index of item you want to remove'))
             while index<1 or index>(len(item_list)):
                 index = int(input('invalid index, try again. Enter index of item you want to remove'))
