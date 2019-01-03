@@ -14,6 +14,7 @@ def get_total_price_of_recipect(rec_num):
 
     # saving location file
     location = r'C:\Users\micha\Desktop\project_new\Group2_Yesodot\final project\recipects.xlsx'
+
     # variable that present the file we will work with
     recipects_file = xlrd.open_workbook(location)
     # the specific sheet we need from the file:
@@ -36,10 +37,10 @@ def get_total_price_of_recipect(rec_num):
     return total_price
 
 
-
 def update_stock_with_cancellation(items_list):
     # saving location file
     location = r'C:\Users\micha\Desktop\project_new\Group2_Yesodot\final project\inventory.xlsx'
+
     # variable that present the file we will work with
     inventory_file = xlrd.open_workbook(location)
     # the specific sheet we need from the file:
@@ -76,6 +77,7 @@ def update_stock_with_cancellation(items_list):
 def update_cancelled_report(data_list):
     # saving location file
     location = r'C:\Users\micha\Desktop\project_new\Group2_Yesodot\final project\sales.xlsx'
+
     # variable that present the file we will work with
     cancelled_sales_file = xlrd.open_workbook(location)
     # the specific sheet we need from the file:
@@ -195,6 +197,7 @@ def cancel_sell(access):
 
 
 def clear_constraints(access):
+
     constraints_loc = r'C:\Users\micha\Desktop\project_new\Group2_Yesodot\final project\Constraints1.xlsx'
     constraints_file = xlrd.open_workbook(constraints_loc)
     sheet = constraints_file.sheet_by_index(0)
@@ -328,6 +331,7 @@ def count_shift_for_worker():
     constraints_loc = r'C:\Users\micha\Desktop\project_new\Group2_Yesodot\final project\Constraints1.xlsx'
     constraints_file = xlrd.open_workbook(constraints_loc)
     screwed_loc = r'C:\Users\micha\Desktop\project_new\Group2_Yesodot\final project\Screwed.xlsx'
+
     screwed_file = xlrd.open_workbook(screwed_loc)
 
     shifts_sheet = constraints_file.sheet_by_index(0)
@@ -350,7 +354,9 @@ def write_number_of_shifts_to_sheet():
     row_list = []
     screwed_list = []
     sheet_list = []
+
     screwed_loc = r'C:\Users\micha\Desktop\project_new\Group2_Yesodot\final project\Screwed.xlsx'
+
     screwed_file = xlrd.open_workbook(screwed_loc)
     amount_sheets = screwed_file.nsheets
 
@@ -581,7 +587,7 @@ def build_shifts(access):
 
 # manager can put cell and the name he want to change for working
 def make_changes_in_shifts(access):
-    constraints_loc = r'C:\Users\emiliazorin\Desktop\yesodotnew\Group2_Yesodot\final project\Constraints1.xlsx'
+    constraints_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\final project\Constraints1.xlsx'
     constraints_file = xlrd.open_workbook(constraints_loc)
     sheet = constraints_file.sheet_by_index(0)
     row_list = [' ', '0', '1', '2', '3', '4', '5', '6', '7']
@@ -667,7 +673,7 @@ def shifts_report(access):
 
 # returns the total amount of the sales in the current day
 def Daily_Money_amount(year, month, day):
-    sales_loc = r'C:\Users\emiliazorin\Desktop\yesodotnew\Group2_Yesodot\final project\sales.xlsx'
+    sales_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\final project\sales.xlsx'
     sales_file = xlrd.open_workbook(sales_loc)
     sheet = sales_file.sheet_by_index(0)
     temp_list = []
@@ -767,16 +773,23 @@ def get_inventory_report(access):
 
 # Prints all names and hours of all employees
 def get_manager_presence_report(access):
-    month = input('enter the number of month of the report you want: ')
+    month = int(input('enter the number of month of the report you want: '))
+    while True:
+        if month > 0 and month < 13:
+            break
+        month = int(input('wrong choice, try again: '))
     print('*****  Presence Report For Manager  *****')
     presence_list = []
     presence_list.append(['worker', 'arrival', 'departure', 'total'])
     presence_loc = r'C:\Users\micha\Desktop\project_new\Group2_Yesodot\final project\presence1.xlsx'
+
     presence_file = xlrd.open_workbook(presence_loc)
     sheet = presence_file.sheet_by_index(0)
-
+    print(sheet.cell_value(2, 8))
     for i in range(0, sheet.nrows):
-        if sheet.cell_value(i, 4) == float(month):
+        if sheet.cell_value(i, 7) == '':
+            continue
+        if sheet.cell_value(i, 4) == str(month):
             total_sec = int(sheet.cell_value(i, 8))
             sec = total_sec % 60
             total_sec = total_sec // 60
@@ -801,11 +814,14 @@ def get_monthly_presence_report(access):
     presence_list.append(['arrival time', 'departure time', 'total work time'])
 
     presence_loc = r'C:\Users\micha\Desktop\project_new\Group2_Yesodot\final project\presence1.xlsx'
+
     presence_file = xlrd.open_workbook(presence_loc)
     sheet = presence_file.sheet_by_index(0)
 
     for i in range(0, sheet.nrows):
-        if sheet.cell_value(i, 1) == name and str(sheet.cell_value(i, 4)) == str(float(month)):
+        if sheet.cell_value(i, 7) == '':
+            continue
+        if sheet.cell_value(i, 1) == name and sheet.cell_value(i, 4) == str(month):
             total_sec = sheet.cell_value(i, 8)
             sec = total_sec % 60
             total_sec = total_sec // 60
@@ -888,7 +904,6 @@ def arrival_to_work(access):
     row_list = []
 
     presence_loc = r'C:\Users\micha\Desktop\project_final\Group2_Yesodot\final project\presence1.xlsx'
-
     presence_file = xlrd.open_workbook(presence_loc)
     sheet = presence_file.sheet_by_index(0)
 
@@ -918,10 +933,8 @@ def arrival_to_work(access):
 def departure(access):
     name = input('enter your first name: ')
     last = input('enter your last name: ')
-
     presence_list = []
     row_list = []
-
     presence_loc = r'C:\Users\micha\Desktop\project_final\Group2_Yesodot\final project\presence1.xlsx'
     presence_file = xlrd.open_workbook(presence_loc)
     sheet = presence_file.sheet_by_index(0)
@@ -966,6 +979,7 @@ def MessageForManager(access):
     row_list = []
 
     message_loc = r'C:\Users\micha\Desktop\project_new\Group2_Yesodot\final project\messages.xlsx'
+
     message_file = xlrd.open_workbook(message_loc)
     sheet = message_file.sheet_by_index(0)
     for i in range(0, sheet.nrows):
@@ -1035,7 +1049,6 @@ def add_worker_Constraints(access):
     row_list = []
 
     constraints_loc = r'C:\Users\micha\Desktop\project_new\Group2_Yesodot\final project\Constraints1.xlsx'
-
     constraints_file = xlrd.open_workbook(constraints_loc)
     amount_sheets = constraints_file.nsheets
 
@@ -1178,6 +1191,7 @@ def add_new_inventory(access):
 
 def Add_custumer (access):
     location = r'C:\Users\micha\Desktop\project_new\Group2_Yesodot\final project\membership.xlsx'
+
     # variable that present the file we will work with
     members_file = xlrd.open_workbook(location)
     # the specific sheet we need from the file:
@@ -1373,36 +1387,41 @@ def make_recipect(date, price):
 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!need to change!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #prints the current sales report
-def get_sales_report(access):
-    month = input('enter the number of month of the report you want: ')
-    print('*****  Sales Report For Manager  *****')
-    sales_loc = r'C:\Users\micha\Desktop\project_final\Group2_Yesodot\final project\sales.xlsx'
-    sales_file = xlrd.open_workbook(sales_loc)
-    sheet = sales_file.sheet_by_index(0)
-    date_now = time.localtime()
-    current_year, current_month, current_day = date_now[0], date_now[1], date_now[2]
-    temp_list = []
-    for i in range(1, sheet.nrows):
-        row_list = sheet.row_values(i)
-        temp_list.append(row_list)
-
-    for i in range(len(temp_list)):
-        temp_list[i][0] = int(temp_list[i][0])
-        temp_list[i][1] = int(temp_list[i][1])
-        temp_list[i][2] = int(temp_list[i][2])
-        temp_list[i][3] = int(temp_list[i][3])
-        temp_list[i][5] = int(temp_list[i][5])
-    sales_list = temp_list
-    printed_list = []
-    printed_list.append(['Year', 'Month', 'Day', 'Code Product', 'Name', 'Amount', 'Price'])
-
-    # add to new list all the rows that relevant to this month
-    for j in range(len(sales_list)):
-        if current_year == sales_list[j][0] and current_month == sales_list[j][1] and current_day == sales_list[j][2]:
-            temp_list = [sales_list[j][0], sales_list[j][1], sales_list[j][2], sales_list[j][3], sales_list[j][4], sales_list[j][5], sales_list[j][6]]
-            printed_list.append(temp_list)
-    print(tabulate(printed_list, tablefmt="fancy_grid"))
-    Open_Menu(access)
+# def get_sales_report(access):
+# <<<<<<< HEAD
+#     print('*****Sales Report For Manager:*****')
+#     sales_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\final project\sales.xlsx'
+# =======
+#     month = input('enter the number of month of the report you want: ')
+#     print('*****  Sales Report For Manager  *****')
+#     sales_loc = r'C:\Users\micha\Desktop\project_final\Group2_Yesodot\final project\sales.xlsx'
+# >>>>>>> 5e5547a592e0ccf39a3ca2dc3d011cbf1119e1b5
+#     sales_file = xlrd.open_workbook(sales_loc)
+#     sheet = sales_file.sheet_by_index(0)
+#     date_now = time.localtime()
+#     current_year, current_month, current_day = date_now[0], date_now[1], date_now[2]
+#     temp_list = []
+#     for i in range(1, sheet.nrows):
+#         row_list = sheet.row_values(i)
+#         temp_list.append(row_list)
+#
+#     for i in range(len(temp_list)):
+#         temp_list[i][0] = int(temp_list[i][0])
+#         temp_list[i][1] = int(temp_list[i][1])
+#         temp_list[i][2] = int(temp_list[i][2])
+#         temp_list[i][3] = int(temp_list[i][3])
+#         temp_list[i][5] = int(temp_list[i][5])
+#     sales_list = temp_list
+#     printed_list = []
+#     printed_list.append(['Year', 'Month', 'Day', 'Code Product', 'Name', 'Amount', 'Price'])
+#
+#     # add to new list all the rows that relevant to this month
+#     for j in range(len(sales_list)):
+#         if current_year == sales_list[j][0] and current_month == sales_list[j][1] and current_day == sales_list[j][2]:
+#             temp_list = [sales_list[j][0], sales_list[j][1], sales_list[j][2], sales_list[j][3], sales_list[j][4], sales_list[j][5], sales_list[j][6]]
+#             printed_list.append(temp_list)
+#     print(tabulate(printed_list, tablefmt="fancy_grid"))
+#     Open_Menu(access)
 ################################################################################################################
 
 
@@ -1569,10 +1588,11 @@ def sell_items(access):
             flag = int(input('invalid answer, try again- To delete items from list press 1, to continue press 0'))
 
         if flag == 1:
-            index = int(input('Enter index of item you want to remove'))
+            index = input('Enter index of item you want to remove')
             # check validation of index input:
-            while index.isnumer == False:
-                index = int(input('invalid index, try again. Enter index of item you want to remove'))
+            while index.isnumeric() == False:
+                index = input('invalid index, try again. Enter index of item you want to remove')
+            index=int(index)
             while index<1 or index>(len(item_list)):
                 index = int(input('invalid index, try again. Enter index of item you want to remove'))
 
@@ -1704,7 +1724,6 @@ def Open_Menu(access):
 
 def manager_menu(access):
     file_loc = r'C:\Users\micha\Desktop\project_new\Group2_Yesodot\final project\messages.xlsx'
-
     workbook = xlrd.open_workbook(file_loc)
     worksheet = workbook.sheet_by_index(0)
     print('-----------------------------------------------')
