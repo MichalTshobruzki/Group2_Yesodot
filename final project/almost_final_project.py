@@ -474,6 +474,9 @@ def build_shifts(access):
     constraints_file = xlrd.open_workbook(constraints_loc)
     amount_sheets = constraints_file.nsheets
     # add the sheets of constraints to list##########
+    if amount_sheets < 9:
+        print('You still can not build shifts, not all employees have submitted constraints')
+        Open_Menu(access)
     for i in range(1, amount_sheets):
         sheet = constraints_file.sheet_by_index(i)
         sheet_list = [sheet.name]
