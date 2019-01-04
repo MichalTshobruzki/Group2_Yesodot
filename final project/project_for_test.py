@@ -1,21 +1,17 @@
 import xlrd
 import xlsxwriter
 import time
+# import DateTime
 from time import gmtime, strftime
 from datetime import date
 import random
 from tabulate import tabulate
-from pathlib import Path
-
-data_folder = Path(r'C:/Users/micha/Desktop/project_new/Group2_Yesodot/final project/')
 
 
 def get_total_price_of_recipect(rec_num):
-
     # ============================== get lists of recipects =====================================
-
     # saving location file
-    location = data_folder / "recipects.xlsx"
+    location = r'C:\Users\micha\PycharmProjects\yesodotFinish\recipects.xlsx'
     # variable that present the file we will work with
     recipects_file = xlrd.open_workbook(location)
     # the specific sheet we need from the file:
@@ -29,7 +25,7 @@ def get_total_price_of_recipect(rec_num):
         row_list = sheet.row_values(i)
         recipects_list.append(row_list)
 
-    total_price=0
+    total_price = 0
     # search for recipect number:
     for i in range(len(recipects_list)):
         if recipects_list[i][0] == rec_num:
@@ -40,27 +36,26 @@ def get_total_price_of_recipect(rec_num):
 
 def update_stock_with_cancellation(items_list):
     # saving location file
-    location = data_folder / "inventory.xlsx"
+    location = r'C:\Users\micha\PycharmProjects\yesodotFinish\inventory.xlsx'
     # variable that present the file we will work with
     inventory_file = xlrd.open_workbook(location)
     # the specific sheet we need from the file:
     sheet = inventory_file.sheet_by_index(0)
 
-    #copy the file to list
+    # copy the file to list
     inventory_list = []
     # list- code, name, amount, price
     for i in range(sheet.nrows):
-            row_list = sheet.row_values(i)
-            inventory_list.append(row_list)
+        row_list = sheet.row_values(i)
+        inventory_list.append(row_list)
 
     # update the inventory by update the list:
     for i in range(len(items_list)):
         product_code = items_list[i][0]
         amount = int(items_list[i][3])
-        for j in range (len(inventory_list)):
+        for j in range(len(inventory_list)):
             if inventory_list[j][0] == product_code:
-                inventory_list[j][3] = inventory_list[j][3]+ amount
-
+                inventory_list[j][3] = inventory_list[j][3] + amount
 
     # update the file by copy the new list:
     inventory_workbook = xlsxwriter.Workbook('inventory.xlsx')
@@ -76,7 +71,7 @@ def update_stock_with_cancellation(items_list):
 
 def update_cancelled_report(data_list):
     # saving location file
-    location = data_folder / "sales.xlsx"
+    location = r'C:\Users\micha\PycharmProjects\yesodotFinish\sales.xlsx'
     # variable that present the file we will work with
     cancelled_sales_file = xlrd.open_workbook(location)
     # the specific sheet we need from the file:
@@ -90,8 +85,7 @@ def update_cancelled_report(data_list):
         row = sheet1.row_values(i)
         sales_list.append(row)
 
-
-    #copy the file to list:
+    # copy the file to list:
     cancelled_sales_list = []
     row_list = []
     for i in range(0, sheet2.nrows):
@@ -100,7 +94,7 @@ def update_cancelled_report(data_list):
 
     cancelled_sales_list.append(data_list)
 
-    #copy the new list to the file:
+    # copy the new list to the file:
     sales_workbook = xlsxwriter.Workbook('sales.xlsx')
     workseet_sales = sales_workbook.add_worksheet('sales')
     worksheet_cancel = sales_workbook.add_worksheet('cancelled sales')
@@ -109,8 +103,7 @@ def update_cancelled_report(data_list):
         for j in range(len(sales_list[i])):
             workseet_sales.write(i, j, sales_list[i][j])
 
-
-    for i in range (len(cancelled_sales_list)):
+    for i in range(len(cancelled_sales_list)):
         for j in range(len(cancelled_sales_list[i])):
             worksheet_cancel.write(i, j, cancelled_sales_list[i][j])
 
@@ -129,10 +122,10 @@ def cancel_sell(access):
 
     if recipect_date == today:
 
-        #==================get from sales report the items in the recipct========================
+        # ==================get from sales report the items in the recipct========================
 
         # saving location file
-        location = data_folder / "sales.xlsx"
+        location = r'C:\Users\micha\PycharmProjects\yesodotFinish\sales.xlsx'
         # variable that present the file we will work with
         sales_file = xlrd.open_workbook(location)
         # the specific sheet we need from the file:
@@ -151,27 +144,27 @@ def cancel_sell(access):
 
         # find the relevant items by recipect number, at the end of the process i get list of items belong to the recipect
         for i in range(len(sales_list)):
-            if sales_list[i][7]== recipect_num:
-                code= sales_list[i][3]
-                name= sales_list[i][4]
-                amount= sales_list[i][5]
+            if sales_list[i][7] == recipect_num:
+                code = sales_list[i][3]
+                name = sales_list[i][4]
+                amount = sales_list[i][5]
                 price = sales_list[i][6]
-                item= [code,name,amount,price]
+                item = [code, name, amount, price]
                 recipect_item_list.append(item)
 
         # =================== get total price we need to refund =======================
-        total_sum = get_total_price_of_recipect (recipect_num)
+        total_sum = get_total_price_of_recipect(recipect_num)
 
         'The cancellation fee according to the law is 5% or 100 NIS, whichever is lower'
-        check_5_Percent = 0.05*total_sum
+        check_5_Percent = 0.05 * total_sum
         Cancellation_fee = 0
-        if check_5_Percent <100:
+        if check_5_Percent < 100:
             Cancellation_fee = check_5_Percent
         else:
             Cancellation_fee = 100
 
         Refund = total_sum - Cancellation_fee
-        Refund= round(Refund)
+        Refund = round(Refund)
         print('recipect items list is:\n')
         for i in range(len(recipect_item_list)):
             print(recipect_item_list[i])
@@ -196,7 +189,7 @@ def cancel_sell(access):
 
 
 def clear_constraints(access):
-    constraints_loc = data_folder / "Constraints1.xlsx"
+    constraints_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\Constraints1.xlsx'
     constraints_file = xlrd.open_workbook(constraints_loc)
     sheet = constraints_file.sheet_by_index(0)
     sheet_list = []
@@ -215,9 +208,9 @@ def clear_constraints(access):
 
 
 def add_2_workers_to_shifts(worker1, worker2):
-    constraints_loc = data_folder / "Constraints1.xlsx"
+    constraints_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\Constraints1.xlsx'
     constraints_file = xlrd.open_workbook(constraints_loc)
-    screwed_loc = data_folder / "Screwed.xlsx"
+    screwed_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\Screwed.xlsx'
     screwed_file = xlrd.open_workbook(screwed_loc)
     amount_sheets_constraints = constraints_file.nsheets
 
@@ -247,10 +240,10 @@ def add_2_workers_to_shifts(worker1, worker2):
     # copy the list to excel
     workbook_constraints = xlsxwriter.Workbook('Constraints1.xlsx')
     for i in range(len(constraints_list)):
-        worksheet = workbook_constraints.add_worksheet(constraints_list[i][0])   #constraints_list[i][0]- sheet name
+        worksheet = workbook_constraints.add_worksheet(constraints_list[i][0])  # constraints_list[i][0]- sheet name
         for j in range(1, len(constraints_list[i])):  # number of rows in sheet
             for k in range(len(constraints_list[i][j])):
-                worksheet.write(j-1, k, constraints_list[i][j][k])
+                worksheet.write(j - 1, k, constraints_list[i][j][k])
     workbook_constraints.close()
 
     # add the sheets of screwed to list##########
@@ -269,14 +262,13 @@ def add_2_workers_to_shifts(worker1, worker2):
         screwed_list[0].append([screwed_file.sheet_by_index(0).nrows, worker1])
         screwed_list[0].append([screwed_file.sheet_by_index(0).nrows + 1, worker2])
 
-
     # copy the list to excel
     workbook = xlsxwriter.Workbook('Screwed.xlsx')
     for i in range(len(screwed_list)):
-        worksheet = workbook.add_worksheet(screwed_list[i][0])   #constraints_list[i][0]- sheet name
+        worksheet = workbook.add_worksheet(screwed_list[i][0])  # constraints_list[i][0]- sheet name
         for j in range(1, len(screwed_list[i])):  # number of rows in sheet
             for k in range(len(screwed_list[i][j])):
-                worksheet.write(j-1, k, screwed_list[i][j][k])
+                worksheet.write(j - 1, k, screwed_list[i][j][k])
     workbook.close()
 ####################################################################################
 
@@ -291,13 +283,13 @@ def max_val(var):
 
 
 def find_2_workers_when_no_one_can():
-    screwed_loc = data_folder / "Screwed.xlsx"
+    screwed_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\Screwed.xlsx'
     screwed_file = xlrd.open_workbook(screwed_loc)
     number_of_shifts_sheet = screwed_file.sheet_by_index(1)
     screwed_sheet = screwed_file.sheet_by_index(0)
 
-    screwed_worker1 = screwed_sheet.cell_value(screwed_sheet.nrows-1, 1)
-    screwed_worker2 = screwed_sheet.cell_value(screwed_sheet.nrows-2, 1)
+    screwed_worker1 = screwed_sheet.cell_value(screwed_sheet.nrows - 1, 1)
+    screwed_worker2 = screwed_sheet.cell_value(screwed_sheet.nrows - 2, 1)
 
     list_of_number_of_shifts = []
     for i in range(1, number_of_shifts_sheet.nrows):
@@ -307,29 +299,31 @@ def find_2_workers_when_no_one_can():
     index_of_max = list_of_number_of_shifts.index(maximum_shifts)
 
     first = second = maximum_shifts
-    first_worker = second_worker = number_of_shifts_sheet.cell_value(index_of_max+1, 0)
+    first_worker = second_worker = number_of_shifts_sheet.cell_value(index_of_max + 1, 0)
     for i in range(len(list_of_number_of_shifts)):
         # If current element is smaller than first then update both first and second
-        if list_of_number_of_shifts[i] < first and list_of_number_of_shifts[i] != screwed_worker1 and list_of_number_of_shifts[i] != screwed_worker2:
+        if list_of_number_of_shifts[i] < first and list_of_number_of_shifts[i] != screwed_worker1 and \
+                list_of_number_of_shifts[i] != screwed_worker2:
             second = first
             second_worker = first_worker
             first = list_of_number_of_shifts[i]
-            first_worker = number_of_shifts_sheet.cell_value(i+1, 0)
+            first_worker = number_of_shifts_sheet.cell_value(i + 1, 0)
 
         # If list_of_number_of_shifts[i] is in between first and second then update second
-        elif list_of_number_of_shifts[i] < second and list_of_number_of_shifts[i] != first and list_of_number_of_shifts[i] != screwed_worker1 and list_of_number_of_shifts[i] != screwed_worker2:
+        elif list_of_number_of_shifts[i] < second and list_of_number_of_shifts[i] != first and list_of_number_of_shifts[
+            i] != screwed_worker1 and list_of_number_of_shifts[i] != screwed_worker2:
             second = list_of_number_of_shifts[i]
-            second_worker = number_of_shifts_sheet.cell_value(i+1, 0)
+            second_worker = number_of_shifts_sheet.cell_value(i + 1, 0)
 
     add_2_workers_to_shifts(first_worker, second_worker)
 ####################################################################################
 
 
 def count_shift_for_worker():
-    constraints_loc = data_folder / "Constraints1.xlsx"
+    constraints_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\Constraints1.xlsx'
     constraints_file = xlrd.open_workbook(constraints_loc)
     # screwed_loc = r'C:\Users\micha\Desktop\project_new\Group2_Yesodot\final project\Screwed.xlsx'
-    screwed_loc = data_folder / "Screwed.xlsx"
+    screwed_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\Screwed.xlsx'
     screwed_file = xlrd.open_workbook(screwed_loc)
 
     shifts_sheet = constraints_file.sheet_by_index(0)
@@ -352,8 +346,7 @@ def write_number_of_shifts_to_sheet():
     row_list = []
     screwed_list = []
     sheet_list = []
-
-    screwed_loc = data_folder / "Screwed.xlsx"
+    screwed_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\Screwed.xlsx'
     screwed_file = xlrd.open_workbook(screwed_loc)
     amount_sheets = screwed_file.nsheets
 
@@ -375,7 +368,7 @@ def write_number_of_shifts_to_sheet():
         worksheet = workbook.add_worksheet(screwed_list[i][0])
         for j in range(1, len(screwed_list[i])):  # number of rows in sheet
             for k in range(len(screwed_list[i][j])):
-                worksheet.write(j-1, k, screwed_list[i][j][k])
+                worksheet.write(j - 1, k, screwed_list[i][j][k])
     workbook.close()
 ####################################################################################
 
@@ -383,7 +376,7 @@ def write_number_of_shifts_to_sheet():
 # make list of constraints of shift manager
 def build_list_of_constraints_of_shift_manager(name):
     shiftManager_constraints = []
-    constraints_loc = data_folder / "Constraints1.xlsx"
+    constraints_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\Constraints1.xlsx'
     constraints_file = xlrd.open_workbook(constraints_loc)
     # find the sheet of the shift manager- michal
     for i in range(constraints_file.nsheets):
@@ -395,7 +388,7 @@ def build_list_of_constraints_of_shift_manager(name):
     for j in range(sheet.nrows):
         for k in range(sheet.ncols):
             if sheet.cell_value(j, k) == 'NO':
-                shiftManager_constraints.append([j, k]) #j- the shift, k- the day
+                shiftManager_constraints.append([j, k])  # j- the shift, k- the day
     return shiftManager_constraints
 ####################################################################################
 
@@ -408,10 +401,12 @@ def make_shifts_for_shift_manager(list_of_constraints):
         row_list = []
         for j in range(1, 8):
             if (list_of_constraints[0][1][0] == i and list_of_constraints[0][1][1] == j) or (
-                    list_of_constraints[0][2][0] == i and list_of_constraints[0][2][1] == j):  # if michal cant work, put emilia
+                    list_of_constraints[0][2][0] == i and list_of_constraints[0][2][
+                1] == j):  # if michal cant work, put emilia
                 row_list.append(list_of_constraints[1][0])
                 emilia_number_of_shifts += 1
-            elif (list_of_constraints[1][1][0] == i and list_of_constraints[1][1][1] == j) or (list_of_constraints[1][2][0] == i and list_of_constraints[1][2][1] == j):
+            elif (list_of_constraints[1][1][0] == i and list_of_constraints[1][1][1] == j) or (
+                    list_of_constraints[1][2][0] == i and list_of_constraints[1][2][1] == j):
                 row_list.append(list_of_constraints[0][0])
                 michal_number_of_shifts += 1
             elif emilia_number_of_shifts < michal_number_of_shifts:
@@ -437,7 +432,7 @@ def make_shift_by_random(day):
         shift.append('no one can')
         return shift
     while len(shift) < 2:
-        rand = random.randint(0, len(day)-1)
+        rand = random.randint(0, len(day) - 1)
         if len(shift) == 0:
             shift.append(day[rand])
         else:
@@ -453,7 +448,7 @@ def make_shift_by_random(day):
 # and append all the workers that can work in this shift
 def build_one_shift(row, col):
     shift = []
-    constraints_loc = data_folder / "Constraints1.xlsx"
+    constraints_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\Constraints1.xlsx'
     constraints_file = xlrd.open_workbook(constraints_loc)
     amount_sheets = constraints_file.nsheets - 2
     for i in range(1, amount_sheets):
@@ -467,7 +462,7 @@ def build_one_shift(row, col):
 def build_shifts(access):
     constraints_list = []
     row_list = []
-    constraints_loc = data_folder / "Constraints1.xlsx"
+    constraints_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\Constraints1.xlsx'
     constraints_file = xlrd.open_workbook(constraints_loc)
     amount_sheets = constraints_file.nsheets
     # add the sheets of constraints to list##########
@@ -532,17 +527,17 @@ def build_shifts(access):
 
     # add the workers to each shift in the sheet
     for i in range(2):
-        worksheet.write(i+1, 1, sunday_morning_shift[i])
+        worksheet.write(i + 1, 1, sunday_morning_shift[i])
     for i in range(2):
-        worksheet.write(i+4, 1, sunday_evening_shift[i])
+        worksheet.write(i + 4, 1, sunday_evening_shift[i])
     for i in range(2):
-        worksheet.write(i+1, 2, monday_morning_shift[i])
+        worksheet.write(i + 1, 2, monday_morning_shift[i])
     for i in range(2):
-        worksheet.write(i+4, 2, monday_evening_shift[i])
+        worksheet.write(i + 4, 2, monday_evening_shift[i])
     for i in range(2):
-        worksheet.write(i+1, 3, tuesday_morning_shift[i])
+        worksheet.write(i + 1, 3, tuesday_morning_shift[i])
     for i in range(2):
-        worksheet.write(i+4, 3, tuesday_evening_shift[i])
+        worksheet.write(i + 4, 3, tuesday_evening_shift[i])
     for i in range(2):
         worksheet.write(i + 1, 4, wednesday_morning_shift[i])
     for i in range(2):
@@ -557,27 +552,27 @@ def build_shifts(access):
         worksheet.write(i + 4, 7, saturday_evening_shift[i])
 
     # add the shifts of the shifts managers:
-    shift_managers_constraints =[]
+    shift_managers_constraints = []
     shift_managers_constraints.append(build_list_of_constraints_of_shift_manager('michal'))
     shift_managers_constraints.append(build_list_of_constraints_of_shift_manager('emilia'))
 
     list_of_shifts_for_sManager = (make_shifts_for_shift_manager(shift_managers_constraints))
     for i in range(1, 7):
-        worksheet.write(3, i, list_of_shifts_for_sManager[0][i-1])
+        worksheet.write(3, i, list_of_shifts_for_sManager[0][i - 1])
     for i in range(1, 8):
         if i == 6:
             continue
         elif i == 7:
             worksheet.write(6, i, list_of_shifts_for_sManager[1][i - 2])
         else:
-            worksheet.write(6, i, list_of_shifts_for_sManager[1][i-1])
+            worksheet.write(6, i, list_of_shifts_for_sManager[1][i - 1])
 
     # copy the sheets of constraints
     for i in range(len(constraints_list)):
-        worksheet = workbook.add_worksheet(constraints_list[i][0])   #constraints_list[i][0]- sheet name
+        worksheet = workbook.add_worksheet(constraints_list[i][0])  # constraints_list[i][0]- sheet name
         for j in range(1, len(constraints_list[i])):  # number of rows in sheet
             for k in range(len(constraints_list[i][j])):
-                worksheet.write(j-1, k, constraints_list[i][j][k])
+                worksheet.write(j - 1, k, constraints_list[i][j][k])
     workbook.close()
     find_2_workers_when_no_one_can()
     write_number_of_shifts_to_sheet()
@@ -587,7 +582,7 @@ def build_shifts(access):
 
 # manager can put cell and the name he want to change for working
 def make_changes_in_shifts(access):
-    constraints_loc = data_folder / "Constraints1.xlsx"
+    constraints_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\Constraints1.xlsx'
     constraints_file = xlrd.open_workbook(constraints_loc)
     sheet = constraints_file.sheet_by_index(0)
     row_list = [' ', '0', '1', '2', '3', '4', '5', '6', '7']
@@ -614,7 +609,7 @@ def make_changes_in_shifts(access):
 
     print('enter row and col of the cell you want to change, for end entet- done')
 
-    passworde_loc = data_folder / "passwarde.xlsx"
+    passworde_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\passwarde.xlsx'
     passworde_file = xlrd.open_workbook(passworde_loc)
     sheet_passworde = passworde_file.sheet_by_index(0)
 
@@ -637,7 +632,7 @@ def make_changes_in_shifts(access):
                 flag = 1
                 break
         if flag == 1:
-            constraints_list[0][row+1][col] = worker
+            constraints_list[0][row + 1][col] = worker
         else:
             print('the worker does not exist')
 
@@ -654,7 +649,7 @@ def make_changes_in_shifts(access):
 
 # shows to the screen table of shifts
 def shifts_report(access):
-    constraints_loc = data_folder / "Constraints1.xlsx"
+    constraints_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\Constraints1.xlsx'
     constraints_file = xlrd.open_workbook(constraints_loc)
     sheet = constraints_file.sheet_by_index(0)
     row_list = []
@@ -672,7 +667,7 @@ def shifts_report(access):
 
 # returns the total amount of the sales in the current day
 def Daily_Money_amount(year, month, day):
-    sales_loc = data_folder / "recipects.xlsx"
+    sales_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\recipects.xlsx'
     sales_file = xlrd.open_workbook(sales_loc)
     sheet = sales_file.sheet_by_index(0)
     temp_list = []
@@ -687,12 +682,14 @@ def Daily_Money_amount(year, month, day):
         if date == temp_list[i][1]:
             total_money_amount = total_money_amount + temp_list[i][2]
     return total_money_amount
+
+
 ####################################################################################
 
 
 #  this function writes the daily money amount with the current date into EOD excel file and returns the daily amount of money
 def EOD_report(access):
-    EOD_loc = data_folder / "EOD.xlsx"
+    EOD_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\EOD.xlsx'
     EOD_file = xlrd.open_workbook(EOD_loc)
     sheet = EOD_file.sheet_by_index(0)
     date1 = str(date.today())
@@ -749,7 +746,7 @@ def Closing_The_Register(access):
 
 # print table of all the inventory
 def get_inventory_report(access):
-    inventory_loc = data_folder / "Inventory.xlsx"
+    inventory_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\Inventory.xlsx'
     inventory_file = xlrd.open_workbook(inventory_loc)
     sheet = inventory_file.sheet_by_index(0)
     row_list = []
@@ -774,7 +771,7 @@ def get_manager_presence_report(access):
     print('*****  Presence Report For Manager  *****')
     presence_list = []
     presence_list.append(['worker', 'arrival', 'departure', 'total'])
-    presence_loc = data_folder / "presence1.xlsx"
+    presence_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\presence1.xlsx'
     presence_file = xlrd.open_workbook(presence_loc)
     sheet = presence_file.sheet_by_index(0)
     for i in range(0, sheet.nrows):
@@ -804,7 +801,7 @@ def get_monthly_presence_report(access):
     presence_list = []
     presence_list.append(['arrival time', 'departure time', 'total work time'])
 
-    presence_loc = data_folder / "presence1.xlsx"
+    presence_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\presence1.xlsx'
     presence_file = xlrd.open_workbook(presence_loc)
     sheet = presence_file.sheet_by_index(0)
 
@@ -822,6 +819,8 @@ def get_monthly_presence_report(access):
     print(tabulate(presence_list, tablefmt="fancy_grid"))
 
     Open_Menu(access)
+
+
 ####################################################################################
 
 
@@ -831,7 +830,7 @@ def return_inventory(access):
     while flag == 0:
         inventory_list = []
         updated_stock_list = []
-        inventory_loc = data_folder / "inventory.xlsx"
+        inventory_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\inventory.xlsx'
         inventory_file = xlrd.open_workbook(inventory_loc)
         sheet = inventory_file.sheet_by_index(0)
         k, l = 0, 0
@@ -850,8 +849,8 @@ def return_inventory(access):
         picks = []
         # input from the manager which item to send back
         pick = int(input("enter product code of item you want to send back?:"))
-        try: # if the input is not valid exeption is trown.
-            if pick > (len(inventory_list)-1):
+        try:  # if the input is not valid exeption is trown.
+            if pick > (len(inventory_list) - 1):
                 raise ValueError('Not valid choice.')
         except ValueError:
             print('Value Error.Pick again')
@@ -863,7 +862,7 @@ def return_inventory(access):
                     if picks[k] == inventory_list[i][j]:
                         l = i + 1
         # making a new list without the deleted item
-        for i in range(0, l-1, 1):
+        for i in range(0, l - 1, 1):
             updated_stock_list.append(inventory_list[i])
         for j in range(l, len(inventory_list), 1):
             updated_stock_list.append(inventory_list[j])
@@ -892,7 +891,7 @@ def return_inventory(access):
 
 # gets name of worker and add to data base of the presence
 def arrival_to_work(access):
-    password_loc = data_folder / "passwarde.xlsx"
+    password_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\passwarde.xlsx'
     password_file = xlrd.open_workbook(password_loc)
     password_sheet = password_file.sheet_by_index(0)
     name = input('enter your first name: ')
@@ -912,8 +911,7 @@ def arrival_to_work(access):
     date_now = time.localtime()
     presence_list = []
     row_list = []
-
-    presence_loc = data_folder / "presence1.xlsx"
+    presence_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\presence1.xlsx'
     presence_file = xlrd.open_workbook(presence_loc)
     sheet = presence_file.sheet_by_index(0)
 
@@ -936,12 +934,14 @@ def arrival_to_work(access):
             worksheet.write(i, j, presence_list[i][j])
     presence_workbook.close()
     Open_Menu(access)
+
+
 ####################################################################################
 
 
 # gets name of worker and add to data base of the presence the time of leaving the work
 def departure(access):
-    password_loc = data_folder / "passwarde.xlsx"
+    password_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\passwarde.xlsx'
     password_file = xlrd.open_workbook(password_loc)
     password_sheet = password_file.sheet_by_index(0)
     name = input('enter your first name: ')
@@ -959,8 +959,7 @@ def departure(access):
         last = input('enter your last name: ')
     presence_list = []
     row_list = []
-
-    presence_loc = data_folder / "presence1.xlsx"
+    presence_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\presence1.xlsx'
     presence_file = xlrd.open_workbook(presence_loc)
     sheet = presence_file.sheet_by_index(0)
 
@@ -995,6 +994,8 @@ def departure(access):
             worksheet.write(i, j, presence_list[i][j])
     presence_workbook.close()
     Open_Menu(access)
+
+
 ####################################################################################
 
 
@@ -1002,8 +1003,7 @@ def departure(access):
 def MessageForManager(access):
     messages_list = []
     row_list = []
-
-    message_loc = data_folder / "messages.xlsx"
+    message_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\messages.xlsx'
     message_file = xlrd.open_workbook(message_loc)
     sheet = message_file.sheet_by_index(0)
     for i in range(0, sheet.nrows):
@@ -1033,7 +1033,7 @@ def find_custumer(access):
     while id.isnumeric() == False:
         id = input('invalid id, try again:')
 
-    file_loc = data_folder / "membership.xlsx"
+    file_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\membership.xlsx'
     workbook = xlrd.open_workbook(file_loc)
     worksheet = workbook.sheet_by_index(0)
     worksheet.cell_value(0, 0)
@@ -1043,9 +1043,8 @@ def find_custumer(access):
     return False
 ####################################################################################
 
-
 def check_if_customer_is_member_club(id):
-    location = data_folder / "membership.xlsx"
+    location = r'C:\Users\micha\PycharmProjects\yesodotFinish\membership.xlsx'
     # variable that present the file we will work with
     members_file = xlrd.open_workbook(location)
     # the specific sheet we need from the file:
@@ -1061,7 +1060,7 @@ def check_if_customer_is_member_club(id):
 
     # find the id in members list:
     for i in range(len(members_list)):
-        if members_list[i][2]==id:
+        if members_list[i][2] == id:
             return True
 
     return False
@@ -1071,8 +1070,7 @@ def check_if_customer_is_member_club(id):
 def add_worker_Constraints(access):
     constraints_list = []
     row_list = []
-
-    constraints_loc = data_folder / "Constraints1.xlsx"
+    constraints_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\Constraints1.xlsx'
     constraints_file = xlrd.open_workbook(constraints_loc)
     amount_sheets = constraints_file.nsheets
 
@@ -1109,11 +1107,11 @@ def add_worker_Constraints(access):
 
     workbook = xlsxwriter.Workbook('Constraints1.xlsx')
 
-    for i in range(len(constraints_list)):  #runs on 2 sheets - michal and shir
-        worksheet = workbook.add_worksheet(constraints_list[i][0])   #constraints_list[i][0]- sheet name
+    for i in range(len(constraints_list)):  # runs on 2 sheets - michal and shir
+        worksheet = workbook.add_worksheet(constraints_list[i][0])  # constraints_list[i][0]- sheet name
         for j in range(1, len(constraints_list[i])):  # number of rows in sheet
             for k in range(len(constraints_list[i][j])):
-                worksheet.write(j-1, k, constraints_list[i][j][k])
+                worksheet.write(j - 1, k, constraints_list[i][j][k])
 
     worksheet = workbook.add_worksheet(name)
 
@@ -1129,7 +1127,7 @@ def add_worker_Constraints(access):
 
     days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
     shift = ['Morning', 'Evening']
-    print('enter constraints in this form: \nday- {0}\nshift- {1}'. format(days, shift))
+    print('enter constraints in this form: \nday- {0}\nshift- {1}'.format(days, shift))
     flag1, flag2 = 0, 0
     while True:
         constraint1_day = input('enter your first constraint-> day: ')
@@ -1204,6 +1202,8 @@ def add_worker_Constraints(access):
     worksheet.write(constraint2_shift, constraint2_day, 'NO')
     workbook.close()
     Open_Menu(access)
+
+
 ####################################################################################
 
 
@@ -1213,7 +1213,7 @@ def add_new_inventory(access):
     while flag == 0:
         inventory_list = []
         users_list = []
-        inventory_loc = data_folder / "inventory.xlsx"
+        inventory_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\inventory.xlsx'
         inventory_file = xlrd.open_workbook(inventory_loc)
         sheet = inventory_file.sheet_by_index(0)
         # coping the existing data to a new list
@@ -1240,7 +1240,7 @@ def add_new_inventory(access):
         users_list.append(input_string)
         inventory_list.append(users_list)
         print('Would you like to order new stock?[yes/no]')
-        try: # if the input is not valid exeption is trown.
+        try:  # if the input is not valid exeption is trown.
             answer = input()
             if answer == 'yes':
                 flag = 0
@@ -1263,8 +1263,8 @@ def add_new_inventory(access):
 ####################################################################################
 
 
-def Add_custumer (access):
-    location = data_folder / "membership.xlsx"
+def Add_custumer(access):
+    location = r'C:\Users\micha\PycharmProjects\yesodotFinish\membership.xlsx'
     # variable that present the file we will work with
     members_file = xlrd.open_workbook(location)
     # the specific sheet we need from the file:
@@ -1299,12 +1299,14 @@ def Add_custumer (access):
     workbook.close()
     print('The customer was successfully added to the customer club')
     Open_Menu(access)
+
+
 ####################################################################################
 
 
-def Delete_customer (access):
+def Delete_customer(access):
     # saving location file
-    location = data_folder / "membership.xlsx"
+    location = r'C:\Users\micha\PycharmProjects\yesodotFinish\membership.xlsx'
     # variable that present the file we will work with
     members_file = xlrd.open_workbook(location)
     # the specific sheet we need from the file:
@@ -1323,7 +1325,6 @@ def Delete_customer (access):
     while ID.isnumeric() == False:
         ID = input('id is not valid, enter costumer id: ')
 
-
     # find the index of the id in membership list:
     index = None
     for i in range(len(members_list)):
@@ -1333,7 +1334,6 @@ def Delete_customer (access):
 
     if index == None:
         print("id doesn't exists in membership club")
-
 
     # update excel file by new members list without the removed costumer:
     workbook = xlsxwriter.Workbook('membership.xlsx')
@@ -1347,20 +1347,22 @@ def Delete_customer (access):
     workbook.close()
     print('The customer was successfully removed from customer club')
     Open_Menu(access)
+
+
 ####################################################################################
 
 
-#return the price of a product given its product code(used in sell function)
+# return the price of a product given its product code(used in sell function)
 def GetPrice(product_code):
     inventory_list = []
-    inventory_loc = data_folder / "inventory.xlsx"
+    inventory_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\inventory.xlsx'
     inventory_file = xlrd.open_workbook(inventory_loc)
     sheet = inventory_file.sheet_by_index(0)
     price_index = 0
     # coping the existing data to a new list
     for i in range(sheet.nrows):
-            row_list = sheet.row_values(i)
-            inventory_list.append(row_list)
+        row_list = sheet.row_values(i)
+        inventory_list.append(row_list)
     # converting the float numbers to integetrs
     for i in range(1, len(inventory_list)):
         num = inventory_list[i][0]
@@ -1370,15 +1372,15 @@ def GetPrice(product_code):
     # searching for the given product code and returning its price
     for i in range(len(inventory_list)):
         for j in range(len(inventory_list[i])):
-                if product_code == inventory_list[i][j]:
-                    price_index = inventory_list[i][j+5]
-                    return price_index
+            if product_code == inventory_list[i][j]:
+                price_index = inventory_list[i][j + 5]
+                return price_index
 ####################################################################################
 
 
 def check_validation_of_product_code(code):
     inventory_list = []
-    inventory_loc = data_folder / "inventory.xlsx"
+    inventory_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\inventory.xlsx'
     inventory_file = xlrd.open_workbook(inventory_loc)
     sheet = inventory_file.sheet_by_index(0)
 
@@ -1387,19 +1389,21 @@ def check_validation_of_product_code(code):
         row_list = sheet.row_values(i)
         inventory_list.append(row_list)
 
-    #find the product in list:
+    # find the product in list:
     for i in range(len(inventory_list)):
         if inventory_list[i][0] == code:
             return True
 
     return False
+
+
 ####################################################################################
 
 
 # when making a sell this function updates the amount of the products
 def update_stock_with_sale(code_product, amount):
     inventory_list = []
-    inventory_loc = data_folder / "inventory.xlsx"
+    inventory_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\inventory.xlsx'
     inventory_file = xlrd.open_workbook(inventory_loc)
     sheet1 = inventory_file.sheet_by_index(0)
 
@@ -1427,7 +1431,7 @@ def update_stock_with_sale(code_product, amount):
 # ============ function for create recipt and save her at recipects data=======================
 def make_recipect(date, price):
     # saving location file
-    location = data_folder / "recipects.xlsx"
+    location = r'C:\Users\micha\PycharmProjects\yesodotFinish\recipects.xlsx'
     # variable that present the file we will work with
     recipects_file = xlrd.open_workbook(location)
     # the specific sheet we need from the file:
@@ -1460,7 +1464,7 @@ def make_recipect(date, price):
 
 # prints the current sales report
 def get_sales_report(access):
-    sales_loc = data_folder / "sales.xlsx"
+    sales_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\sales.xlsx'
     sales_file = xlrd.open_workbook(sales_loc)
     sheet = sales_file.sheet_by_index(0)
 
@@ -1554,14 +1558,14 @@ def get_sales_report(access):
 # return name of the product
 def GetName(product_code):
     inventory_list = []
-    inventory_loc = data_folder / "inventory.xlsx"
+    inventory_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\inventory.xlsx'
     inventory_file = xlrd.open_workbook(inventory_loc)
     sheet = inventory_file.sheet_by_index(0)
     name_index = 0
     # coping the exidting data to new list.
     for i in range(sheet.nrows):
-            row_list = sheet.row_values(i)
-            inventory_list.append(row_list)
+        row_list = sheet.row_values(i)
+        inventory_list.append(row_list)
     # converting the float numbers into integers(not the price column).
     for i in range(1, len(inventory_list)):
         num = inventory_list[i][0]
@@ -1571,9 +1575,11 @@ def GetName(product_code):
     # searching for the name of the item with the given product code
     for i in range(len(inventory_list)):
         for j in range(len(inventory_list[i])):
-                if product_code == inventory_list[i][j]:
-                    name_index = inventory_list[i][j+1]
-                    return name_index
+            if product_code == inventory_list[i][j]:
+                name_index = inventory_list[i][j + 1]
+                return name_index
+
+
 ####################################################################################
 
 
@@ -1581,10 +1587,10 @@ def update_sales(list_1):
     updated_sales_list = []
     cancelled_sales_list = []
     temp_sales_list = []
-    sales_loc = data_folder / "sales.xlsx"
+    sales_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\sales.xlsx'
     sales_file = xlrd.open_workbook(sales_loc)
-    sheet1 = sales_file.sheet_by_index(0) # sheet of sales
-    sheet2 = sales_file.sheet_by_index(1) # sheet of cancelled sales
+    sheet1 = sales_file.sheet_by_index(0)  # sheet of sales
+    sheet2 = sales_file.sheet_by_index(1)  # sheet of cancelled sales
 
     date_now = time.localtime()
     current_year, current_month, current_day = date_now[0], date_now[1], date_now[2]
@@ -1633,7 +1639,7 @@ def update_sales(list_1):
 def The_number_of_next_recipct():
     """function that return the next number in recipects list, we need it for sell process"""
     # saving location file
-    location = data_folder / "recipects.xlsx"
+    location = r'C:\Users\micha\PycharmProjects\yesodotFinish\recipects.xlsx'
     # variable that present the file we will work with
     recipects_file = xlrd.open_workbook(location)
     # the specific sheet we need from the file:
@@ -1648,21 +1654,21 @@ def sell_items(access):
 
     print('\n\n------------------- sell page-------------------\n')
     answer = int(input("Is the customer a member of the customer club?\nIf he doe's enter 1, otherwise enter 0"))
-    while answer != 1 and answer!=0:
+    while answer != 1 and answer != 0:
         answer = int(input("invalid answer, try again"))
 
     if answer == 1:
-            id= input('Enter customer ID: ')
-            while id.isnumeric() == False:
-                id = input('invalid id, Enter customer ID again: ')
+        id = input('Enter customer ID: ')
+        while id.isnumeric() == False:
+            id = input('invalid id, Enter customer ID again: ')
 
-            assumption=0
-            if check_if_customer_is_member_club(id):
-                print('The customer is a member in the customer club, so he won 15% off the sale')
-                assumption = 0.15
-            else:
-                print("The customer isn't a member in the customer club")
-                assumption = 0
+        assumption = 0
+        if check_if_customer_is_member_club(id):
+            print('The customer is a member in the customer club, so he won 15% off the sale')
+            assumption = 0.15
+        else:
+            print("The customer isn't a member in the customer club")
+            assumption = 0
     else:
         assumption = 0
 
@@ -1678,7 +1684,7 @@ def sell_items(access):
 
     while flag == 1:
 
-        date1= str(date.today())
+        date1 = str(date.today())
         product_code = int(input('Enter product code:'))
 
         # check if product code exists:
@@ -1696,10 +1702,9 @@ def sell_items(access):
 
         # if there's more items:
         flag = int(input('for add more items press 1, else press 0:'))
-        #checking validation of input:
-        while flag!=0 and flag!=1:
+        # checking validation of input:
+        while flag != 0 and flag != 1:
             flag = int(input('invalid answer, try again- for add more items press 1, else press 0'))
-
 
     # =========================== delete item from list during sale ====================================
     flag = 1
@@ -1709,7 +1714,7 @@ def sell_items(access):
         for i in range(len(item_list)):
             print('{0}) {1}'.format(i + 1, item_list[i]))
         flag = int(input('To delete items from list press 1, to continue press 0:'))
-        #check validation of answer:
+        # check validation of answer:
         while flag != 0 and flag != 1:
             flag = int(input('invalid answer, try again- To delete items from list press 1, to continue press 0'))
 
@@ -1718,17 +1723,16 @@ def sell_items(access):
             # check validation of index input:
             while index.isnumeric() == False:
                 index = input('invalid index, try again. Enter index of item you want to remove')
-            index=int(index)
-            while index<1 or index>(len(item_list)):
+            index = int(index)
+            while index < 1 or index > (len(item_list)):
                 index = int(input('invalid index, try again. Enter index of item you want to remove'))
 
-
-            #if theres more the one item to same index, remove only 1 item:
-            if item_list[index-1][2]>1:
-                item_list[index-1][2] -=1
-            #if there is only one item, remve all item line from list
+            # if theres more the one item to same index, remove only 1 item:
+            if item_list[index - 1][2] > 1:
+                item_list[index - 1][2] -= 1
+            # if there is only one item, remve all item line from list
             else:
-                del(item_list[index - 1])
+                del (item_list[index - 1])
 
             print('item removed')
 
@@ -1743,23 +1747,18 @@ def sell_items(access):
     for i in range(len(item_list)):
         update_sales(item_list[i])
 
-
-
     # ============================= update stock with bought items====================================
     for i in range(len(item_list)):
         update_stock_with_sale(item_list[i][0], item_list[i][2])
 
-
-
     # =============================== print recipect ==================================================
-
 
     print('\n\n****costumer recipect****')
     print('--------recepict number:{0}--------'.format(recipet_num))
     print('Date:{0}\n'.format(date1))
     for i in range(len(item_list)):
         for j in range(1, 4):
-            print(item_list[i][j], end= " ")
+            print(item_list[i][j], end=" ")
         print()
 
     print('\ntotal price is:{0}₪'.format(total_price))
@@ -1775,10 +1774,8 @@ def sell_items(access):
     total_price = total_price = round(total_price, 2)
     print('Sum is:{0}₪'.format(total_price))
 
-
     # ===================================== make recipect =======================================
     make_recipect(date1, total_price)
-
 
     # ====================================== back to main page ===================================
     Open_Menu(access)
@@ -1787,7 +1784,7 @@ def sell_items(access):
 def check_recipect_number_validation(rec_num):
     # ======================== get lists of recipect =====================================
     # saving location file
-    location = data_folder / "recipects.xlsx"
+    location = r'C:\Users\micha\PycharmProjects\yesodotFinish\recipects.xlsx'
     # variable that present the file we will work with
     recipects_file = xlrd.open_workbook(location)
     # the specific sheet we need from the file:
@@ -1807,13 +1804,15 @@ def check_recipect_number_validation(rec_num):
         if recipects_list[i][0] == rec_num:
             return True
     return False
+
+
 ####################################################################################
 
 
 def get_recipect_date(number):
     # ======================== get lists of recipect =====================================
     # saving location file
-    location = data_folder / "recipects.xlsx"
+    location = r'C:\Users\micha\PycharmProjects\yesodotFinish\recipects.xlsx'
     # variable that present the file we will work with
     recipects_file = xlrd.open_workbook(location)
     # the specific sheet we need from the file:
@@ -1832,6 +1831,8 @@ def get_recipect_date(number):
         if recipects_list[i][0] == number:
             return recipects_list[i][1]
     return
+
+
 ####################################################################################
 
 
@@ -1846,11 +1847,11 @@ def Open_Menu(access):
         Responsible_menu(access)
     if access == access_worker:
         worker_menu(access)
-####################################################################################
 
 
 def manager_menu(access):
-    file_loc = data_folder / "messages.xlsx"
+    file_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\messages.xlsx'
+
     workbook = xlrd.open_workbook(file_loc)
     worksheet = workbook.sheet_by_index(0)
     print('-----------------------------------------------')
@@ -1949,7 +1950,6 @@ def manager_menu(access):
     if choice == 7:
         Log_In()
     # *********************************************************
-####################################################################################
 
 
 def Responsible_menu(access):
@@ -2032,7 +2032,6 @@ def Responsible_menu(access):
     if choice == 8:
         Log_In()
     # *********************************************************
-####################################################################################
 
 
 def worker_menu(access):
@@ -2117,16 +2116,14 @@ def worker_menu(access):
     if choice == 7:
         Log_In()
     # *********************************************************
-####################################################################################
 
 
 def Error_page():
     exit(0)
-####################################################################################
 
 
 def Log_In():
-    file_loc = data_folder / "passwarde.xlsx"
+    file_loc = r'C:\Users\micha\PycharmProjects\yesodotFinish\passwarde.xlsx'
     pas_file = xlrd.open_workbook(file_loc)
     sheet = pas_file.sheet_by_index(0)
     sheet.cell_value(0, 0)
@@ -2135,12 +2132,12 @@ def Log_In():
 
     def check_name(flag):
         name = input('enter user name-english letters only: ')
-        for i in range(1, sheet.ncols+1):
+        for i in range(1, sheet.ncols + 1):
             check = sheet.cell_value(i, 0)
             if check == name:
-                flag=1
+                flag = 1
                 Password = int(input('Enter a 6-digit password-'))
-                index= i
+                index = i
                 for j in range(2):
                     if Password == (sheet.cell_value(index, 1)):
                         worker_access = sheet.cell_value(index, 2)
@@ -2158,16 +2155,15 @@ def Log_In():
 
         return flag
 
-    ans=check_name(0)
-    if ans==0:
-        for i in range (2):
+    ans = check_name(0)
+    if ans == 0:
+        for i in range(2):
             print("Name does not exist on the system, Try again")
-            if check_name(0)!= 0:
+            if check_name(0) != 0:
                 break
-####################################################################################
 
-
-Log_In()
+#
+# Log_In()
 
 
 
