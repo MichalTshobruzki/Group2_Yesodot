@@ -673,7 +673,7 @@ def shifts_report(access):
 
 # returns the total amount of the sales in the current day
 def Daily_Money_amount(year, month, day):
-    sales_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\final project\sales.xlsx'
+    sales_loc = r'C:\Users\micha\Desktop\project_new\Group2_Yesodot\final project\sales.xlsx'
     sales_file = xlrd.open_workbook(sales_loc)
     sheet = sales_file.sheet_by_index(0)
     temp_list = []
@@ -1385,44 +1385,97 @@ def make_recipect(date, price):
         workbook.close()
 
 
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!need to change!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#prints the current sales report
-# def get_sales_report(access):
-# <<<<<<< HEAD
-#     print('*****Sales Report For Manager:*****')
-#     sales_loc = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\final project\sales.xlsx'
-# =======
-#     month = input('enter the number of month of the report you want: ')
-#     print('*****  Sales Report For Manager  *****')
-#     sales_loc = r'C:\Users\micha\Desktop\project_final\Group2_Yesodot\final project\sales.xlsx'
-# >>>>>>> 5e5547a592e0ccf39a3ca2dc3d011cbf1119e1b5
-#     sales_file = xlrd.open_workbook(sales_loc)
-#     sheet = sales_file.sheet_by_index(0)
-#     date_now = time.localtime()
-#     current_year, current_month, current_day = date_now[0], date_now[1], date_now[2]
-#     temp_list = []
-#     for i in range(1, sheet.nrows):
-#         row_list = sheet.row_values(i)
-#         temp_list.append(row_list)
-#
-#     for i in range(len(temp_list)):
-#         temp_list[i][0] = int(temp_list[i][0])
-#         temp_list[i][1] = int(temp_list[i][1])
-#         temp_list[i][2] = int(temp_list[i][2])
-#         temp_list[i][3] = int(temp_list[i][3])
-#         temp_list[i][5] = int(temp_list[i][5])
-#     sales_list = temp_list
-#     printed_list = []
-#     printed_list.append(['Year', 'Month', 'Day', 'Code Product', 'Name', 'Amount', 'Price'])
-#
-#     # add to new list all the rows that relevant to this month
-#     for j in range(len(sales_list)):
-#         if current_year == sales_list[j][0] and current_month == sales_list[j][1] and current_day == sales_list[j][2]:
-#             temp_list = [sales_list[j][0], sales_list[j][1], sales_list[j][2], sales_list[j][3], sales_list[j][4], sales_list[j][5], sales_list[j][6]]
-#             printed_list.append(temp_list)
-#     print(tabulate(printed_list, tablefmt="fancy_grid"))
-#     Open_Menu(access)
-################################################################################################################
+# prints the current sales report
+def get_sales_report(access):
+    sales_loc = r'C:\Users\micha\Desktop\project_new\Group2_Yesodot\final project\sales.xlsx'
+    sales_file = xlrd.open_workbook(sales_loc)
+    sheet = sales_file.sheet_by_index(0)
+
+    date_now = time.localtime()
+    current_year, current_month, current_day = date_now[0], date_now[1], date_now[2]
+    temp_list = []
+    # copying the existing data to a new list
+    for i in range(1, sheet.nrows):
+        row_list = sheet.row_values(i)
+        temp_list.append(row_list)
+    # converting the float numbers to integers(not the price column)
+    for i in range(len(temp_list)):
+        temp_list[i][0] = int(temp_list[i][0])
+        temp_list[i][1] = int(temp_list[i][1])
+        temp_list[i][2] = int(temp_list[i][2])
+        temp_list[i][3] = int(temp_list[i][3])
+        temp_list[i][5] = int(temp_list[i][5])
+    sales_list = temp_list
+    printed_list = []
+    printed_list.append(['Year', 'Month', 'Day', 'Code Product', 'Name', 'Amount', 'Price'])
+    pick = input('[1]Daily report\n[2]Monthly report\nyour choice: ')
+    try:
+        # the manager is given a choice if he wants a daily report or monthly
+        if pick == '1':  # in case the manager wants a daily report he can choose - current day or different day.
+            date_choice = input('[1]current day\n[2]Enter different date: ')
+            try:
+                if date_choice == '1':  # print report for the current day
+                    print('*****  Sales Report For Manager  *****')
+                    # add to new list all the rows that relevant to this month
+                    for j in range(len(sales_list)):
+                        if current_year == sales_list[j][0] and current_month == sales_list[j][1] and current_day == \
+                                sales_list[j][2]:
+                            temp_list = [sales_list[j][0], sales_list[j][1], sales_list[j][2], sales_list[j][3],
+                                         sales_list[j][4], sales_list[j][5], sales_list[j][6]]
+                            printed_list.append(temp_list)
+                    print(tabulate(printed_list, tablefmt="fancy_grid"))
+
+                elif date_choice == '2':  # print report for a different day.
+                    print('Enter date[dd/mm/yyyy]:')
+                    day_choice = int(input('DAY:'))
+                    month_choice = int(input('MONTH(number):'))
+                    year_choice = int(input('YEAR:'))
+                    for j in range(len(sales_list)):
+                        if year_choice == sales_list[j][0] and month_choice == sales_list[j][1] and day_choice == \
+                                sales_list[j][2]:
+                            temp_list = [sales_list[j][0], sales_list[j][1], sales_list[j][2], sales_list[j][3],
+                                         sales_list[j][4], sales_list[j][5], sales_list[j][6]]
+                            printed_list.append(temp_list)
+                    print(tabulate(printed_list, tablefmt="fancy_grid"))
+
+                else:  # in case something else is pressed
+                    raise ValueError('Not valid choice.')
+            except ValueError:
+                print('Value Error.Pick again')
+
+        elif pick == '2':  # in case the manager wants a monthly report he can choose - current month or different month.
+            date_choice = input('[1]current month\n[2]Enter different month: ')
+            try:
+                if date_choice == '1':  # print report for the current month
+                    print('*****  Sales Report For Manager  *****')
+                    # add to new list all the rows that relevant to this month
+                    for j in range(len(sales_list)):
+                        if current_year == sales_list[j][0] and current_month == sales_list[j][1]:
+                            temp_list = [sales_list[j][0], sales_list[j][1], sales_list[j][2], sales_list[j][3],
+                                         sales_list[j][4],
+                                         sales_list[j][5], sales_list[j][6]]
+                            printed_list.append(temp_list)
+                    print(tabulate(printed_list, tablefmt="fancy_grid"))
+                elif date_choice == '2':  # print report for different month
+                    year_choice = int(input('YEAR:'))
+                    month_choice = int(input('MONTH(number):'))
+                    for j in range(len(sales_list)):
+                        if year_choice == sales_list[j][0] and month_choice == sales_list[j][1]:
+                            temp_list = [sales_list[j][0], sales_list[j][1], sales_list[j][2], sales_list[j][3],
+                                         sales_list[j][4], sales_list[j][5], sales_list[j][6]]
+                            printed_list.append(temp_list)
+                    print(tabulate(printed_list, tablefmt="fancy_grid"))
+                else:
+                    raise ValueError('Not valid choice.')
+            except ValueError:
+                print('Value Error.Pick again')
+
+        # in case something else is pressed
+        else:
+            raise ValueError('Not valid choice.')
+    except ValueError:
+        print('Value Error.Pick again')
+    Open_Menu(access)
 
 
 # return name of the product
@@ -1967,6 +2020,7 @@ def worker_menu(access):
                 print('Customer exists')
             else:
                 print('Customer does not exist')
+        Open_Menu(access)
     # *********************************************************
     if choice == 5:
         MessageForManager(access)
@@ -1987,60 +2041,6 @@ def worker_menu(access):
     if choice == 7:
         Log_In()
     # *********************************************************
-
-
-
-
-
-    print('-----------------------------------------------')
-    print('** worker menu **')
-
-    print('3- Closing the register')
-    print('4- Submission of constraints')
-    print('5- add customer to customer club')
-    print('6- find customer in customer club')
-    print('7- Entry to work')
-    print('8- Departing from work')
-    print('9- Get presence report')
-    print('10- change user')
-    print('-----------------------------------------------')
-    choice = input()
-    if choice == '1':
-        sell_items(access)
-    if choice == '2':
-        total = EOD_report(access)
-        print('The final amount of money for today is: {0} NIS'.format(total))
-    if choice == '3':
-        Closing_The_Register(access)
-    if choice == '4':
-        print('1- submission of constrains')
-        print('2- Viewing constraints')
-        print('-----------------------------------------------')
-        choice = input()
-        if choice == '1':
-            add_worker_Constraints(access)
-        if choice == '2':
-            shifts_report(access)
-    if choice == '5':
-        Add_custumer(access)
-    if choice == '6':
-        if find_custumer(access):
-            print('Costumer exists in membership club')
-        else:
-            print("Costumer doesn't exists in membership club")
-            ans = input('would you like to add the costumer to membership club?')
-            if ans == 'yes':
-                Add_custumer(access)
-            else:
-                Open_Menu(access)
-    if choice == '7':
-        arrival_to_work(access)
-    if choice == '8':
-        departure(access)
-    if choice == '9':
-        get_monthly_presence_report(access)
-    if choice == '10':
-        Log_In()
 
 
 def Error_page():
