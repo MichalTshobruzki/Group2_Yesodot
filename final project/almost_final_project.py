@@ -1123,10 +1123,41 @@ def add_worker_Constraints(access):
     worksheet.write(0, 6, 'Friday')
     worksheet.write(0, 7, 'Saturday')
 
-    constraint1_day, constraint1_shift = input('enter your first constraint-> day: '), \
-                                         input('enter your first constraint-> shift: ')
-    constraint2_day, constraint2_shift = input('enter your second constraint-> day: '), \
-                                         input('enter your second constraint-> shift: ')
+    days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    shift = ['Morning', 'Evening']
+    print('enter constraints in this form: \nday- {0}\nshift- {1}'. format(days, shift))
+    flag1, flag2 = 0, 0
+    while True:
+        constraint1_day = input('enter your first constraint-> day: ')
+        if constraint1_day in days:
+            flag1 = 1
+        else:
+            print('wrong input, try again:')
+        constraint1_shift = input('enter your first constraint-> shift: ')
+        if constraint1_shift in shift:
+            flag2 = 1
+        else:
+            print('wrong input, try again:')
+        if flag1 and flag2:
+            break
+
+    flag1, flag2 = 0, 0
+    while True:
+        constraint2_day = input('enter your second constraint-> day: ')
+        if constraint2_day in days:
+            flag1 = 1
+        else:
+            print('wrong input, try again:')
+            continue
+        constraint2_shift = input('enter your second constraint-> shift: ')
+        if constraint2_shift in shift:
+            flag2 = 1
+        else:
+            print('wrong input, try again:')
+            continue
+        if flag1 and flag2:
+            break
+
     if constraint1_day == 'Sunday':
         constraint1_day = 1
     if constraint1_day == 'Monday':
