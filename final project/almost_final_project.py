@@ -785,7 +785,6 @@ def get_manager_presence_report(access):
 
     presence_file = xlrd.open_workbook(presence_loc)
     sheet = presence_file.sheet_by_index(0)
-    print(sheet.cell_value(2, 8))
     for i in range(0, sheet.nrows):
         if sheet.cell_value(i, 7) == '':
             continue
@@ -897,13 +896,28 @@ def return_inventory(access):
 
 # gets name of worker and add to data base of the presence
 def arrival_to_work(access):
+    password_loc = r'C:\Users\micha\Desktop\project_new\Group2_Yesodot\final project\passwarde.xlsx'
+    password_file = xlrd.open_workbook(password_loc)
+    password_sheet = password_file.sheet_by_index(0)
     name = input('enter your first name: ')
     last = input('enter your last name: ')
+    flag = 0
+    while True:
+        for i in range(password_sheet.nrows):
+            if password_sheet.cell_value(i, 0) == name and password_sheet.cell_value(i, 3) == last:
+                flag = 1
+                break
+        if flag:
+            break
+        print('wrong name')
+        name = input('enter your first name: ')
+        last = input('enter your last name: ')
+
     date_now = time.localtime()
     presence_list = []
     row_list = []
 
-    presence_loc = r'C:\Users\micha\Desktop\project_final\Group2_Yesodot\final project\presence1.xlsx'
+    presence_loc = r'C:\Users\micha\Desktop\project_new\Group2_Yesodot\final project\presence1.xlsx'
     presence_file = xlrd.open_workbook(presence_loc)
     sheet = presence_file.sheet_by_index(0)
 
@@ -931,11 +945,25 @@ def arrival_to_work(access):
 
 # gets name of worker and add to data base of the presence the time of leaving the work
 def departure(access):
+    password_loc = r'C:\Users\micha\Desktop\project_new\Group2_Yesodot\final project\passwarde.xlsx'
+    password_file = xlrd.open_workbook(password_loc)
+    password_sheet = password_file.sheet_by_index(0)
     name = input('enter your first name: ')
     last = input('enter your last name: ')
+    flag = 0
+    while True:
+        for i in range(password_sheet.nrows):
+            if password_sheet.cell_value(i, 0) == name and password_sheet.cell_value(i, 3) == last:
+                flag = 1
+                break
+        if flag:
+            break
+        print('wrong name')
+        name = input('enter your first name: ')
+        last = input('enter your last name: ')
     presence_list = []
     row_list = []
-    presence_loc = r'C:\Users\micha\Desktop\project_final\Group2_Yesodot\final project\presence1.xlsx'
+    presence_loc = r'C:\Users\micha\Desktop\project_new\Group2_Yesodot\final project\presence1.xlsx'
     presence_file = xlrd.open_workbook(presence_loc)
     sheet = presence_file.sheet_by_index(0)
 
@@ -1052,6 +1080,16 @@ def add_worker_Constraints(access):
     constraints_file = xlrd.open_workbook(constraints_loc)
     amount_sheets = constraints_file.nsheets
 
+    name = input('Enter your name: ')
+    if amount_sheets < 7 and (name == 'michal' or name == 'emilia'):
+        print('You still can not submit constraints, wait for all employees to submit')
+        Open_Menu(access)
+
+    for i in range(amount_sheets):
+        sheet = constraints_file.sheet_by_index(i)
+        if sheet.name == name:
+            print('You have already submitted constraints')
+            Open_Menu(access)
     for i in range(amount_sheets):
         sheet = constraints_file.sheet_by_index(i)
         if sheet.name == 'Sheet1':
@@ -1069,8 +1107,6 @@ def add_worker_Constraints(access):
         for j in range(1, len(constraints_list[i])):  # number of rows in sheet
             for k in range(len(constraints_list[i][j])):
                 worksheet.write(j-1, k, constraints_list[i][j][k])
-
-    name = input('Enter your name: ')
 
     worksheet = workbook.add_worksheet(name)
 
@@ -1966,9 +2002,8 @@ def worker_menu(access):
     print('2- Reports')
     print('3- Submission of constraints')
     print('4- Customers Club')
-    print('5- Messages to Manager')
-    print('6- Entry & Departing')
-    print('7- Change User')
+    print('5- Entry & Departing')
+    print('6- Change User')
     print('-----------------------------------------------')
 
     choice = int(input('your choice: '))
@@ -2023,9 +2058,6 @@ def worker_menu(access):
         Open_Menu(access)
     # *********************************************************
     if choice == 5:
-        MessageForManager(access)
-    # *********************************************************
-    if choice == 6:
         print('1- arrival')
         print('2- departure')
         choice = int(input('your choice: '))
@@ -2038,7 +2070,7 @@ def worker_menu(access):
         if choice == 2:
             departure(access)
     # *********************************************************
-    if choice == 7:
+    if choice == 6:
         Log_In()
     # *********************************************************
 
