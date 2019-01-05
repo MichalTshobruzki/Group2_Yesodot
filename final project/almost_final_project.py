@@ -240,10 +240,11 @@ def add_2_workers_to_shifts(worker1, worker2):
         for j in range(len(constraints_list[0][i])):
             if constraints_list[0][i][j] == 'no one can' and count == 1:
                 constraints_list[0][i][j] = worker2
+                count += 1
             elif constraints_list[0][i][j] == 'no one can':
                 constraints_list[0][i][j] = worker1
                 count += 1
-
+##########################################################
     # copy the list to excel
     workbook_constraints = xlsxwriter.Workbook('Constraints1.xlsx')
     for i in range(len(constraints_list)):
@@ -296,28 +297,39 @@ def find_2_workers_when_no_one_can():
     number_of_shifts_sheet = screwed_file.sheet_by_index(1)
     screwed_sheet = screwed_file.sheet_by_index(0)
 
+    # takes from screwed excel the last two workers that screwded
     screwed_worker1 = screwed_sheet.cell_value(screwed_sheet.nrows-1, 1)
     screwed_worker2 = screwed_sheet.cell_value(screwed_sheet.nrows-2, 1)
 
     list_of_number_of_shifts = []
+    # make list only of the numbers of shifts from screwed excel, 'shiftsPerWorker' sheet
     for i in range(1, number_of_shifts_sheet.nrows):
         list_of_number_of_shifts.append(number_of_shifts_sheet.cell_value(i, 1))
 
+    # we need to find 2 workers with the minimum number of shifts
+    # the algorithm put the maximum to both workers and
+    # in each round of the loop check if the next value is smaller
     maximum_shifts = max_val(list_of_number_of_shifts)
-    index_of_max = list_of_number_of_shifts.index(maximum_shifts)
+    index_of_max = list_of_number_of_shifts.index(maximum_shifts) # save the index of the maximum shifts)
 
     first = second = maximum_shifts
-    first_worker = second_worker = number_of_shifts_sheet.cell_value(index_of_max+1, 0)
+    first_worker = number_of_shifts_sheet.cell_value(index_of_max+1, 0)
+    second_worker = number_of_shifts_sheet.cell_value(index_of_max+1, 0)
+
     for i in range(len(list_of_number_of_shifts)):
         # If current element is smaller than first then update both first and second
-        if list_of_number_of_shifts[i] < first and list_of_number_of_shifts[i] != screwed_worker1 and list_of_number_of_shifts[i] != screwed_worker2:
+        # check the algorithm and check if he didn't screweded last time
+        if list_of_number_of_shifts[i] < first and \
+                list_of_number_of_shifts[i] != screwed_worker1 and list_of_number_of_shifts[i] != screwed_worker2:
             second = first
             second_worker = first_worker
             first = list_of_number_of_shifts[i]
             first_worker = number_of_shifts_sheet.cell_value(i+1, 0)
 
         # If list_of_number_of_shifts[i] is in between first and second then update second
-        elif list_of_number_of_shifts[i] < second and list_of_number_of_shifts[i] != first and list_of_number_of_shifts[i] != screwed_worker1 and list_of_number_of_shifts[i] != screwed_worker2:
+        # check the algorithm and check if he didn't screweded last time
+        elif list_of_number_of_shifts[i] < second and \
+                list_of_number_of_shifts[i] != first and list_of_number_of_shifts[i] != screwed_worker1 and list_of_number_of_shifts[i] != screwed_worker2:
             second = list_of_number_of_shifts[i]
             second_worker = number_of_shifts_sheet.cell_value(i+1, 0)
 
@@ -400,6 +412,7 @@ def build_list_of_constraints_of_shift_manager(name):
 ####################################################################################
 
 
+# example: list_of_constraints = [['michal', [1,2], [2,3]], ['emilia', [1,3], [2,2]]]
 def make_shifts_for_shift_manager(list_of_constraints):
     list = []
     michal_number_of_shifts = 0
@@ -407,13 +420,19 @@ def make_shifts_for_shift_manager(list_of_constraints):
     for i in range(1, 3):
         row_list = []
         for j in range(1, 8):
-            if (list_of_constraints[0][1][0] == i and list_of_constraints[0][1][1] == j) or (
-                    list_of_constraints[0][2][0] == i and list_of_constraints[0][2][1] == j):  # if michal cant work, put emilia
-                row_list.append(list_of_constraints[1][0])
+            # check if michal cant work, i-row (shift), j-col (day)
+            # list_of_constraints[0][1][0] = from [1,2]->1
+            # list_of_constraints[0][2][1] = from [2,3]->3
+            if (list_of_constraints[0][1][0] == i and list_of_constraints[0][1][1] == j) or\
+                    (list_of_constraints[0][2][0] == i and list_of_constraints[0][2][1] == j):
+                row_list.append(list_of_constraints[1][0]) # put emilia
                 emilia_number_of_shifts += 1
-            elif (list_of_constraints[1][1][0] == i and list_of_constraints[1][1][1] == j) or (list_of_constraints[1][2][0] == i and list_of_constraints[1][2][1] == j):
+            # check if emilia cant work
+            elif (list_of_constraints[1][1][0] == i and list_of_constraints[1][1][1] == j) or \
+                    (list_of_constraints[1][2][0] == i and list_of_constraints[1][2][1] == j):
                 row_list.append(list_of_constraints[0][0])
                 michal_number_of_shifts += 1
+            # check if emilia has less shifts then michal
             elif emilia_number_of_shifts < michal_number_of_shifts:
                 row_list.append(list_of_constraints[1][0])
                 emilia_number_of_shifts += 1
@@ -426,16 +445,22 @@ def make_shifts_for_shift_manager(list_of_constraints):
 
 
 # the function gets list of people who can work in the shift and return list by random of two workers
+# day- the list of all the workers that can work in the shift
+# shift- list of two workers who will work
 def make_shift_by_random(day):
     shift = []
+    # if day is empty its means that all the workers cant work in this shift
+    # and the list returns with two 'no one can'
     if len(day) == 0:
         shift.append('no one can')
         shift.append('no one can')
         return shift
+    # if only one worker can work in this shift, returns his name and 'no on can'
     elif len(day) == 1:
         shift.append(day[0])
         shift.append('no one can')
         return shift
+    # otherwise build list of two different workers who will work in this shift
     while len(shift) < 2:
         rand = random.randint(0, len(day)-1)
         if len(shift) == 0:
@@ -460,7 +485,7 @@ def build_one_shift(row, col):
         sheet = constraints_file.sheet_by_index(i)
         if sheet.cell_value(row, col) != 'NO':
             shift.append(sheet.name)
-    return shift
+    return shift # list of all the workers that can work
 ####################################################################################
 
 
@@ -531,6 +556,8 @@ def build_shifts(access):
     worksheet.write(0, 7, 'Saturday')
 
     # add the workers to each shift in the sheet
+    # i+1 = 1, 2 (rows of morning shift)
+    # i+4 = 4, 5 (rows of evening shift)
     for i in range(2):
         worksheet.write(i+1, 1, sunday_morning_shift[i])
     for i in range(2):
@@ -556,25 +583,30 @@ def build_shifts(access):
     for i in range(2):
         worksheet.write(i + 4, 7, saturday_evening_shift[i])
 
-    # add the shifts of the shifts managers:
-    shift_managers_constraints =[]
+    # add the constraints of the shifts managers to list:
+    # example- [['michal', [1,2], [1,6]], ['emilia', [2,2], [2, 7]]]
+    # [1,2]- monday morning, [1,6]- friday morning
+    shift_managers_constraints = []
     shift_managers_constraints.append(build_list_of_constraints_of_shift_manager('michal'))
     shift_managers_constraints.append(build_list_of_constraints_of_shift_manager('emilia'))
 
-    list_of_shifts_for_sManager = (make_shifts_for_shift_manager(shift_managers_constraints))
+    list_of_shifts_for_sManager = make_shifts_for_shift_manager(shift_managers_constraints)
+
+    # write the shift to the sheet, row 3 is morning shift
     for i in range(1, 7):
         worksheet.write(3, i, list_of_shifts_for_sManager[0][i-1])
+    # write the shift to the sheet, row 6 is evening shift
     for i in range(1, 8):
-        if i == 6:
+        if i == 6: # the list_of_shifts_for_sManager has 6 vars, if its friday- continue
             continue
-        elif i == 7:
+        elif i == 7: # enter saturday shift
             worksheet.write(6, i, list_of_shifts_for_sManager[1][i - 2])
         else:
             worksheet.write(6, i, list_of_shifts_for_sManager[1][i-1])
 
     # copy the sheets of constraints
     for i in range(len(constraints_list)):
-        worksheet = workbook.add_worksheet(constraints_list[i][0])   #constraints_list[i][0]- sheet name
+        worksheet = workbook.add_worksheet(constraints_list[i][0])   # constraints_list[i][0]- sheet name
         for j in range(1, len(constraints_list[i])):  # number of rows in sheet
             for k in range(len(constraints_list[i][j])):
                 worksheet.write(j-1, k, constraints_list[i][j][k])
@@ -671,7 +703,7 @@ def shifts_report(access):
 
 
 # returns the total amount of the sales in the current day
-def Daily_Money_amount(year, month, day):
+def Daily_Money_amount(date):
     sales_loc = data_folder / "recipects.xlsx"
     sales_file = xlrd.open_workbook(sales_loc)
     sheet = sales_file.sheet_by_index(0)
@@ -1499,7 +1531,7 @@ def get_sales_report(access):
                     print(tabulate(printed_list, tablefmt="fancy_grid"))
 
                 elif date_choice == '2':  # print report for a different day.
-                    print('Enter date[dd/mm/yyyy]:')
+                    print('Enter date:')
                     day_choice = int(input('DAY:'))
                     month_choice = int(input('MONTH(number):'))
                     year_choice = int(input('YEAR:'))
@@ -1576,7 +1608,7 @@ def GetName(product_code):
                     return name_index
 ####################################################################################
 
-
+# list_1 = [product code, product name, amount, price, number recipect]
 def update_sales(list_1):
     updated_sales_list = []
     cancelled_sales_list = []
