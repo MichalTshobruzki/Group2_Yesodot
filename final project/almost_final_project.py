@@ -617,6 +617,7 @@ def build_shifts(access):
             for k in range(len(constraints_list[i][j])):
                 worksheet.write(j-1, k, constraints_list[i][j][k])
     workbook.close()
+    write_number_of_shifts_to_sheet()
     find_2_workers_when_no_one_can()
     write_number_of_shifts_to_sheet()
     Open_Menu(access)
@@ -668,6 +669,12 @@ def make_changes_in_shifts(access):
         col = int(input('col- '))
         if col > 7 or col < 1:
             print('try again')
+            continue
+        if row > 0 and row < 4 and col == 7:
+            print('its saturday morning, we are not working')
+            continue
+        if row > 3 and row < 7 and col == 6:
+            print('its friday evening, we are not working')
             continue
         worker = str(input('worker- '))
         for i in range(sheet_passworde.nrows):
