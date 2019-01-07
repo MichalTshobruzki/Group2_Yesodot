@@ -1074,10 +1074,7 @@ def MessageForManager(access):
 
 
 # find a custumer in the members club
-def find_custumer(access):
-    id = input('Enter ID: ')
-    while id.isnumeric() == False:
-        id = input('invalid id, try again:')
+def find_custumer(id):
     file_loc = data_folder / "membership.xlsx"
     workbook = xlrd.open_workbook(file_loc)
     worksheet = workbook.sheet_by_index(0)
@@ -2157,11 +2154,12 @@ def worker_menu(access):
         if choice == 1:
             Add_custumer(access)
         if choice == 2:
-            result = find_custumer(access)
+            id = input('Enter ID: ')
+            result = find_custumer(id)
             if result:
                 print('Customer exists')
             else:
-                print('Customer does not exist')
+                print('the Customer with the {0} id does not exist'.format(id))
         Open_Menu(access)
     # *********************************************************
     if choice == 5:
