@@ -778,7 +778,7 @@ def Closing_The_Register(access):
             Open_Menu(access)
         else:
             print('Please inform the shift manager that the money you entered does not match the EOD report.'
-                  'Would you to close the register anyway?[yes/no]')
+                  '\nWould you like to close the register anyway?[yes/no]')
             # only if the worker enters yes the function will close and the menu will be shown again.
             answer = input()
             if answer == 'yes':
@@ -1509,12 +1509,9 @@ def make_recipect(date, price):
 def get_sales_report(access):
     print('*****Sales Report For Manager:*****')
     sales_loc = data_folder / "sales.xlsx"
-    month = input('enter the number of month of the report you want: ')
-    print('*****  Sales Report For Manager  *****')
-
     sales_file = xlrd.open_workbook(sales_loc)
     sheet = sales_file.sheet_by_index(0)
-
+    flag = 0
     date_now = time.localtime()
     current_year, current_month, current_day = date_now[0], date_now[1], date_now[2]
     temp_list = []
@@ -1533,11 +1530,11 @@ def get_sales_report(access):
     printed_list = []
     printed_list.append(['Year', 'Month', 'Day', 'Code Product', 'Name', 'Amount', 'Price'])
     pick = input('[1]Daily report\n[2]Monthly report\nyour choice: ')
-    try:
+    while True:
         # the manager is given a choice if he wants a daily report or monthly
         if pick == '1':  # in case the manager wants a daily report he can choose - current day or different day.
             date_choice = input('[1]current day\n[2]Enter different date: ')
-            try:
+            while flag == 0:
                 if date_choice == '1':  # print report for the current day
                     print('*****  Sales Report For Manager  *****')
                     # add to new list all the rows that relevant to this month
@@ -1548,12 +1545,21 @@ def get_sales_report(access):
                                          sales_list[j][4], sales_list[j][5], sales_list[j][6]]
                             printed_list.append(temp_list)
                     print(tabulate(printed_list, tablefmt="fancy_grid"))
-
+                    Open_Menu(access)
                 elif date_choice == '2':  # print report for a different day.
                     print('Enter date:')
                     day_choice = int(input('DAY:'))
+                    if day_choice>31 or day_choice<0:
+                        print('NOT VALID')
+                        continue
                     month_choice = int(input('MONTH(number):'))
+                    if month_choice>12 or month_choice<0:
+                        print('NOT VALID')
+                        continue
                     year_choice = int(input('YEAR:'))
+                    if year_choice>current_year or year_choice<0:
+                        print('NOT VALID')
+                        continue
                     for j in range(len(sales_list)):
                         if year_choice == sales_list[j][0] and month_choice == sales_list[j][1] and day_choice == \
                                 sales_list[j][2]:
@@ -1561,15 +1567,14 @@ def get_sales_report(access):
                                          sales_list[j][4], sales_list[j][5], sales_list[j][6]]
                             printed_list.append(temp_list)
                     print(tabulate(printed_list, tablefmt="fancy_grid"))
-
+                    Open_Menu(access)
                 else:  # in case something else is pressed
-                    raise ValueError('Not valid choice.')
-            except ValueError:
-                print('Value Error.Pick again')
+                    print("NOT VALID.")
+                    break
 
         elif pick == '2':  # in case the manager wants a monthly report he can choose - current month or different month.
             date_choice = input('[1]current month\n[2]Enter different month: ')
-            try:
+            while True:
                 if date_choice == '1':  # print report for the current month
                     print('*****  Sales Report For Manager  *****')
                     # add to new list all the rows that relevant to this month
@@ -1580,25 +1585,30 @@ def get_sales_report(access):
                                          sales_list[j][5], sales_list[j][6]]
                             printed_list.append(temp_list)
                     print(tabulate(printed_list, tablefmt="fancy_grid"))
+                    Open_Menu(access)
                 elif date_choice == '2':  # print report for different month
                     year_choice = int(input('YEAR:'))
+                    if year_choice>current_year or year_choice<0:
+                        print('NOT VALID')
+                        continue
                     month_choice = int(input('MONTH(number):'))
+                    if month_choice>12 or month_choice<0:
+                        print('NOT VALID')
+                        continue
                     for j in range(len(sales_list)):
                         if year_choice == sales_list[j][0] and month_choice == sales_list[j][1]:
                             temp_list = [sales_list[j][0], sales_list[j][1], sales_list[j][2], sales_list[j][3],
                                          sales_list[j][4], sales_list[j][5], sales_list[j][6]]
                             printed_list.append(temp_list)
                     print(tabulate(printed_list, tablefmt="fancy_grid"))
+                    Open_Menu(access)
                 else:
-                    raise ValueError('Not valid choice.')
-            except ValueError:
-                print('Value Error.Pick again')
+                    print('NOT VALID.')
 
         # in case something else is pressed
         else:
-            raise ValueError('Not valid choice.')
-    except ValueError:
-        print('Value Error.Pick again')
+            print('Value Error.Pick again')
+            break
     Open_Menu(access)
 
 
@@ -1696,24 +1706,36 @@ def The_number_of_next_recipct():
 
 def sell_items(access):
     # ============== check if customer is a friend in members club ==================
-
+    assumption = 0
     print('\n\n------------------- sell page-------------------\n')
     answer = int(input("Is the customer a member of the customer club?\nIf he doe's enter 1, otherwise enter 0"))
-    while answer != 1 and answer!=0:
+    while answer != 1 and answer != 0:
         answer = int(input("invalid answer, try again"))
 
     if answer == 1:
-            id= input('Enter customer ID: ')
-            while id.isnumeric() == False:
-                id = input('invalid id, Enter customer ID again: ')
+        id = input('Enter customer ID: ')
+        while id.isnumeric() == False:
+            id = input('invalid id, Enter customer ID again: ')
 
-            assumption=0
-            if check_if_customer_is_member_club(id):
-                print('The customer is a member in the customer club, so he won 15% off the sale')
-                assumption = 0.15
-            else:
-                print("The customer isn't a member in the customer club")
-                assumption = 0
+        assumption = 0
+
+        if check_if_customer_is_member_club(id):
+            print('The customer is a member in the customer club, so he won 15% off the sale')
+            assumption = 0.15
+        else:
+            print("The customer isn't a member in the customer club")
+            flag = int(input('Do you want to try again?, Yes- press 1, No press 0'))
+            while flag != 1 and flag != 0:
+                flag = int(input("invalid answer, try again"))
+            if flag == 1:
+                id = input('Enter customer ID again: ')
+                if check_if_customer_is_member_club(id):
+                    print('The customer is a member in the customer club, so he won 15% off the sale')
+                    assumption = 0.15
+                else:
+                    print('The customer is not a member, We will continue with a regular sale')
+                    assumption = 0
+
     else:
         assumption = 0
 
@@ -1729,7 +1751,7 @@ def sell_items(access):
 
     while flag == 1:
 
-        date1= str(date.today())
+        date1 = str(date.today())
         product_code = int(input('Enter product code:'))
 
         # check if product code exists:
@@ -1747,10 +1769,9 @@ def sell_items(access):
 
         # if there's more items:
         flag = int(input('for add more items press 1, else press 0:'))
-        #checking validation of input:
-        while flag!=0 and flag!=1:
+        # checking validation of input:
+        while flag != 0 and flag != 1:
             flag = int(input('invalid answer, try again- for add more items press 1, else press 0'))
-
 
     # =========================== delete item from list during sale ====================================
     flag = 1
@@ -1760,7 +1781,7 @@ def sell_items(access):
         for i in range(len(item_list)):
             print('{0}) {1}'.format(i + 1, item_list[i]))
         flag = int(input('To delete items from list press 1, to continue press 0:'))
-        #check validation of answer:
+        # check validation of answer:
         while flag != 0 and flag != 1:
             flag = int(input('invalid answer, try again- To delete items from list press 1, to continue press 0'))
 
@@ -1769,17 +1790,16 @@ def sell_items(access):
             # check validation of index input:
             while index.isnumeric() == False:
                 index = input('invalid index, try again. Enter index of item you want to remove')
-            index=int(index)
-            while index<1 or index>(len(item_list)):
+            index = int(index)
+            while index < 1 or index > (len(item_list)):
                 index = int(input('invalid index, try again. Enter index of item you want to remove'))
 
-
-            #if theres more the one item to same index, remove only 1 item:
-            if item_list[index-1][2]>1:
-                item_list[index-1][2] -=1
-            #if there is only one item, remve all item line from list
+            # if theres more the one item to same index, remove only 1 item:
+            if item_list[index - 1][2] > 1:
+                item_list[index - 1][2] -= 1
+            # if there is only one item, remve all item line from list
             else:
-                del(item_list[index - 1])
+                del (item_list[index - 1])
 
             print('item removed')
 
@@ -1794,23 +1814,18 @@ def sell_items(access):
     for i in range(len(item_list)):
         update_sales(item_list[i])
 
-
-
     # ============================= update stock with bought items====================================
     for i in range(len(item_list)):
         update_stock_with_sale(item_list[i][0], item_list[i][2])
 
-
-
     # =============================== print recipect ==================================================
-
 
     print('\n\n****costumer recipect****')
     print('--------recepict number:{0}--------'.format(recipet_num))
     print('Date:{0}\n'.format(date1))
     for i in range(len(item_list)):
         for j in range(1, 4):
-            print(item_list[i][j], end= " ")
+            print(item_list[i][j], end=" ")
         print()
 
     print('\ntotal price is:{0}₪'.format(total_price))
@@ -1826,10 +1841,8 @@ def sell_items(access):
     total_price = total_price = round(total_price, 2)
     print('Sum is:{0}₪'.format(total_price))
 
-
     # ===================================== make recipect =======================================
     make_recipect(date1, total_price)
-
 
     # ====================================== back to main page ===================================
     Open_Menu(access)
