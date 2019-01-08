@@ -41,6 +41,12 @@ def get_total_price_of_recipect(rec_num):
 
 def update_stock_with_cancellation(items_list):
     # saving location file
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+    location = r'C:\Users\User\Desktop\project-store\Group2_Yesodot\final project\.xlsx'
+=======
+>>>>>>> 356a00a98716f744cd5479dec9f10896c60081ce
 
     location = data_folder / "inventory.xlsx"
 
@@ -53,7 +59,7 @@ def update_stock_with_cancellation(items_list):
     inventory_list = []
     # list- code, name, amount, price
     for i in range(sheet.nrows):
-            row_list = sheet.row_values(i)
+            row_list = sheet.row_values(i)inventory
             inventory_list.append(row_list)
 
     # update the inventory by update the list:
