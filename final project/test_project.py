@@ -72,6 +72,12 @@ class TestProject(unittest.TestCase):
         self.assertEqual(False, project_for_test.find_custumer(12331123))
         self.assertNotEqual(True, project_for_test.find_custumer(3321123))
 
+    def test_check_if_customer_is_member_club(self):
+        self.assertEqual(True, project_for_test.check_if_customer_is_member_club('242532654'))
+        self.assertEqual(True, project_for_test.check_if_customer_is_member_club('123456789'))
+        self.assertNotEqual(True, project_for_test.check_if_customer_is_member_club('42532654'))
+        self.assertNotEqual(True, project_for_test.check_if_customer_is_member_club(''))
+
 
 if __name__ == '__test_project__':
     unittest.main()
