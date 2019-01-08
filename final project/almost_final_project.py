@@ -1705,10 +1705,17 @@ def sell_items(access):
     # ============== check if customer is a friend in members club ==================
     assumption = 0
     print('\n\n------------------- sell page-------------------\n')
-    answer = int(input("Is the customer a member of the customer club?\nIf he doe's enter 1, otherwise enter 0"))
-    while answer != 1 and answer != 0:
-        answer = int(input("invalid answer, try again"))
-
+    answer = input("Is the customer a member of the customer club?\nIf he doe's enter 1, otherwise enter 0: ")
+    while True:
+        if answer == '':
+            answer = input("invalid answer, try again")
+            continue
+        elif int(answer) not in range(2):
+            answer = input("invalid answer, try again")
+            continue
+        else:
+            break
+    answer = int(answer)
     if answer == 1:
         id = input('Enter customer ID: ')
         while id.isnumeric() == False:
@@ -1930,12 +1937,17 @@ def manager_menu(access):
     print('7- Change User')
     print('-----------------------------------------------')
 
-    choice = int(input('your choice: '))
+    choice = input('your choice: ')
     while True:
-        if choice > 0 and choice < 15:
+        if choice == '':
+            choice = input('wrong choice, try again: ')
+            continue
+        elif int(choice) not in range(1, 8):
+            choice = input('wrong choice, try again: ')
+            continue
+        else:
             break
-        choice = int(input('wrong choice, try again: '))
-
+    choice = int(choice)
     # *********************************************************
     if choice == 1:
         sell_items(access)
@@ -1949,11 +1961,17 @@ def manager_menu(access):
         print('3- Shift report')
         print('4- sales report')
 
-        choice = int(input('your choice: '))
+        choice = input('your choice: ')
         while True:
-            if choice > 0 and choice < 5:
+            if choice == '':
+                choice = input('wrong choice, try again: ')
+                continue
+            elif int(choice) not in range(1, 5):
+                choice = input('wrong choice, try again: ')
+                continue
+            else:
                 break
-            choice = int(input('wrong choice, try again: '))
+        choice = int(choice)
 
         if choice == 1:
             get_manager_presence_report(access)
@@ -1965,14 +1983,21 @@ def manager_menu(access):
             get_sales_report(access)
     # *********************************************************
     if choice == 4:
-        print('1- Submission of constraints')
+        print('1- Open the possibility to Submit constraints')
         print('2- Build Shifts')
         print('3- make changes in shifts')
-        choice = int(input('your choice: '))
+
+        choice = input('your choice: ')
         while True:
-            if choice > 0 and choice < 4:
+            if choice == '':
+                choice = input('wrong choice, try again: ')
+                continue
+            elif int(choice) not in range(1, 4):
+                choice = input('wrong choice, try again: ')
+                continue
+            else:
                 break
-            choice = int(input('wrong choice, try again: '))
+        choice = int(choice)
 
         if choice == 1:
             clear_constraints(access)
@@ -1984,11 +2009,18 @@ def manager_menu(access):
     if choice == 5:
         print('1- add customer')
         print('2- remove customer')
-        choice = int(input('your choice: '))
+
+        choice = input('your choice: ')
         while True:
-            if choice > 0 and choice < 3:
+            if choice == '':
+                choice = input('wrong choice, try again: ')
+                continue
+            elif int(choice) not in range(1, 3):
+                choice = input('wrong choice, try again: ')
+                continue
+            else:
                 break
-            choice = int(input('wrong choice, try again: '))
+        choice = int(choice)
 
         if choice == 1:
             Add_custumer(access)
@@ -1998,11 +2030,17 @@ def manager_menu(access):
     if choice == 6:
         print('1- Order new stock')
         print('2- Remove items')
-        choice = int(input('your choice: '))
+        choice = input('your choice: ')
         while True:
-            if choice > 0 and choice < 3:
+            if choice == '':
+                choice = input('wrong choice, try again: ')
+                continue
+            elif int(choice) not in range(1, 3):
+                choice = input('wrong choice, try again: ')
+                continue
+            else:
                 break
-            choice = int(input('wrong choice, try again: '))
+        choice = int(choice)
 
         if choice == 1:
             add_new_inventory(access)
@@ -2028,12 +2066,17 @@ def Responsible_menu(access):
     print('8- Change User')
     print('-----------------------------------------------')
 
-    choice = int(input('your choice: '))
+    choice = input('your choice: ')
     while True:
-        if choice > 0 and choice < 15:
+        if choice == '':
+            choice = input('wrong choice, try again: ')
+            continue
+        elif int(choice) not in range(1, 9):
+            choice = input('wrong choice, try again: ')
+            continue
+        else:
             break
-        choice = int(input('wrong choice, try again: '))
-
+    choice = int(choice)
     # *********************************************************
     if choice == 1:
         sell_items(access)
@@ -2046,11 +2089,17 @@ def Responsible_menu(access):
         print('2- Inventory report')
         print('3- Shift report')
 
-        choice = int(input('your choice: '))
+        choice = input('your choice: ')
         while True:
-            if choice > 0 and choice < 4:
+            if choice == '':
+                choice = input('wrong choice, try again: ')
+                continue
+            elif int(choice) not in range(1, 4):
+                choice = input('wrong choice, try again: ')
+                continue
+            else:
                 break
-            choice = int(input('wrong choice, try again: '))
+        choice = int(choice)
 
         if choice == 1:
             get_monthly_presence_report(access)
@@ -2065,11 +2114,18 @@ def Responsible_menu(access):
     if choice == 5:
         print('1- add customer')
         print('2- remove customer')
-        choice = int(input('your choice: '))
+
+        choice = input('your choice: ')
         while True:
-            if choice > 0 and choice < 3:
+            if choice == '':
+                choice = input('wrong choice, try again: ')
+                continue
+            elif int(choice) not in range(1, 3):
+                choice = input('wrong choice, try again: ')
+                continue
+            else:
                 break
-            choice = int(input('wrong choice, try again: '))
+        choice = int(choice)
 
         if choice == 1:
             Add_custumer(access)
@@ -2082,11 +2138,19 @@ def Responsible_menu(access):
     if choice == 7:
         print('1- arrival')
         print('2- departure')
-        choice = int(input('your choice: '))
+
+        choice = input('your choice: ')
         while True:
-            if choice > 0 and choice < 3:
+            if choice == '':
+                choice = input('wrong choice, try again: ')
+                continue
+            elif int(choice) not in range(1, 3):
+                choice = input('wrong choice, try again: ')
+                continue
+            else:
                 break
-            choice = int(input('wrong choice, try again: '))
+        choice = int(choice)
+
         if choice == 1:
             arrival_to_work(access)
         if choice == 2:
@@ -2110,12 +2174,17 @@ def worker_menu(access):
     print('7- Change User')
     print('-----------------------------------------------')
 
-    choice = int(input('your choice: '))
+    choice = input('your choice: ')
     while True:
-        if choice > 0 and choice < 15:
+        if choice == '':
+            choice = input('wrong choice, try again: ')
+            continue
+        elif int(choice) not in range(1, 8):
+            choice = input('wrong choice, try again: ')
+            continue
+        else:
             break
-        choice = int(input('wrong choice, try again: '))
-
+    choice = int(choice)
     # *********************************************************
     if choice == 1:
         sell_items(access)
@@ -2125,11 +2194,17 @@ def worker_menu(access):
         print('2- End of the day report')
         print('3- Shift report')
 
-        choice = int(input('your choice: '))
+        choice = input('your choice: ')
         while True:
-            if choice > 0 and choice < 4:
+            if choice == '':
+                choice = input('wrong choice, try again: ')
+                continue
+            elif int(choice) not in range(1, 4):
+                choice = input('wrong choice, try again: ')
+                continue
+            else:
                 break
-            choice = int(input('wrong choice, try again: '))
+        choice = int(choice)
 
         if choice == 1:
             get_monthly_presence_report(access)
@@ -2145,11 +2220,18 @@ def worker_menu(access):
     if choice == 4:
         print('1- add customer')
         print('2- find customer')
-        choice = int(input('your choice: '))
+
+        choice = input('your choice: ')
         while True:
-            if choice > 0 and choice < 3:
+            if choice == '':
+                choice = input('wrong choice, try again: ')
+                continue
+            elif int(choice) not in range(1, 3):
+                choice = input('wrong choice, try again: ')
+                continue
+            else:
                 break
-            choice = int(input('wrong choice, try again: '))
+        choice = int(choice)
 
         if choice == 1:
             Add_custumer(access)
@@ -2165,11 +2247,19 @@ def worker_menu(access):
     if choice == 5:
         print('1- arrival')
         print('2- departure')
-        choice = int(input('your choice: '))
+
+        choice = input('your choice: ')
         while True:
-            if choice > 0 and choice < 3:
+            if choice == '':
+                choice = input('wrong choice, try again: ')
+                continue
+            elif int(choice) not in range(1, 3):
+                choice = input('wrong choice, try again: ')
+                continue
+            else:
                 break
-            choice = int(input('wrong choice, try again: '))
+        choice = int(choice)
+
         if choice == 1:
             arrival_to_work(access)
         if choice == 2:
@@ -2203,15 +2293,18 @@ def Log_In():
             check = sheet.cell_value(i, 0)
             if check == name:
                 flag=1
-                Password = int(input('Enter a 6-digit password-'))
+                Password = input('Enter a 6-digit password-')
                 index= i
+                if Password == '':
+                    Password = input('wrong password, try again')
                 for j in range(2):
-                    if Password == (sheet.cell_value(index, 1)):
+                    if int(Password) == (sheet.cell_value(index, 1)):
                         worker_access = sheet.cell_value(index, 2)
                         Open_Menu(worker_access)
                         break
                     else:
-                        Password = int(input('wrong password, try again'))
+                        Password = input('wrong password, try again')
+
 
                 if j == 2:
                     print("sorry, too many tries")
